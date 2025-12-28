@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
 import toast from 'react-hot-toast';
-import api from '../utils/api';
+
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { TypewriterEffect } from '../../../ui/typewriter-effect';
 import { FlipWords } from '../../../ui/flip-words';
 import { FaArrowRight } from 'react-icons/fa';
+import api from '../../../../utils/api';
 
 const HeroSection = ({
   words = [],
