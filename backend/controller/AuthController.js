@@ -253,7 +253,7 @@ const handleAuthCallback=async (req, res) => {
     // console.log("code and status=",code,state)
 
     if (!code) {
-      return res.status(400).json({ error: "Authorization code missing" });
+      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Authorization code missing`);
     }
 
     // 🔁 Exchange auth code for tokens (SERVER ONLY)
@@ -274,7 +274,7 @@ const handleAuthCallback=async (req, res) => {
     const tokens = await tokenRes.json();
 
     if (!tokens.id_token) {
-      return res.status(400).json({ error: "Failed to get ID token" });
+      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Failed to get ID token`);
     }
 
     // 🔐 Decode ID token (basic decode for now)
@@ -290,7 +290,7 @@ const handleAuthCallback=async (req, res) => {
     // ✅ Verify audience
  
     if (payload.aud !== process.env.GOOGLE_CLIENT_ID) {
-      return res.status(401).json({ error: "Invalid audience" });
+      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Invalid audience`);
     }
 
     const {username,usertype}=JSON.parse(
@@ -304,7 +304,7 @@ const handleAuthCallback=async (req, res) => {
     // console.log("user payload and username",payload,username)
 
     //check user already exist or have to create
-    const user = await User.findOne({ email }).lean();
+    let user = await User.findOne({ email }).lean();
    
     
     if (!user && usertype=='onboarding'){
@@ -316,7 +316,8 @@ const handleAuthCallback=async (req, res) => {
       const newUserInfo=await Profile.create({username,image:picture});
       if (newUser&&newUserInfo) {
         console.log("user created");
-        user._id=newUser._id
+        // Update user variable to reference the newly created user
+        user = await User.findById(newUser._id).lean();
         // Use name from request body or fallback to username
         const displayName =  username;
         sendWelcomeEmail(email, username, displayName, "LinkBridger");
@@ -325,10 +326,16 @@ const handleAuthCallback=async (req, res) => {
       }
     }
     
-    if (!user && usertype=='onboarded')
-      return res
-        .status(404)
-        .json({ success: false, message: "Email does not exist !" });
+    if (!user && usertype=='onboarded') {
+      // Redirect to login page with error message instead of returning JSON
+      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Email does not exist`);
+    }
+    
+    if (!user) {
+      // Fallback: if user still doesn't exist for any reason, redirect with error
+      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Authentication failed`);
+    }
+    
     // console.log("id=",user._id)
 
     // 🧠 Create your app JWT
@@ -344,15 +351,16 @@ const handleAuthCallback=async (req, res) => {
       secure: true,
     });
 
-    // 🔁 Redirect to frontend
-    res.redirect(`${clientUrl(process.env.TIER)}/`);
+    // 🔁 Redirect to frontend dashboard (authenticated users go to /home)
+    const frontendUrl = `${clientUrl(process.env.TIER)}/home`;
+    res.redirect(frontendUrl);
 
     // 🔵 Option 2 (testing only): return JSON
     // res.json({ tokens, user: payload });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Google auth failed" });
+    console.error("Google auth error:", err);
+    return res.redirect(`${clientUrl(process.env.TIER)}/?error=Google authentication failed`);
   }
 }
 
