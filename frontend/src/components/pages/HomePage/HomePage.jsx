@@ -15,7 +15,9 @@ import {
   FaUserTie,
   FaCode,
   FaGraduationCap,
-  FaCog
+  FaCog,
+  FaServer,
+  FaHome
 } from 'react-icons/fa';
 import { 
   SiLinkedin, 
@@ -33,7 +35,8 @@ import {
   HeroSection,
   StatisticsSection,
   CTASection,
-  ComparisonTable
+  ComparisonTable,
+  FeaturesSection
 } from './sections';
 
 // 3D Card Component with Magnetic Hover
@@ -329,6 +332,51 @@ const HomePage = () => {
     { value: 50000, suffix: "+", label: "Links Created", icon: <FaLink /> },
     { value: 1000000, suffix: "+", label: "Clicks Tracked", icon: <FaChartLine /> },
     { value: 99, suffix: "%", label: "Uptime", icon: <FaClock /> },
+  ];
+
+  const features = [
+    {
+      icon: FaLink,
+      title: "Personalized Smart Links",
+      description: "Generate easy-to-remember links for your social profiles using your username and platform names.",
+      color: "from-blue-500 to-cyan-500",
+      delay: 0.1
+    },
+    {
+      icon: FaHome,
+      title: "All Links at One Place",
+      description: "Access all your profiles with a single hub link. Visit your domain (without any platform name) to see all your links in one beautiful, organized page.",
+      color: "from-violet-500 to-purple-500",
+      delay: 0.2
+    },
+    {
+      icon: FaSyncAlt,
+      title: "Centralized Link Management",
+      description: "Update your social profile links in one place, and the change reflects everywhere.",
+      color: "from-green-500 to-emerald-500",
+      delay: 0.3
+    },
+    {
+      icon: FaEnvelope,
+      title: "Real-Time Email Notifications",
+      description: "Get instant email notifications every time someone visits your links. Stay informed about engagement in real-time.",
+      color: "from-cyan-500 to-blue-500",
+      delay: 0.4
+    },
+    {
+      icon: FaServer,
+      title: "Your Own Domain",
+      description: "After registering, you'll get your own personalized domain to manage all your links. Your domain will reflect your brand identity and make your links more professional and memorable.",
+      color: "from-teal-500 to-cyan-500",
+      delay: 0.5
+    },
+    {
+      icon: FaChartLine,
+      title: "Advanced Analytics",
+      description: "Get comprehensive insights into every click with detailed analytics. Track location, device type, browser type, referrer, time, and much more. Understand your audience with granular data about every interaction.",
+      color: "from-blue-500 to-cyan-500",
+      delay: 0.6
+    },
   ];
 
   return (
@@ -679,6 +727,13 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Features Section */}
+      <FeaturesSection
+        features={features}
+        title="Powerful Features"
+        subtitle="Everything you need to manage your social presence in one place"
+        layout="grid"
+      />
 
        <section
         className="pt-8 sm:pt-12 md:pt-16 lg:pt-20 pb-2 sm:pb-4 md:pb-6 lg:pb-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50/80 via-purple-50/80 to-pink-50/80 dark:from-slate-900/60 dark:via-purple-950/40 dark:to-pink-950/40"

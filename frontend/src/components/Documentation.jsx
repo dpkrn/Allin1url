@@ -589,15 +589,23 @@ const Documentation = () => {
       icon: FaCog,
       gradient: "from-indigo-500 to-purple-500",
     },
-  ];
-
-  const futureFeatures = [
     {
+      img: logo,
+      title: "Your Own Domain",
+      desc: "After registering, you'll get your own personalized domain to manage all your links. Your domain will reflect your brand identity and make your links more professional and memorable. Perfect for building your online presence!",
+      icon: FaServer,
+      gradient: "from-teal-500 to-cyan-500",
+    },
+    {
+      img: "click.webp",
       title: "Advanced Analytics",
-      desc: "See detailed reports on clicks, traffic sources, and engagement levels for each link.",
+      desc: "Get comprehensive insights into every click with detailed analytics. Track where clicks originated from, the exact time of each click, geographic location, device type (mobile, tablet, desktop), browser type, referrer information, and much more. Understand your audience better with granular data about every interaction.",
       icon: FaChartLine,
       gradient: "from-blue-500 to-cyan-500",
     },
+  ];
+
+  const futureFeatures = [
     {
       title: "Custom Link Themes",
       desc: "Add custom themes or styles to your personalized links to match your branding or style preferences.",

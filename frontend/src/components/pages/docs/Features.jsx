@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaLink, FaCog, FaChartLine, FaSyncAlt, FaPalette, FaRocket, FaShieldAlt, FaUsers, FaLock, FaEye } from 'react-icons/fa';
+import { FaLink, FaCog, FaChartLine, FaSyncAlt, FaPalette, FaRocket, FaShieldAlt, FaUsers, FaLock, FaEye, FaServer } from 'react-icons/fa';
 import Footer from '../../footer/Footer';
 
 const Features = () => {
@@ -67,6 +67,20 @@ const Features = () => {
       description: "Granular control over what information is visible in your public profile. Toggle visibility of email, location, bio, passion, profile image, link count, and click statistics independently.",
       gradient: "from-yellow-500 to-orange-500",
       color: "from-cyan-500 to-blue-500"
+    },
+    {
+      icon: FaServer,
+      title: "Your Own Domain",
+      description: "After registering, you'll get your own personalized domain to manage all your links. Your domain will reflect your brand identity and make your links more professional and memorable. Perfect for building your online presence!",
+      gradient: "from-teal-500 to-cyan-500",
+      color: "from-teal-500 to-cyan-500"
+    },
+    {
+      icon: FaChartLine,
+      title: "Advanced Analytics",
+      description: "Get comprehensive insights into every click with detailed analytics. Track where clicks originated from, the exact time of each click, geographic location, device type (mobile, tablet, desktop), browser type, referrer information, and much more. Understand your audience better with granular data about every interaction.",
+      gradient: "from-blue-500 to-cyan-500",
+      color: "from-blue-500 to-cyan-500"
     }
   ];
 
