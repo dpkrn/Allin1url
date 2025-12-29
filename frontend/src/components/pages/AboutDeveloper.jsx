@@ -277,8 +277,7 @@ const AboutDeveloper = () => {
               >
                 I created LinkBridger to solve a real problem: managing multiple social media and professional links scattered across different platforms. 
                 Instead of sharing long, forgettable URLs, LinkBridger lets you create memorable, personalized links that reflect your brand. With granular
-                privacy controls, customizable notifications, and password protection, you have complete control over your digital presence. and it also delivers
-                a solution that's both powerful and user-friendly.
+                privacy controls, customizable notifications, and password protection, you have complete control over your digital presence. Plus, get a free custom domain to make your link truly yours and establish your unique online identity.
               </motion.p>
 
               {/* Social Links */}
