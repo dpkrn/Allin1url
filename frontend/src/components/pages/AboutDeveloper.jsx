@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleDarkMode } from '../../redux/pageSlice';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
+import axios from 'axios';
 import profile from '../../assets/profile.png';
 import logo from '../../assets/logo.png';
 
@@ -13,6 +14,8 @@ const AboutDeveloper = () => {
   const dispatch = useDispatch();
   const darkMode = useSelector(store => store.page.darkMode);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+  const [collaborators, setCollaborators] = useState([]);
+  const [loadingCollaborators, setLoadingCollaborators] = useState(false);
 
   // Add edge animation styles
   useEffect(() => {
@@ -125,6 +128,29 @@ const AboutDeveloper = () => {
     };
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  // Fetch GitHub collaborators
+  useEffect(() => {
+    const fetchCollaborators = async () => {
+      try {
+        setLoadingCollaborators(true);
+        const response = await axios.get('https://api.github.com/repos/DpkRn/LinkBridger/collaborators', {
+          headers: {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': 'Bearer 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',
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        });
+        setCollaborators(response.data);
+      } catch (error) {
+        console.error('Error fetching collaborators:', error);
+      } finally {
+        setLoadingCollaborators(false);
+      }
+    };
+
+    fetchCollaborators();
   }, []);
 
   const fadeInUp = {
@@ -364,6 +390,45 @@ const AboutDeveloper = () => {
             Go Back
           </button>
         </motion.div>
+
+        {/* GitHub Collaborators Section */}
+        {collaborators.length > 0 && (
+          <motion.div variants={fadeInUp} className="mt-16 pt-12 border-t border-gray-300 dark:border-gray-700">
+            <motion.h2
+              variants={fadeInUp}
+              className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-8 transition-colors duration-300"
+            >
+              GitHub Collaborators
+            </motion.h2>
+            <motion.div variants={staggerContainer} className="bg-black rounded-xl p-8 shadow-lg">
+              <div className="flex flex-wrap gap-4 justify-center items-center">
+                {collaborators.map((collaborator) => (
+                  <motion.a
+                    key={collaborator.id}
+                    href={collaborator.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variants={fadeInUp}
+                    whileHover={{ scale: 1.05 }}
+                    className="flex flex-col items-center gap-2 p-4 hover:bg-gray-900 rounded-lg transition-colors duration-200"
+                  >
+                    <img
+                      src={collaborator.avatar_url}
+                      alt={collaborator.login}
+                      className="w-12 h-12 rounded-full border-2 border-gray-600"
+                    />
+                    <span className="text-sm font-semibold text-white">
+                      {collaborator.login}
+                    </span>
+                  </motion.a>
+                ))}
+              </div>
+              <p className="text-center text-sm text-gray-400 mt-6">
+                These talented developers contribute to LinkBridger on GitHub
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
         </div>
       </motion.div>
     </div>
