@@ -43,7 +43,7 @@ const HeroSection = ({
       return;
     }
     const params = new URLSearchParams({
-      client_id: "82343726980-l5frel7ehhv36rcuqo4vu5adkf8vkanq.apps.googleusercontent.com",
+      client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
       redirect_uri: "https://clickly.cv/auth/google",
       response_type: "code",
       scope: "openid email profile",

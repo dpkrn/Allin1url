@@ -138,7 +138,7 @@ const AboutDeveloper = () => {
         const response = await axios.get('https://api.github.com/repos/DpkRn/LinkBridger/collaborators', {
           headers: {
             'Accept': 'application/vnd.github+json',
-            'Authorization': 'Bearer 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',
+            'Authorization': `Bearer ${import.meta.env?.VITE_GITHUB_TOKEN}`,
             'X-GitHub-Api-Version': '2022-11-28',
           },
         });
