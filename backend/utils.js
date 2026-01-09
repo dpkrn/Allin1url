@@ -47,10 +47,10 @@ const serverUrl=(tier)=>{
 
 const getUserLinkUrl = (username, source = null) => {
   if (!username) return '';
-  
-  // Check if we're in production (check NODE_ENV or host)
-  const isProd = process.env.TIER === 'dev';
-  
+
+  // Check if we're in production
+  const isProd = process.env.TIER === 'prod';
+
   if (isProd) {
     // Production: Use subdomain format
     const baseUrl = `https://${username}.clickly.cv`;
