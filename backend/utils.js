@@ -31,7 +31,7 @@ const unhashData = (hashedData) => {
 };
 
 const clientUrl=(tier)=>{
-  if(tier=='dev'){
+  if(tier==='dev'){
     return "http://localhost:5173/app"
   }
   return "https://clickly.cv/app"
@@ -39,7 +39,7 @@ const clientUrl=(tier)=>{
 
 
 const serverUrl=(tier)=>{
-  if(tier=='dev'){
+  if(tier==='dev'){
       return "http://localhost:8080"
   }
   return "https://clickly.cv"
@@ -48,17 +48,18 @@ const serverUrl=(tier)=>{
 const getUserLinkUrl = (username, source = null) => {
   if (!username) return '';
 
-  // Check if we're in production
-  const isProd = process.env.TIER === 'prod';
+  // Check if we're explicitly in development mode
+  // Default to production if not explicitly dev (safer for production)
+  const isDev = process.env.TIER === 'dev';
 
-  if (isProd) {
-    // Production: Use subdomain format
-    const baseUrl = `https://${username}.clickly.cv`;
-    return source ? `${baseUrl}/${source}` : baseUrl;
-  } else {
+  if (isDev) {
     // Development: Use localhost subdomain format
     const port = process.env.PORT || '8080';
     const baseUrl = `http://${username}.localhost:${port}`;
+    return source ? `${baseUrl}/${source}` : baseUrl;
+  } else {
+    // Production: Use subdomain format (default)
+    const baseUrl = `https://${username}.clickly.cv`;
     return source ? `${baseUrl}/${source}` : baseUrl;
   }
 };

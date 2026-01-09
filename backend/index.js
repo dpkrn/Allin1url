@@ -29,6 +29,13 @@ const { saveAnalytics } = require('./controller/AnalyticsController')
 
 dotenv.config()
 
+// Log environment variables for debugging
+const tier = process.env.TIER || 'NOT SET (defaults to production)';
+console.log('Environment check:');
+console.log('  TIER:', tier);
+console.log('  Mode:', process.env.TIER === 'dev' ? 'DEVELOPMENT' : 'PRODUCTION');
+console.log('  PORT:', process.env.PORT || '8080 (default)');
+
 cloudinary.config({
   cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -46,6 +53,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Make helper function available to all EJS templates
+// Ensure it always reads the current environment variable
 app.locals.getUserLinkUrl = getUserLinkUrl;
 
 // Allowed origins for CORS
