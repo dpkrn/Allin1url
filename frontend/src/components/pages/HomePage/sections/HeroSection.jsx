@@ -198,7 +198,7 @@ const HeroSection = ({
                 </div>
               </div>
             )}
-            <div className="flex flex-row flex-nowrap gap-1 sm:gap-2 items-center w-full max-w-full px-4 sm:px-0 justify-center sm:justify-start">
+            <div className="flex flex-row flex-nowrap gap-1 sm:gap-2 items-center w-full max-w-full px-4 sm:px-0 justify-center">
               <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">https://</span>
               <div className="relative flex-shrink-0 min-w-[80px] sm:min-w-[100px] md:min-w-[120px] w-auto sm:w-36 md:w-44 max-w-[120px] sm:max-w-none">
                 <input
