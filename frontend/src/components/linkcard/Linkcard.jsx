@@ -217,13 +217,13 @@ const Linkcard = ({ sources }) => {
   const getVisibilityIcon = () => {
     switch (visibility) {
       case 'public':
-        return <FaGlobe className="text-lg" />;
+        return <FaGlobe className="text-sm" />;
       case 'unlisted':
-        return <FaEyeSlash className="text-lg" />;
+        return <FaEyeSlash className="text-sm" />;
       case 'private':
-        return <FaLock className="text-lg" />;
+        return <FaLock className="text-sm" />;
       default:
-        return <FaGlobe className="text-lg" />;
+        return <FaGlobe className="text-sm" />;
     }
   };
 
@@ -257,8 +257,8 @@ const Linkcard = ({ sources }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.02, y: -5 }}
-      className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-6 md:p-8 relative group"
+      whileHover={{ scale: 1.01, y: -2 }}
+      className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 p-4 md:p-5 relative group"
       style={{ transformOrigin: 'center', willChange: 'transform', overflow: 'visible', zIndex: 1 }}
     >
       {/* Gradient Background on Hover */}
@@ -267,105 +267,105 @@ const Linkcard = ({ sources }) => {
         style={{ pointerEvents: 'none', zIndex: 0 }}
       />
       <div className="relative z-10" style={{ pointerEvents: 'auto', position: 'relative' }}>
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col md:flex-row gap-4">
           {/* Click Counter Section */}
           <motion.div
-            className="hidden md:flex flex-col items-center justify-center border-r-2 border-dashed border-white/20 dark:border-gray-600 pr-6 min-w-[120px]"
-            whileHover={{ scale: 1.1 }}
+            className="hidden md:flex flex-col items-center justify-center border-r-2 border-dashed border-white/20 dark:border-gray-600 pr-4 min-w-[90px]"
+            whileHover={{ scale: 1.05 }}
             style={{ transformOrigin: 'center', willChange: 'transform' }}
           >
             <motion.div
-              className="bg-gradient-to-r from-blue-600 to-cyan-600 p-6 rounded-2xl shadow-lg mb-3"
-              whileHover={{ rotate: 5, scale: 1.1 }}
+              className="bg-gradient-to-r from-blue-600 to-cyan-600 p-3 rounded-xl shadow-lg mb-2"
+              whileHover={{ rotate: 5, scale: 1.05 }}
               style={{ transformOrigin: 'center', willChange: 'transform' }}
             >
-              <FaMousePointer className="text-3xl text-white" />
+              <FaMousePointer className="text-xl text-white" />
             </motion.div>
             <motion.div
-              className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-2"
+              className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, damping: 15 }}
             >
               {clicked || 0}
             </motion.div>
-            <span className="bg-white/10 dark:bg-gray-800/50 px-4 py-2 rounded-lg text-sm font-semibold text-gray-900 dark:text-gray-200 border border-white/20">
+            <span className="bg-white/10 dark:bg-gray-800/50 px-2 py-1 rounded-md text-xs font-semibold text-gray-900 dark:text-gray-200 border border-white/20">
               Clicks
             </span>
           </motion.div>
 
           {/* Main Content */}
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-2">
             {/* Platform Name */}
             <div>
               <motion.h3
-                className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent mb-2"
-                whileHover={{ scale: 1.05 }}
+                className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent mb-1"
+                whileHover={{ scale: 1.02 }}
                 style={{ transformOrigin: 'center', willChange: 'transform' }}
               >
                 {source.toUpperCase()}
               </motion.h3>
-              <p className="font-mono text-sm md:text-base text-gray-700 dark:text-gray-400 break-all">
+              <p className="font-mono text-xs md:text-sm text-gray-700 dark:text-gray-400 break-all line-clamp-1">
                 {destination}
               </p>
             </div>
 
             {/* Personalized Link */}
-            <div className="p-4 bg-gray-800/40 dark:bg-gray-800/30 rounded-2xl border border-gray-700/30 dark:border-white/10">
-              <p className="text-xs text-gray-300 dark:text-gray-500 mb-2 font-semibold">
+            <div className="p-3 bg-gray-800/40 dark:bg-gray-800/30 rounded-xl border border-gray-700/30 dark:border-white/10">
+              <p className="text-xs text-gray-300 dark:text-gray-500 mb-1.5 font-semibold">
                 Your Personalized Link:
               </p>
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span
                   ref={linkRef}
-                  className="break-all font-mono text-base md:text-lg text-white dark:text-gray-200 flex-1 min-w-0"
+                  className="break-all font-mono text-xs md:text-sm text-white dark:text-gray-200 flex-1 min-w-0 line-clamp-1"
                 >
                   {getUserLinkUrl(username, source)}
                 </span>
                 <motion.button
-                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileHover={{ scale: 1.05, rotate: 3 }}
                   style={{ transformOrigin: 'center', willChange: 'transform' }}
-                  whileTap={{ scale: 0.9 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={copyToClipboard}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-2.5 rounded-lg transition-all duration-300 flex-shrink-0"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-2 rounded-md transition-all duration-300 flex-shrink-0"
                   title="Copy link"
                 >
-                  <MdContentCopy className="text-xl text-white" />
+                  <MdContentCopy className="text-base text-white" />
                 </motion.button>
               </div>
             </div>
 
             {/* Mobile Click Counter */}
-            <div className="md:hidden flex items-center gap-4 p-4 bg-white/5 dark:bg-gray-800/30 rounded-2xl border border-white/10">
+            <div className="md:hidden flex items-center gap-3 p-2.5 bg-white/5 dark:bg-gray-800/30 rounded-xl border border-white/10">
               <motion.div
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 p-3 rounded-xl"
-                whileHover={{ scale: 1.1, rotate: 5 }}
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 p-2 rounded-lg"
+                whileHover={{ scale: 1.05, rotate: 3 }}
                 style={{ transformOrigin: 'center', willChange: 'transform' }}
               >
-                <FaMousePointer className="text-2xl text-white" />
+                <FaMousePointer className="text-lg text-white" />
               </motion.div>
               <div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{clicked || 0}</div>
+                <div className="text-lg font-bold text-gray-900 dark:text-white">{clicked || 0}</div>
                 <div className="text-xs text-gray-700 dark:text-gray-500">Total Clicks</div>
               </div>
             </div>
 
-            {/* Visibility Badge */}
-            <div className="flex items-center gap-2 pt-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${getVisibilityColor()} text-white flex items-center gap-1`}>
+            {/* Visibility Badge and Action Buttons Row */}
+            <div className="flex items-center justify-between gap-2 pt-1 flex-wrap">
+              {/* Visibility Badge */}
+              <span className={`px-2.5 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${getVisibilityColor()} text-white flex items-center gap-1.5`}>
                 {getVisibilityIcon()}
-                {getVisibilityLabel()}
+                <span className="hidden sm:inline">{getVisibilityLabel()}</span>
               </span>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-3 pt-2 flex-wrap relative" style={{ zIndex: 100 }}>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2 flex-wrap relative" style={{ zIndex: 100 }}>
               {/* Visibility Toggle Button */}
               <div className="relative" ref={menuRef} style={{ zIndex: 1000 }}>
                 <motion.button
                   ref={buttonRef}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -408,7 +408,7 @@ const Linkcard = ({ sources }) => {
                     setShowVisibilityMenu(newState);
                   }}
                   disabled={updatingVisibility}
-                  className={`privacy-button bg-gradient-to-r ${getVisibilityColor()} hover:opacity-90 text-white p-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2 disabled:opacity-50 relative cursor-pointer`}
+                  className={`privacy-button bg-gradient-to-r ${getVisibilityColor()} hover:opacity-90 text-white p-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-1.5 disabled:opacity-50 relative cursor-pointer`}
                   title="Change visibility"
                   type="button"
                   style={{ 
@@ -422,11 +422,11 @@ const Linkcard = ({ sources }) => {
                   }}
                 >
                   {updatingVisibility ? (
-                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                    <div className="animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full" />
                   ) : (
                     getVisibilityIcon()
                   )}
-                  <span className="hidden sm:inline">Privacy</span>
+                  <span className="hidden sm:inline text-xs">Privacy</span>
                 </motion.button>
 
                 {/* Visibility Menu - Using Portal to render outside DOM hierarchy */}
@@ -617,41 +617,42 @@ const Linkcard = ({ sources }) => {
               )}
 
               <motion.button
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => handleDeleteLink(_id)}
-                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white p-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white p-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-1.5"
                 title="Delete link"
               >
-                <FaTrash className="text-lg" />
-                <span className="hidden sm:inline">Delete</span>
+                <FaTrash className="text-sm" />
+                <span className="hidden sm:inline text-xs">Delete</span>
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => handleEditLink(_id)}
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white p-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white p-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-1.5"
                 title="Edit link"
                 style={{ transformOrigin: 'center', willChange: 'transform' }}
               >
-                <FaEdit className="text-lg" />
-                <span className="hidden sm:inline">Edit</span>
+                <FaEdit className="text-sm" />
+                <span className="hidden sm:inline text-xs">Edit</span>
               </motion.button>
 
               <motion.a
                 href={`https://clickly.cv/${username}/${source}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.9 }}
-                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white p-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white p-2 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-1.5"
                 title="Open link"
                 style={{ transformOrigin: 'center', willChange: 'transform' }}
               >
-                <FaExternalLinkAlt className="text-lg" />
-                <span className="hidden sm:inline">Open</span>
+                <FaExternalLinkAlt className="text-sm" />
+                <span className="hidden sm:inline text-xs">Open</span>
               </motion.a>
+            </div>
             </div>
           </div>
         </div>

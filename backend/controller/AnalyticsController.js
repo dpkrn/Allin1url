@@ -24,55 +24,82 @@ const getAnalytics = async (req, res) => {
             destination: 1,
             clicked: 1,
             notSeen: 1,
-            visibility: 1
+            visibility: 1,
+            _id: 1
         });
 
-        if (!links || links.length === 0) {
-            return res.status(200).json({
-                success: true,
-                analytics: {
-                    profileVisits: [],
-                    clickCounts: [],
-                    locationData: [],
-                    osData: [],
-                    platformData: [],
-                    linkData: []
-                }
-            });
-        }
+        const linkIds = links.map(link => link._id);
 
         // Calculate date range
         const today = new Date();
+        today.setHours(23, 59, 59, 999); // End of today
         let days = 30;
+        let startDate = new Date(today);
+        
         switch (timeRange) {
             case '7d':
                 days = 7;
+                startDate.setDate(today.getDate() - 6); // Include today + 6 days
                 break;
             case '30d':
                 days = 30;
+                startDate.setDate(today.getDate() - 29); // Include today + 29 days
                 break;
             case '90d':
                 days = 90;
+                startDate.setDate(today.getDate() - 89);
                 break;
             case '1y':
                 days = 365;
+                startDate.setDate(today.getDate() - 364);
                 break;
             case 'all':
-                days = 365; // For all time, show last year
+                startDate = null; // No start date limit
+                days = 365; // For display purposes
                 break;
             default:
                 days = 30;
+                startDate.setDate(today.getDate() - 29);
+        }
+
+        startDate?.setHours(0, 0, 0, 0); // Start of the day
+
+        // Build match conditions for analytics
+        const matchConditions = {
+            userId: new mongoose.Types.ObjectId(userId),
+            username,
+            deletedAt: null
+        };
+
+        // Add date filter if not 'all'
+        if (timeRange !== 'all' && startDate) {
+            matchConditions.clickDate = {
+                $gte: startDate,
+                $lte: today
+            };
+        }
+
+        // Filter by links if available (only show analytics for existing links)
+        if (linkIds.length > 0) {
+            matchConditions.$or = [
+                { linkId: { $in: linkIds } },
+                { linkId: null } // Include profile visits (linkId is null for profile visits)
+            ];
+        } else {
+            // If no links, only show profile visits
+            matchConditions.linkId = null;
         }
 
         // Generate date range for time series data
         const generateDateRange = () => {
             const dates = [];
-            for (let i = days - 1; i >= 0; i--) {
+            const rangeDays = timeRange === 'all' ? 365 : days;
+            for (let i = rangeDays - 1; i >= 0; i--) {
                 const date = new Date(today);
                 date.setDate(date.getDate() - i);
                 dates.push({
                     date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                    fullDate: date
+                    fullDate: new Date(date.getFullYear(), date.getMonth(), date.getDate())
                 });
             }
             return dates;
@@ -80,62 +107,273 @@ const getAnalytics = async (req, res) => {
 
         const dateRange = generateDateRange();
 
-        // Profile Visits (simulated based on total clicks)
-        const totalClicks = links.reduce((sum, link) => sum + (link.clicked || 0), 0);
-        const avgDailyClicks = totalClicks / days;
+        // 1. Profile Visits (where linkId is null)
+        const profileVisitsQuery = { ...matchConditions, linkId: null };
+        const profileVisitsAggregation = await LinkAnalytics.aggregate([
+            { $match: profileVisitsQuery },
+            {
+                $group: {
+                    _id: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$clickDate" }
+                    },
+                    visits: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        // Map to date range
+        const profileVisitsMap = new Map(
+            profileVisitsAggregation.map(item => [item._id, item.visits])
+        );
         const profileVisits = dateRange.map(({ date, fullDate }) => {
-            // Simulate profile visits (usually higher than individual link clicks)
-            const baseVisits = Math.floor(avgDailyClicks * 1.2);
-            const variation = Math.floor(Math.random() * baseVisits * 0.3);
+            const dateStr = fullDate.toISOString().split('T')[0];
             return {
                 date,
-                visits: Math.max(0, baseVisits + variation - Math.floor(baseVisits * 0.15))
+                visits: profileVisitsMap.get(dateStr) || 0
             };
         });
 
-        // Click Counts (simulated daily distribution)
+        // 2. Click Counts (all clicks including profile visits)
+        const clickCountsAggregation = await LinkAnalytics.aggregate([
+            { $match: matchConditions },
+            {
+                $group: {
+                    _id: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$clickDate" }
+                    },
+                    clicks: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        const clickCountsMap = new Map(
+            clickCountsAggregation.map(item => [item._id, item.clicks])
+        );
         const clickCounts = dateRange.map(({ date, fullDate }) => {
-            const baseClicks = Math.floor(avgDailyClicks);
-            const variation = Math.floor(Math.random() * baseClicks * 0.4);
+            const dateStr = fullDate.toISOString().split('T')[0];
             return {
                 date,
-                clicks: Math.max(0, baseClicks + variation - Math.floor(baseClicks * 0.2))
+                clicks: clickCountsMap.get(dateStr) || 0
             };
         });
 
-        // Location Data (simulated based on common distribution)
-        const locationData = [
-            { name: 'United States', value: Math.floor(totalClicks * 0.35) },
-            { name: 'India', value: Math.floor(totalClicks * 0.25) },
-            { name: 'United Kingdom', value: Math.floor(totalClicks * 0.15) },
-            { name: 'Canada', value: Math.floor(totalClicks * 0.10) },
-            { name: 'Australia', value: Math.floor(totalClicks * 0.08) },
-            { name: 'Germany', value: Math.floor(totalClicks * 0.07) }
-        ].filter(item => item.value > 0);
-
-        // OS Data (simulated)
-        const osData = [
-            { name: 'Windows', value: Math.floor(totalClicks * 0.40) },
-            { name: 'macOS', value: Math.floor(totalClicks * 0.25) },
-            { name: 'Linux', value: Math.floor(totalClicks * 0.15) },
-            { name: 'iOS', value: Math.floor(totalClicks * 0.12) },
-            { name: 'Android', value: Math.floor(totalClicks * 0.08) }
-        ].filter(item => item.value > 0);
-
-        // Platform Data (real data from links)
-        const platformData = links
-            .map(link => ({
-                name: link.source.charAt(0).toUpperCase() + link.source.slice(1),
-                clicks: link.clicked || 0
-            }))
-            .sort((a, b) => b.clicks - a.clicks);
-
-        // Link Data (real data from links)
-        const linkData = links.map(link => ({
-            name: link.source.charAt(0).toUpperCase() + link.source.slice(1),
-            clicks: link.clicked || 0,
-            visits: Math.floor((link.clicked || 0) * 1.2) // Simulated visits
+        // 3. Location Data (real data)
+        const locationAggregation = await LinkAnalytics.aggregate([
+            { $match: { ...matchConditions, 'location.country': { $ne: null } } },
+            {
+                $group: {
+                    _id: '$location.country',
+                    value: { $sum: 1 }
+                }
+            },
+            { $sort: { value: -1 } },
+            { $limit: 10 }
+        ]);
+        const locationData = locationAggregation.map(item => ({
+            name: item._id || 'Unknown',
+            value: item.value
         }));
+
+        // 4. OS Data (real data)
+        const osAggregation = await LinkAnalytics.aggregate([
+            { $match: { ...matchConditions, 'os.name': { $ne: null } } },
+            {
+                $group: {
+                    _id: '$os.name',
+                    value: { $sum: 1 }
+                }
+            },
+            { $sort: { value: -1 } },
+            { $limit: 10 }
+        ]);
+        const osData = osAggregation.map(item => ({
+            name: item._id || 'Unknown',
+            value: item.value
+        }));
+
+        // 5. Browser Data (real data)
+        const browserAggregation = await LinkAnalytics.aggregate([
+            { $match: { ...matchConditions, 'browser.name': { $ne: null } } },
+            {
+                $group: {
+                    _id: '$browser.name',
+                    value: { $sum: 1 }
+                }
+            },
+            { $sort: { value: -1 } },
+            { $limit: 10 }
+        ]);
+        const browserData = browserAggregation.map(item => ({
+            name: item._id || 'Unknown',
+            value: item.value
+        }));
+
+        // 6. Device Data (real data)
+        const deviceAggregation = await LinkAnalytics.aggregate([
+            { $match: { ...matchConditions, 'device.type': { $ne: null } } },
+            {
+                $group: {
+                    _id: '$device.type',
+                    value: { $sum: 1 }
+                }
+            },
+            { $sort: { value: -1 } }
+        ]);
+        const deviceData = deviceAggregation.map(item => ({
+            name: item._id.charAt(0).toUpperCase() + item._id.slice(1) || 'Unknown',
+            value: item.value
+        }));
+
+        // 7. Referrer Data (NEW - real referrer analytics)
+        const referrerAggregation = await LinkAnalytics.aggregate([
+            { $match: matchConditions },
+            {
+                $group: {
+                    _id: '$referrer',
+                    value: { $sum: 1 },
+                    clicks: { $sum: 1 }
+                }
+            },
+            { $sort: { value: -1 } },
+            { $limit: 20 }
+        ]);
+        
+        // Process referrer data - extract domain names and categorize
+        const referrerData = referrerAggregation.map(item => {
+            let name = item._id || 'direct';
+            let category = 'direct';
+            
+            if (name !== 'direct' && name !== 'null' && name !== '') {
+                try {
+                    const url = new URL(name);
+                    name = url.hostname.replace('www.', '');
+                    
+                    // Categorize referrers
+                    if (name.includes('google') || name.includes('bing') || name.includes('yahoo') || name.includes('duckduckgo')) {
+                        category = 'search';
+                    } else if (name.includes('facebook') || name.includes('twitter') || name.includes('linkedin') || name.includes('instagram') || name.includes('youtube') || name.includes('tiktok')) {
+                        category = 'social';
+                    } else if (name.includes('clickly.cv') || name.includes(username)) {
+                        category = 'internal';
+                    } else {
+                        category = 'external';
+                    }
+                } catch (e) {
+                    // Invalid URL, keep as is
+                    category = 'other';
+                }
+            } else {
+                name = 'Direct';
+                category = 'direct';
+            }
+            
+            return {
+                name,
+                value: item.value,
+                clicks: item.clicks,
+                category,
+                originalReferrer: item._id
+            };
+        });
+
+        // 8. Referrer by Category (group referrers by category)
+        const referrerByCategory = referrerData.reduce((acc, item) => {
+            const category = item.category;
+            if (!acc[category]) {
+                acc[category] = { name: category.charAt(0).toUpperCase() + category.slice(1), value: 0, clicks: 0 };
+            }
+            acc[category].value += item.value;
+            acc[category].clicks += item.clicks;
+            return acc;
+        }, {});
+        const referrerCategoryData = Object.values(referrerByCategory);
+
+        // 9. Platform Data (by link source - real data)
+        const platformAggregation = await LinkAnalytics.aggregate([
+            { $match: { ...matchConditions, linkId: { $ne: null } } },
+            { $lookup: { from: 'links', localField: 'linkId', foreignField: '_id', as: 'link' } },
+            { $unwind: { path: '$link', preserveNullAndEmptyArrays: true } },
+            { $match: { 'link.source': { $ne: null } } },
+            {
+                $group: {
+                    _id: '$link.source',
+                    clicks: { $sum: 1 }
+                }
+            },
+            { $sort: { clicks: -1 } }
+        ]);
+        const platformData = platformAggregation.map(item => ({
+            name: item._id ? (item._id.charAt(0).toUpperCase() + item._id.slice(1)) : 'Unknown',
+            clicks: item.clicks,
+            value: item.clicks
+        }));
+
+        // 10. Link Data (by link with clicks and visits)
+        const linkAggregation = await LinkAnalytics.aggregate([
+            { $match: { ...matchConditions, linkId: { $ne: null } } },
+            { $lookup: { from: 'links', localField: 'linkId', foreignField: '_id', as: 'link' } },
+            { $unwind: { path: '$link', preserveNullAndEmptyArrays: true } },
+            { $match: { 'link.source': { $ne: null } } },
+            {
+                $group: {
+                    _id: '$link.source',
+                    clicks: { $sum: 1 }
+                }
+            },
+            { $sort: { clicks: -1 } }
+        ]);
+        const linkData = linkAggregation.map(item => ({
+            name: item._id ? (item._id.charAt(0).toUpperCase() + item._id.slice(1)) : 'Unknown',
+            clicks: item.clicks,
+            visits: item.clicks // Use clicks as visits for now
+        }));
+
+        // 11. Hourly Distribution (time-based analytics)
+        const hourlyAggregation = await LinkAnalytics.aggregate([
+            { $match: matchConditions },
+            {
+                $group: {
+                    _id: { $hour: '$clickDate' },
+                    clicks: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+        const hourlyData = Array.from({ length: 24 }, (_, hour) => {
+            const hourData = hourlyAggregation.find(h => h._id === hour);
+            return {
+                hour: `${hour}:00`,
+                clicks: hourData?.clicks || 0
+            };
+        });
+
+        // 12. Day of Week Distribution
+        const dayOfWeekAggregation = await LinkAnalytics.aggregate([
+            { $match: matchConditions },
+            {
+                $project: {
+                    dayOfWeek: { $dayOfWeek: '$clickDate' }
+                }
+            },
+            {
+                $group: {
+                    _id: '$dayOfWeek',
+                    clicks: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayOfWeekData = Array.from({ length: 7 }, (_, day) => {
+            const dayData = dayOfWeekAggregation.find(d => d._id === day + 1);
+            return {
+                name: dayNames[day],
+                clicks: dayData?.clicks || 0,
+                value: dayData?.clicks || 0
+            };
+        });
 
         return res.status(200).json({
             success: true,
@@ -144,8 +382,14 @@ const getAnalytics = async (req, res) => {
                 clickCounts,
                 locationData,
                 osData,
+                browserData,
+                deviceData,
+                referrerData,
+                referrerCategoryData,
                 platformData,
-                linkData
+                linkData,
+                hourlyData,
+                dayOfWeekData
             }
         });
 
@@ -153,7 +397,8 @@ const getAnalytics = async (req, res) => {
         console.error('Error fetching analytics:', err);
         return res.status(500).json({
             success: false,
-            message: 'Server Internal Error'
+            message: 'Server Internal Error',
+            error: err.message
         });
     }
 };

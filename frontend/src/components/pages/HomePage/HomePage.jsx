@@ -17,7 +17,9 @@ import {
   FaGraduationCap,
   FaCog,
   FaServer,
-  FaHome
+  FaHome,
+  FaShieldAlt,
+  FaLock
 } from 'react-icons/fa';
 import { 
   SiLinkedin, 
@@ -211,7 +213,7 @@ const HomePage = () => {
   const useCases = [
     {
       title: "Job Seekers",
-      desc: "Create professional links for your resume, LinkedIn, portfolio, and GitHub. Share one memorable link with recruiters.",
+      desc: "Create professional links for your resume, LinkedIn, portfolio, and GitHub. Share one memorable link with recruiters. Track which platforms recruiters visit most with detailed analytics including location, device, browser, and referrer insights to optimize your job search strategy.",
       icon: FaBriefcase,
       gradient: "from-blue-500 to-cyan-500",
       examples: [
@@ -222,7 +224,7 @@ const HomePage = () => {
     },
     {
       title: "Content Creators",
-      desc: "Manage all your social media profiles from one place. Share your LinkBridger link in bio and watch engagement grow.",
+      desc: "Manage all your social media profiles from one place. Share your LinkBridger link in bio and watch engagement grow. Track which platforms drive the most traffic with comprehensive analytics including device, browser, OS, and referrer insights.",
       icon: FaUserTie,
       gradient: "from-purple-500 to-pink-500",
       examples: [
@@ -233,7 +235,7 @@ const HomePage = () => {
     },
     {
       title: "Developers",
-      desc: "Showcase your GitHub, portfolio, blog, and coding profiles. Perfect for developer portfolios and tech resumes.",
+      desc: "Showcase your GitHub, portfolio, blog, and coding profiles. Perfect for developer portfolios and tech resumes. Analyze click patterns with detailed analytics including hourly distribution, day-of-week analysis, and referrer tracking to optimize your professional presence.",
       icon: FaCode,
       gradient: "from-green-500 to-emerald-500",
       examples: [
@@ -311,8 +313,14 @@ const HomePage = () => {
     {
       step: "6",
       title: "Get Real-Time Notifications",
-      desc: "Receive instant email notifications every time someone visits your links. Stay informed about engagement and track who's viewing your profiles in real-time.",
+      desc: "Receive instant email notifications every time someone visits your links. Customize notification preferences (link clicks, profile views, weekly reports) to stay informed about engagement in real-time.",
       icon: FaEnvelope,
+    },
+    {
+      step: "7",
+      title: "Analyze with Advanced Analytics",
+      desc: "Track clicks, profile visits, location, devices, browsers, operating systems, referrers, hourly patterns, and day-of-week analysis. Use multiple chart types with customizable time ranges to understand your audience and optimize your strategy.",
+      icon: FaChartLine,
     },
   ];
 
@@ -352,14 +360,14 @@ const HomePage = () => {
     {
       icon: FaSyncAlt,
       title: "Centralized Link Management",
-      description: "Update your social profile links in one place, and the change reflects everywhere.",
+      description: "Update your social profile links in one place, and the change reflects everywhere. No more hunting down old links across multiple platforms.",
       color: "from-green-500 to-emerald-500",
       delay: 0.3
     },
     {
       icon: FaEnvelope,
       title: "Real-Time Email Notifications",
-      description: "Get instant email notifications every time someone visits your links. Stay informed about engagement in real-time.",
+      description: "Get instant email notifications every time someone visits your links. Customize notification preferences (link clicks, profile views, weekly reports) to stay informed about engagement in real-time.",
       color: "from-cyan-500 to-blue-500",
       delay: 0.4
     },
@@ -372,10 +380,24 @@ const HomePage = () => {
     },
     {
       icon: FaChartLine,
-      title: "Advanced Analytics",
-      description: "Get comprehensive insights into every click with detailed analytics. Track location, device type, browser type, referrer, time, and much more. Understand your audience with granular data about every interaction.",
+      title: "Advanced Analytics Dashboard",
+      description: "Comprehensive analytics with detailed insights. Track clicks, profile visits, location (country-level), devices (Desktop/Mobile/Tablet), browsers (Chrome/Safari/Firefox/Edge), operating systems (Windows/macOS/Linux/iOS/Android), referrers (Direct/Search/Social/Internal/External), hourly patterns, day-of-week analysis, platform performance, and link-based metrics. Multiple chart types (Line, Bar, Area, Pie) with customizable time ranges (7d, 30d, 90d, 1y, all time). Summary cards with key metrics and full dark/light theme support.",
       color: "from-blue-500 to-cyan-500",
       delay: 0.6
+    },
+    {
+      icon: FaCog,
+      title: "Responsive & Mobile-Optimized",
+      description: "Fully responsive design with adaptive text sizing that works perfectly on all devices. Mobile-optimized layouts with single-row URL inputs, touch-friendly interfaces, and seamless dark/light theme support across all screen sizes.",
+      color: "from-purple-500 to-pink-500",
+      delay: 0.7
+    },
+    {
+      icon: FaShieldAlt,
+      title: "Enterprise-Grade Security",
+      description: "JWT-based authentication with bcrypt password hashing, HTTPS encryption, Helmet.js security headers, CORS protection, secure cookie-based sessions, and password-protected private links. Your data is encrypted in transit and at rest with comprehensive privacy controls and granular visibility settings.",
+      color: "from-indigo-500 to-purple-500",
+      delay: 0.8
     },
   ];
 
@@ -402,7 +424,7 @@ const HomePage = () => {
       >
         <div className="container mx-auto max-w-3xl">
           <h2
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-3 sm:mb-4 md:mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-center mb-3 sm:mb-4 md:mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent px-4"
           >
             Have You Ever Wondered How Link Has Been Personalized:
           </h2>
@@ -430,8 +452,8 @@ const HomePage = () => {
 
               <div className="relative z-10">
                 {/* Example Username Badge - Top Right */}
-                <div className="absolute top-0 right-0">
-                  <span className="text-xs md:text-sm font-bold text-gray-600 dark:text-gray-400">
+                <div className="absolute top-0 right-0 px-2 sm:px-3">
+                  <span className="text-xs sm:text-xs md:text-sm font-bold text-gray-600 dark:text-gray-400">
                     Example username: <span className="text-purple-600 dark:text-purple-400">dpkrn</span>
                   </span>
                 </div>
@@ -440,25 +462,25 @@ const HomePage = () => {
                 <div
                   className="mb-4 pb-3 border-b border-purple-500/30 dark:border-purple-400/30"
                 >
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-1.5 font-semibold uppercase tracking-wider">
+                  <p className="text-xs sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 mb-1.5 font-semibold uppercase tracking-wider">
                     Base URL (Same for All):
                   </p>
                   <div
-                    className="flex items-center gap-2 flex-wrap"
+                    className="flex items-center gap-1.5 sm:gap-2 flex-wrap"
                   >
                     <a
                       href="https://dpkrn.clickly.cv/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs md:text-sm lg:text-base font-mono font-bold text-purple-300 dark:text-purple-200 bg-purple-500/20 dark:bg-purple-500/30 px-2 py-1 rounded-lg border border-purple-400/30 hover:bg-purple-500/30 dark:hover:bg-purple-500/40 hover:border-purple-400/50 transition-all duration-300 inline-block"
+                      className="text-xs sm:text-xs md:text-sm lg:text-base font-mono font-bold text-purple-300 dark:text-purple-200 bg-purple-500/20 dark:bg-purple-500/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg border border-purple-400/30 hover:bg-purple-500/30 dark:hover:bg-purple-500/40 hover:border-purple-400/50 transition-all duration-300 inline-block break-all"
                     >
-                      https://<span className="font-bold text-purple-200 dark:text-purple-100 bg-purple-400/20 dark:bg-purple-400/30 px-1 rounded">dpkrn</span>.clickly.cv/
+                      https://<span className="font-bold text-purple-200 dark:text-purple-100 bg-purple-400/20 dark:bg-purple-400/30 px-0.5 sm:px-1 rounded">dpkrn</span>.clickly.cv/
                     </a>
-                    <span className="text-xs md:text-sm text-gray-400 dark:text-gray-500 italic">
+                    <span className="text-xs sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 italic">
                       (accessible for all generated link at one place)
                     </span>
                     <span
-                      className="text-lg"
+                      className="text-sm sm:text-base md:text-lg"
                     >
                       ⬇️
                     </span>
@@ -488,26 +510,26 @@ const HomePage = () => {
                       <div className="relative flex items-center gap-2 p-2 bg-slate-700/50 dark:bg-slate-800/50 rounded-lg border border-slate-600/50 dark:border-slate-700/50 backdrop-blur-sm group-hover:border-purple-400/50 transition-all duration-300">
                         {/* Platform Label */}
                         <motion.div
-                          className="flex-shrink-0 w-20 md:w-24"
+                          className="flex-shrink-0 w-16 sm:w-20 md:w-24"
                           whileHover={{ scale: 1.1 }}
                         >
-                          <span className="text-xs md:text-sm font-semibold text-gray-300 dark:text-gray-400">
+                          <span className="text-xs sm:text-xs md:text-sm font-semibold text-gray-300 dark:text-gray-400">
                             {link.platform}:
                           </span>
                         </motion.div>
 
                         {/* Complete URL - No Space */}
-                        <div className="flex items-center font-mono">
+                        <div className="flex items-center font-mono flex-wrap gap-0.5 sm:gap-1">
                           {/* Base URL - Static with highlighted username */}
-                          <span className="text-xs md:text-sm lg:text-base text-gray-400 dark:text-gray-500 select-all">
-                            https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.clickly.cv/
+                          <span className="text-xs sm:text-xs md:text-sm lg:text-base text-gray-400 dark:text-gray-500 select-all break-all">
+                            https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-0.5 sm:px-1 rounded">dpkrn</span>.clickly.cv/
                           </span>
                           {/* Platform Name - Animated (no space before) */}
                           <motion.a
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`text-xs md:text-sm lg:text-base font-bold bg-gradient-to-r ${link.color} bg-clip-text text-transparent hover:scale-110 transition-transform duration-300 inline-block`}
+                            className={`text-xs sm:text-xs md:text-sm lg:text-base font-bold bg-gradient-to-r ${link.color} bg-clip-text text-transparent hover:scale-110 transition-transform duration-300 inline-block`}
                             whileHover={{ 
                               scale: 1.15,
                             }}
@@ -767,7 +789,9 @@ const HomePage = () => {
                 https://<span className="font-bold text-purple-600 dark:text-purple-400">yourname</span>.clickly.cv
               </b>{" "}
               (without any platform name). Plus, get real-time email
-              notifications every time someone visits your links!
+              notifications every time someone visits your links! Analyze your
+              audience with comprehensive analytics including device, browser,
+              OS, referrer, and temporal patterns to optimize your strategy.
             </p>
 
             <div className="space-y-4 sm:space-y-5 md:space-y-6">

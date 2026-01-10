@@ -123,8 +123,8 @@ const HeroSection = ({
         />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center space-y-8">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="text-center space-y-6 sm:space-y-7 md:space-y-8">
           {/* Main Heading with Typewriter */}
           {words.length > 0 && (
             <motion.div
@@ -142,11 +142,11 @@ const HeroSection = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.1, delay: 0.1 }}
-              className="text-2xl md:text-4xl font-semibold text-gray-800 dark:text-gray-300 mb-4"
+              className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-gray-800 dark:text-gray-300 mb-3 sm:mb-4 px-4"
             >
               Create personalized links for your{' '}
               <span className="inline-block">
-                <FlipWords words={flipWords} duration={100} className="text-3xl md:text-5xl font-bold" />
+                <FlipWords words={flipWords} duration={100} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold" />
               </span>
             </motion.div>
           )}
@@ -157,13 +157,13 @@ const HeroSection = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed px-4"
             >
               {description}
               {highlightText && (
                 <>
                   <br />
-                  <span className="font-semibold text-purple-600 dark:text-purple-400">
+                  <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-purple-600 dark:text-purple-400">
                     {highlightText}
                   </span>
                 </>
@@ -193,14 +193,14 @@ const HeroSection = ({
             {/* Tooltip as toast-like message */}
             {showTooltip && username.length === 0 && (
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 transition-opacity duration-200">
-                <div className="bg-purple-600 text-white text-xs px-4 py-2 rounded-lg shadow-lg font-semibold whitespace-nowrap animate-fade-in">
+                <div className="bg-purple-600 text-white text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg shadow-lg font-semibold whitespace-nowrap animate-fade-in">
                   Always choose easy and memorable username
                 </div>
               </div>
             )}
-            <div className="flex flex-col sm:flex-row gap-2 items-center w-full sm:w-auto">
-              <span className="text-lg font-medium text-gray-700 dark:text-gray-200">https://</span>
-              <div className="relative w-36 sm:w-44">
+            <div className="flex flex-row flex-nowrap gap-1 sm:gap-2 items-center w-full max-w-full px-4 sm:px-0 justify-center sm:justify-start">
+              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">https://</span>
+              <div className="relative flex-shrink-0 min-w-[80px] sm:min-w-[100px] md:min-w-[120px] w-auto sm:w-36 md:w-44 max-w-[120px] sm:max-w-none">
                 <input
                   type="text"
                   value={username}
@@ -213,20 +213,20 @@ const HeroSection = ({
                       setAvailable(false);
                     }
                   }}
-                  placeholder="enter username"
-                  className="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-lg font-semibold placeholder-gray-400 dark:placeholder-gray-500 hover:border-purple-400 dark:hover:border-purple-400"
+                  placeholder="username"
+                  className="w-full px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-xs sm:text-sm md:text-base lg:text-lg font-semibold placeholder-gray-400 dark:placeholder-gray-500 hover:border-purple-400 dark:hover:border-purple-400"
                   autoComplete="off"
                   spellCheck="false"
                 />
               </div>
-              <span className="text-lg font-medium text-gray-700 dark:text-gray-200">.clickly.cv/</span>
+              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">.clickly.cv/</span>
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => handleCtaClick(username)}
               disabled={username.length < 5 || !isAvailable || checking}
-              className="group relative px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-base sm:text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 overflow-hidden w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-sm sm:text-base md:text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 overflow-hidden w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 Start with your username
@@ -240,12 +240,12 @@ const HeroSection = ({
               />
             </motion.button>
             {username.length >= 5 && (
-              <p className={`mt-2 text-xs ml-1 transition-all duration-300 ${isAvailable ? "text-green-400" : "text-red-400"}`}>
+              <p className={`mt-2 text-xs sm:text-sm ml-1 transition-all duration-300 ${isAvailable ? "text-green-400" : "text-red-400"}`}>
                 {isAvailable ? "✓ Username is available" : "✗ Username is not available"}
               </p>
             )}
-            <p className="text-base text-gray-700 dark:text-gray-200 mt-2">Get your own domain <strong>FREE</strong> to manage your links</p>
-            <p className="text-sm text-purple-600 dark:text-purple-400 mt-1 font-semibold">That will reflect your brand identity ✨</p>
+            <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200 mt-2 px-4 text-center">Get your own domain <strong>FREE</strong> to manage your links</p>
+            <p className="text-xs sm:text-sm text-purple-600 dark:text-purple-400 mt-1 font-semibold px-4 text-center">That will reflect your brand identity ✨</p>
           </motion.div>
 
           {/* Platform Icons */}
@@ -256,8 +256,8 @@ const HeroSection = ({
               transition={{ duration: 0.8, delay: 0.9 }}
               className="mt-16"
             >
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Works with all platforms</p>
-              <div className="flex flex-wrap justify-center gap-6">
+              <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 px-4">Works with all platforms</p>
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-5 md:gap-6 px-4">
                 {platforms.map((platform, index) => (
                   <motion.div
                     key={platform.name || index}
@@ -265,7 +265,7 @@ const HeroSection = ({
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1 + index * 0.1, type: "spring", stiffness: 200 }}
                     whileHover={{ scale: 1.2, rotate: 5 }}
-                    className={`text-4xl ${platform.color || 'text-gray-600'} cursor-pointer hover:drop-shadow-lg transition-all`}
+                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl ${platform.color || 'text-gray-600'} cursor-pointer hover:drop-shadow-lg transition-all`}
                   >
                     {platform.icon}
                   </motion.div>

@@ -247,8 +247,11 @@ const LinkPage = ({ children }) => {
 
           {/* Main Content: Links and Preview */}
           <div className={`grid grid-cols-1 ${children ? 'lg:grid-cols-[2fr_1fr]' : ''} gap-6 lg:gap-8`}>
-            {/* Left Side: Links Section */}
-            <motion.div variants={itemVariants} className="space-y-6">
+            {/* Left Side: Links Section - Scrollable - Height matches template preview */}
+            <motion.div 
+              variants={itemVariants} 
+              className={`space-y-3 scroll-smooth custom-scrollbar ${children && location.pathname !== '/links' ? 'lg:h-[680px] lg:overflow-y-auto lg:pr-4' : ''}`}
+            >
               {links.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
@@ -297,14 +300,14 @@ const LinkPage = ({ children }) => {
               )}
             </motion.div>
 
-            {/* Right Side: Template Preview (only if children provided and pathname is not /links) */}
+            {/* Right Side: Template Preview - Fixed/Sticky */}
             {children && location.pathname !== '/links' && (
               <motion.div 
                 variants={itemVariants} 
-                className="lg:sticky lg:top-8 h-fit"
+                className="lg:sticky lg:top-8 lg:self-start"
               >
-                <div key={refreshKey}>
-                  {React.cloneElement(children, { refreshTrigger: refreshKey })}
+                <div key={refreshKey} className="w-full">
+                  {React.cloneElement(children, { refreshTrigger: refreshKey, height: "h-[600px] md:h-[650px]" })}
                 </div>
               </motion.div>
             )}

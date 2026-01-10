@@ -13,6 +13,7 @@ const AboutDeveloper = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const darkMode = useSelector(store => store.page.darkMode);
+  const isAuthenticated = useSelector(store => store.admin.isAuthenticated);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [collaborators, setCollaborators] = useState([]);
   const [loadingCollaborators, setLoadingCollaborators] = useState(false);
@@ -227,21 +228,21 @@ const AboutDeveloper = () => {
         initial="hidden"
         animate="visible"
         variants={staggerContainer}
-        className="py-12 px-4"
+        className={`py-8 sm:py-10 md:py-12 px-3 sm:px-4 md:px-6 ${!isAuthenticated ? 'pt-20 sm:pt-24 md:pt-28' : ''}`}
       >
         <div className="max-w-6xl mx-auto">
         {/* Header Section */}
-        <motion.div variants={fadeInUp} className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-300">
+        <motion.div variants={fadeInUp} className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 md:mb-6 transition-colors duration-300">
             About Developer
           </h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+          <div className="w-20 sm:w-24 md:w-28 h-0.5 sm:h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
         </motion.div>
 
         {/* Developer Card */}
         <motion.div
           variants={fadeInUp}
-          className="edge-animated edge-animated-always bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 md:p-12 mb-12 transition-colors duration-300"
+          className="edge-animated edge-animated-always bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 lg:p-12 mb-8 sm:mb-10 md:mb-12 transition-colors duration-300"
         >
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             {/* Profile Image */}
@@ -255,7 +256,7 @@ const AboutDeveloper = () => {
                 <img
                   src={profile}
                   alt="Deepak Kumar"
-                  className="relative w-48 h-48 md:w-56 md:h-56 rounded-full object-cover border-4 border-white dark:border-gray-700 shadow-xl"
+                  className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 rounded-full object-cover border-2 sm:border-3 md:border-4 border-white dark:border-gray-700 shadow-xl"
                   onError={(e) => {
                     e.target.src = 'https://via.placeholder.com/224?text=DK';
                   }}
@@ -267,13 +268,13 @@ const AboutDeveloper = () => {
             <div className="flex-1 text-center md:text-left">
               <motion.h2
                 variants={fadeInUp}
-                className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4 transition-colors duration-300"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4 md:mb-6 transition-colors duration-300"
               >
                 Deepak Kumar
               </motion.h2>
               <motion.p
                 variants={fadeInUp}
-                className="text-lg text-gray-600 dark:text-gray-300 mb-6 transition-colors duration-300"
+                className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-5 md:mb-6 leading-relaxed transition-colors duration-300 px-2 sm:px-0"
               >
                 I created LinkBridger to solve a real problem: managing multiple social media and professional links scattered across different platforms. 
                 Instead of sharing long, forgettable URLs, LinkBridger lets you create memorable, personalized links that reflect your brand. With granular
@@ -289,10 +290,10 @@ const AboutDeveloper = () => {
                   href="https://github.com/DpkRn"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                  className="p-2 sm:p-2.5 md:p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
                   aria-label="GitHub"
                 >
-                  <svg className="w-6 h-6 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path
                       fillRule="evenodd"
                       d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
@@ -304,10 +305,10 @@ const AboutDeveloper = () => {
                   href="https://www.linkedin.com/in/deepak-kumar-b3181a236/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                  className="p-2 sm:p-2.5 md:p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
                   aria-label="LinkedIn"
                 >
-                  <svg className="w-6 h-6 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gray-800 dark:text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                 </a>
@@ -315,10 +316,10 @@ const AboutDeveloper = () => {
                   href="https://deepak-aryan.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                  className="p-2 sm:p-2.5 md:p-3 bg-gray-100 dark:bg-gray-700 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
                   aria-label="Portfolio"
                 >
-                  <svg className="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -333,46 +334,46 @@ const AboutDeveloper = () => {
         </motion.div>
 
         {/* Roles Section */}
-        <motion.div variants={staggerContainer} className="mb-8">
+        <motion.div variants={staggerContainer} className="mb-6 sm:mb-8 md:mb-10">
           <motion.h2
             variants={fadeInUp}
-            className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-8 transition-colors duration-300"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center text-gray-800 dark:text-white mb-6 sm:mb-8 md:mb-10 transition-colors duration-300 px-4"
           >
             Developers & Contributors
           </motion.h2>
-          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <motion.div variants={staggerContainer} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
             {roles.map((role, index) => (
               <motion.div
                 key={index}
                 variants={fadeInUp}
                 whileHover={{ y: -5 }}
-                className="edge-animated bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="edge-animated bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-lg sm:rounded-xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 {/* Icon */}
-                <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-4 mx-auto">
-                  <div className="text-white">{role.icon}</div>
+                <div className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-3 sm:mb-4 mx-auto">
+                  <div className="text-white text-lg sm:text-xl md:text-2xl">{role.icon}</div>
                 </div>
 
                 {/* Role Title */}
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-3 text-center transition-colors duration-300">
+                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-800 dark:text-white mb-2 sm:mb-3 text-center transition-colors duration-300">
                   {role.title}
                 </h3>
 
                 {/* Name and Email */}
-                <div className="mb-3 text-center">
-                  <p className="text-lg font-semibold text-gray-800 dark:text-white transition-colors duration-300">
+                <div className="mb-2 sm:mb-3 text-center">
+                  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-800 dark:text-white transition-colors duration-300">
                     {role.name}
                   </p>
                   <a
                     href={`mailto:${role.email}`}
-                    className="text-sm text-blue-600 dark:text-blue-400 hover:underline transition-colors duration-200"
+                    className="text-xs sm:text-sm md:text-base text-blue-600 dark:text-blue-400 hover:underline transition-colors duration-200 break-all"
                   >
                     {role.email}
                   </a>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-600 dark:text-gray-300 text-center transition-colors duration-300">
+                <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300 text-center transition-colors duration-300 leading-relaxed">
                   {role.description}
                 </p>
               </motion.div>
@@ -381,10 +382,10 @@ const AboutDeveloper = () => {
         </motion.div>
 
         {/* Back Button */}
-        <motion.div variants={fadeInUp} className="text-center mt-8">
+        <motion.div variants={fadeInUp} className="text-center mt-6 sm:mt-8 md:mt-10">
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm sm:text-base md:text-lg font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             Go Back
           </button>
@@ -395,12 +396,12 @@ const AboutDeveloper = () => {
           <motion.div variants={fadeInUp} className="mt-16 pt-12 border-t border-gray-300 dark:border-gray-700">
             <motion.h2
               variants={fadeInUp}
-              className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-8 transition-colors duration-300"
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center text-gray-800 dark:text-white mb-6 sm:mb-8 md:mb-10 transition-colors duration-300 px-4"
             >
               GitHub Collaborators
             </motion.h2>
-            <motion.div variants={staggerContainer} className="bg-black rounded-xl p-8 shadow-lg">
-              <div className="flex flex-wrap gap-4 justify-center items-center">
+            <motion.div variants={staggerContainer} className="bg-black rounded-xl p-4 sm:p-6 md:p-8 shadow-lg">
+              <div className="flex flex-wrap gap-3 sm:gap-4 md:gap-5 justify-center items-center">
                 {collaborators.map((collaborator) => (
                   <motion.a
                     key={collaborator.id}
@@ -409,20 +410,20 @@ const AboutDeveloper = () => {
                     rel="noopener noreferrer"
                     variants={fadeInUp}
                     whileHover={{ scale: 1.05 }}
-                    className="flex flex-col items-center gap-2 p-4 hover:bg-gray-900 rounded-lg transition-colors duration-200"
+                    className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 hover:bg-gray-900 rounded-lg transition-colors duration-200"
                   >
                     <img
                       src={collaborator.avatar_url}
                       alt={collaborator.login}
-                      className="w-12 h-12 rounded-full border-2 border-gray-600"
+                      className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-gray-600"
                     />
-                    <span className="text-sm font-semibold text-white">
+                    <span className="text-xs sm:text-sm md:text-base font-semibold text-white text-center">
                       {collaborator.login}
                     </span>
                   </motion.a>
                 ))}
               </div>
-              <p className="text-center text-sm text-gray-400 mt-6">
+              <p className="text-center text-xs sm:text-sm md:text-base text-gray-400 mt-4 sm:mt-5 md:mt-6 px-4">
                 These talented developers contribute to LinkBridger on GitHub
               </p>
             </motion.div>
