@@ -20,8 +20,8 @@ const userSettingsSchema = new mongoose.Schema({
     template: {
         type: String,
         default: 'default', // Default template name
-        enum: ['default', 'minimal', 'modern', 'dark', 'light', 'hacker', 'glass', 'neon', 'gradient', 'cards', 'particles', '3d', 'retro'], // Available templates
         trim: true
+        // Removed enum validation - templates are validated dynamically from database
     },
     
     // Profile Visibility Settings

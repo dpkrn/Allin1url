@@ -21,7 +21,7 @@ const { extractInfo } = require('./middleware/deviceInfo')
 const { sendVisitEmail, sendProfileVisitEmail } = require('./lib/mail')
 const { verifyTokenOptional } = require('./middleware/verifyToken')
 const resolveUsername = require('./middleware/resolveUsername')
-const { getUserLinkUrl } = require('./utils')
+const { getUserLinkUrl, getTemplateScripts, getFaviconScript } = require('./utils')
 const bcryptjs = require('bcryptjs')
 const { time } = require('console')
 const { saveAnalytics } = require('./controller/AnalyticsController')
@@ -52,9 +52,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Make helper function available to all EJS templates
+// Make helper functions available to all EJS templates
 // Ensure it always reads the current environment variable
 app.locals.getUserLinkUrl = getUserLinkUrl;
+app.locals.getTemplateScripts = getTemplateScripts;
+app.locals.getFaviconScript = getFaviconScript;
 
 // Allowed origins for CORS
 const allowedOrigins = [

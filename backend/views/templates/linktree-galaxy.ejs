@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%=username.toUpperCase()%>'s LinkBridger profile">
+    <link rel="icon" type="image/png" id="dynamic-favicon" href="/images/panda.png" />
+    <title><%=username.toUpperCase()%> - LinkBridger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 25%, #2a2a5a 50%, #3a3a7a 75%, #4a4a9a 100%);
+            background-size: 400% 400%;
+            animation: galaxyGradient 20s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes galaxyGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(75, 0, 130, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(148, 0, 211, 0.3) 0%, transparent 60%);
+            animation: nebulaFloat 15s ease-in-out infinite;
+        }
+        
+        @keyframes nebulaFloat {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+        }
+        
+        .galaxy-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .galaxy-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: galaxyTwinkle 4s infinite;
+        }
+        
+        .galaxy-star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .galaxy-star:nth-child(2) { top: 20%; left: 30%; animation-delay: 0.5s; }
+        .galaxy-star:nth-child(3) { top: 30%; left: 50%; animation-delay: 1s; }
+        .galaxy-star:nth-child(4) { top: 40%; left: 70%; animation-delay: 1.5s; }
+        .galaxy-star:nth-child(5) { top: 50%; left: 90%; animation-delay: 2s; }
+        .galaxy-star:nth-child(6) { top: 60%; left: 15%; animation-delay: 0.3s; }
+        .galaxy-star:nth-child(7) { top: 70%; left: 40%; animation-delay: 0.8s; }
+        .galaxy-star:nth-child(8) { top: 80%; left: 60%; animation-delay: 1.3s; }
+        .galaxy-star:nth-child(9) { top: 15%; left: 80%; animation-delay: 1.8s; }
+        .galaxy-star:nth-child(10) { top: 25%; left: 20%; animation-delay: 2.5s; }
+        
+        @keyframes galaxyTwinkle {
+            0%, 100% { opacity: 0.5; transform: scale(1); box-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+            50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 20px rgba(138, 43, 226, 1), 0 0 30px rgba(255, 255, 255, 1); }
+        }
+        
+        .spiral {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(138, 43, 226, 0.2);
+            border-radius: 50%;
+            z-index: 0;
+            animation: spiralRotate 30s linear infinite;
+        }
+        
+        .spiral::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            border: 2px solid rgba(75, 0, 130, 0.2);
+            border-radius: 50%;
+        }
+        
+        .spiral::after {
+            content: '';
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            width: 400px;
+            height: 400px;
+            border: 2px solid rgba(148, 0, 211, 0.2);
+            border-radius: 50%;
+        }
+        
+        @keyframes spiralRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 520px;
+            max-height: 95vh;
+            background: rgba(10, 10, 26, 0.6);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 25px 30px;
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.8),
+                0 0 80px rgba(138, 43, 226, 0.5),
+                inset 0 0 60px rgba(75, 0, 130, 0.3);
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            animation: galaxyGlow 4s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        @keyframes galaxyGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 25px 70px rgba(0, 0, 0, 0.8),
+                    0 0 80px rgba(138, 43, 226, 0.5),
+                    inset 0 0 60px rgba(75, 0, 130, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 25px 70px rgba(0, 0, 0, 0.8),
+                    0 0 100px rgba(138, 43, 226, 0.7),
+                    inset 0 0 80px rgba(75, 0, 130, 0.4);
+            }
+        }
+        
+        .profile-section {
+            text-align: center;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+        
+        .profile-pic {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(138, 43, 226, 0.8);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.7),
+                0 0 60px rgba(138, 43, 226, 0.8),
+                inset 0 0 40px rgba(75, 0, 130, 0.4);
+            margin-bottom: 25px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            animation: picGalaxy 5s ease-in-out infinite;
+        }
+        
+        @keyframes picGalaxy {
+            0%, 100% { 
+                box-shadow: 
+                    0 20px 50px rgba(0, 0, 0, 0.7),
+                    0 0 60px rgba(138, 43, 226, 0.8),
+                    inset 0 0 40px rgba(75, 0, 130, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    0 20px 50px rgba(0, 0, 0, 0.7),
+                    0 0 80px rgba(138, 43, 226, 1),
+                    inset 0 0 60px rgba(75, 0, 130, 0.6);
+                transform: scale(1.05);
+            }
+        }
+        
+        .profile-pic:hover {
+            transform: scale(1.2) rotate(360deg);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.9),
+                0 0 100px rgba(138, 43, 226, 1),
+                inset 0 0 80px rgba(75, 0, 130, 0.7);
+        }
+        
+        .username {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8a2be2 0%, #9370db 25%, #ba55d3 50%, #9370db 75%, #8a2be2 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            animation: galaxyText 5s linear infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.8));
+        }
+        
+        @keyframes galaxyText {
+            to { background-position: 300% center; }
+        }
+        
+        .bio {
+            font-size: 17px;
+            color: rgba(200, 180, 255, 0.95);
+            line-height: 1.9;
+            margin-bottom: 30px;
+            text-shadow: 
+                0 2px 15px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(138, 43, 226, 0.5);
+        }
+        
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 5px;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(138, 43, 226, 0.3) transparent;
+        }
+        
+        .links::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .links::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .links::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.3);
+            border-radius: 3px;
+        }
+        
+        .links::-webkit-scrollbar-thumb:hover {
+            background: rgba(138, 43, 226, 0.5);
+        }
+        
+        .link-item {
+            opacity: 0;
+            transform: translateY(40px) scale(0.8);
+            animation: galaxyAppear 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes galaxyAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 18px 26px;
+            background: rgba(75, 0, 130, 0.3);
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            border-radius: 20px;
+            text-decoration: none;
+            color: #d4a5ff;
+            font-weight: 700;
+            font-size: 17px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(138, 43, 226, 0.4),
+                inset 0 0 30px rgba(75, 0, 130, 0.2);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.5), transparent);
+            transition: left 0.8s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            background: rgba(138, 43, 226, 0.4);
+            border-color: rgba(138, 43, 226, 0.9);
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.8),
+                0 0 80px rgba(138, 43, 226, 0.8),
+                inset 0 0 50px rgba(75, 0, 130, 0.4);
+            color: #fff;
+        }
+        
+        .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-arrow {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.6s ease;
+            font-size: 22px;
+        }
+        
+        .btn:hover .btn-arrow {
+            transform: translateX(15px) scale(1.4);
+        }
+        
+        .no-links {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(200, 180, 255, 0.8);
+        }
+        
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid rgba(138, 43, 226, 0.3);
+            flex-shrink: 0;
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .website {
+            text-decoration: none;
+            color: rgba(200, 180, 255, 0.9);
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .website:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 25px rgba(138, 43, 226, 0.9);
+            color: #d4a5ff;
+        }
+        
+        .heart {
+            margin: 0 5px;
+            animation: galaxyHeart 1.5s ease infinite;
+        }
+        
+        @keyframes galaxyHeart {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.6)); }
+            25% { transform: scale(1.6); filter: drop-shadow(0 0 20px rgba(138, 43, 226, 1)); }
+            50% { transform: scale(1.4); filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 20px 15px; max-height: 98vh; }
+            .profile-section { margin-bottom: 15px; }
+            .links { gap: 12px; margin-bottom: 15px; }
+        }
+        
+        @media (max-height: 600px) {
+            .container { max-height: 98vh; }
+            .profile-section { margin-bottom: 15px; }
+            .profile-pic { width: 90px; height: 90px; }
+            .username { font-size: 26px; }
+            .bio { font-size: 14px; margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nebula"></div>
+    <div class="galaxy-stars">
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+        <div class="galaxy-star"></div>
+    </div>
+    <div class="spiral"></div>
+    
+    <div class="container">
+        <div class="profile-section">
+            <img src="<%=dp.image%>" alt="<%=username.toUpperCase()%>'s Profile" class="profile-pic" onerror="handleImageError(this, '<%=username.charAt(0).toUpperCase()%>')">
+            <h1 class="username"><%= username.toUpperCase() %></h1>
+            <p class="bio"><%=dp.bio||"Welcome to my link hub! Explore all my profiles below."%></p>
+        </div>
+        
+        <div class="links">
+            <% if (tree && tree.length > 0) { %>
+                <% tree.forEach((item, index) => { 
+                    const delay = index * 0.1;
+                    %>
+                    <div class="link-item" style="animation-delay: <%= delay %>s;">
+                        <a href="<%= getUserLinkUrl(item.username, item.source) %>" class="btn" rel="noopener noreferrer" target="_self">
+                            <span class="btn-text"><%= item.source.toUpperCase() %></span>
+                            <span class="btn-arrow">→</span>
+                        </a>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="no-links">
+                    <p>No links available yet.</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <div class="footer">
+            <a class="website" href="https://clickly.cv" target="_blank">
+                <span>Made with</span>
+                <span class="heart">❤️</span>
+                <span>by LinkBridger</span>
+            </a>
+        </div>
+    </div>
+
+    <%- getTemplateScripts({ bgColor: 'rgba(10,10,26,0.8)', textColor: '#8a2be2' }) %>
+</body>
+</html>
+

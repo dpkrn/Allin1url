@@ -1,5 +1,6 @@
 const UserSettings = require("../model/userSettingsModel");
 const User = require("../model/userModel");
+const Project = require("../model/projectModel");
 
 // Get user settings
 const getSettings = async (req, res) => {
@@ -101,7 +102,14 @@ const updateSettings = async (req, res) => {
 
             // Handle template update
             if (category === 'template') {
-                const validTemplates = ['default', 'minimal', 'modern', 'dark', 'light', 'hacker', 'glass', 'neon', 'gradient', 'cards', 'particles', '3d', 'retro'];
+                // Get valid templates from database
+                const project = await Project.getProjectConfig();
+                const validTemplates = project && project.availableTemplates 
+                    ? project.availableTemplates
+                        .filter(t => t.status === true)
+                        .map(t => t.template)
+                    : ['default']; // Fallback to default if project config not found
+                
                 if (!validTemplates.includes(value)) {
                     return res.status(400).json({
                         success: false,
@@ -244,8 +252,14 @@ const updateSettings = async (req, res) => {
         // Handle bulk update (old format for backward compatibility)
         // Update template if provided
         if (settingsData.template !== undefined) {
-            // Validate template name
-            const validTemplates = ['default', 'minimal', 'modern', 'dark', 'light', 'hacker', 'glass', 'neon', 'gradient', 'cards', 'particles', '3d', 'retro'];
+            // Get valid templates from database
+            const project = await Project.getProjectConfig();
+            const validTemplates = project && project.availableTemplates 
+                ? project.availableTemplates
+                    .filter(t => t.status === true)
+                    .map(t => t.template)
+                : ['default']; // Fallback to default if project config not found
+            
             if (validTemplates.includes(settingsData.template)) {
                 settings.template = settingsData.template;
             } else {

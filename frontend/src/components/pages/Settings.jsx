@@ -61,6 +61,7 @@ const Settings = () => {
 
   // Template Settings
   const [selectedTemplate, setSelectedTemplate] = useState('default');
+  const [availableTemplates, setAvailableTemplates] = useState([]);
 
   const [newKeyword, setNewKeyword] = useState("");
   const [updatingFields, setUpdatingFields] = useState(new Set());
@@ -80,7 +81,30 @@ const Settings = () => {
   // Load settings on mount
   useEffect(() => {
     loadSettings();
+    loadTemplates();
   }, [username]);
+
+  // Load available templates from API
+  const loadTemplates = async () => {
+    try {
+      const res = await api.get('/project/templates');
+      if (res.status === 200 && res.data.success) {
+        setAvailableTemplates(res.data.templates || []);
+      } else {
+        console.error("Failed to load templates:", res.data.message);
+        // Fallback to default templates if API fails
+        setAvailableTemplates([
+          { name: 'default', label: 'Default' }
+        ]);
+      }
+    } catch (error) {
+      console.error("Error loading templates:", error);
+      // Fallback to default templates if API fails
+      setAvailableTemplates([
+        { name: 'default', label: 'Default' }
+      ]);
+    }
+  };
 
   const loadSettings = async () => {
     try {
@@ -358,51 +382,44 @@ const Settings = () => {
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {[
-                  { name: 'default', label: 'Default' },
-                  { name: 'minimal', label: 'Minimal' },
-                  { name: 'modern', label: 'Modern' },
-                  { name: 'dark', label: 'Dark' },
-                  { name: 'light', label: 'Light' },
-                  { name: 'hacker', label: 'Hacker' },
-                  { name: 'glass', label: 'Glass' },
-                  { name: 'neon', label: 'Neon' },
-                  { name: 'gradient', label: 'Gradient' },
-                  { name: 'cards', label: 'Cards' },
-                  { name: 'particles', label: 'Particles' },
-                  { name: '3d', label: '3D' },
-                  { name: 'retro', label: 'Retro' }
-                ].map((template) => (
-                  <motion.button
-                    key={template.name}
-                    whileHover={{ scale: updatingFields.has('template') ? 1 : 1.05 }}
-                    whileTap={{ scale: updatingFields.has('template') ? 1 : 0.95 }}
-                    onClick={() => !updatingFields.has('template') && updateTemplate(template.name)}
-                    disabled={updatingFields.has('template')}
-                    className={`relative p-4 rounded-xl border-2 transition-all ${
-                      selectedTemplate === template.name
-                        ? 'border-purple-600 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg'
-                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-purple-400 dark:hover:border-purple-500'
-                    } ${updatingFields.has('template') ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                  >
-                    <div className="absolute top-2 right-2">
-                      {updatingFields.has('template') && selectedTemplate === template.name ? (
-                        <FaSpinner className="animate-spin text-purple-600 dark:text-purple-400 text-sm" />
-                      ) : selectedTemplate === template.name ? (
-                        <div className="w-3 h-3 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
-                      ) : null}
-                    </div>
-                    <div className="text-center">
-                      <div className={`text-lg font-semibold mb-1 ${
+                {availableTemplates.length > 0 ? (
+                  availableTemplates.map((template) => (
+                    <motion.button
+                      key={template.name}
+                      whileHover={{ scale: updatingFields.has('template') ? 1 : 1.05 }}
+                      whileTap={{ scale: updatingFields.has('template') ? 1 : 0.95 }}
+                      onClick={() => !updatingFields.has('template') && updateTemplate(template.name)}
+                      disabled={updatingFields.has('template')}
+                      className={`relative p-4 rounded-xl border-2 transition-all ${
                         selectedTemplate === template.name
-                          ? 'text-purple-700 dark:text-purple-300'
-                          : 'text-gray-700 dark:text-gray-300'
-                      }`}>
-                        {template.label}
+                          ? 'border-purple-600 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg'
+                          : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-purple-400 dark:hover:border-purple-500'
+                      } ${updatingFields.has('template') ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                    >
+                      <div className="absolute top-2 right-2">
+                        {updatingFields.has('template') && selectedTemplate === template.name ? (
+                          <FaSpinner className="animate-spin text-purple-600 dark:text-purple-400 text-sm" />
+                        ) : selectedTemplate === template.name ? (
+                          <div className="w-3 h-3 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
+                        ) : null}
                       </div>
-                    </div>
-                  </motion.button>
-                ))}
+                      <div className="text-center">
+                        <div className={`text-lg font-semibold mb-1 ${
+                          selectedTemplate === template.name
+                            ? 'text-purple-700 dark:text-purple-300'
+                            : 'text-gray-700 dark:text-gray-300'
+                        }`}>
+                          {template.label}
+                        </div>
+                      </div>
+                    </motion.button>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+                    <FaSpinner className="animate-spin text-2xl mx-auto mb-2" />
+                    <p>Loading templates...</p>
+                  </div>
+                )}
               </div>
             </motion.div>
 

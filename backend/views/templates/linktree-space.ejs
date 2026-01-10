@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%=username.toUpperCase()%>'s LinkBridger profile">
+    <link rel="icon" type="image/png" id="dynamic-favicon" href="/images/panda.png" />
+    <title><%=username.toUpperCase()%> - LinkBridger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        .star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .star:nth-child(2) { top: 20%; left: 30%; animation-delay: 0.5s; }
+        .star:nth-child(3) { top: 30%; left: 50%; animation-delay: 1s; }
+        .star:nth-child(4) { top: 40%; left: 70%; animation-delay: 1.5s; }
+        .star:nth-child(5) { top: 50%; left: 90%; animation-delay: 2s; }
+        .star:nth-child(6) { top: 60%; left: 15%; animation-delay: 0.3s; }
+        .star:nth-child(7) { top: 70%; left: 40%; animation-delay: 0.8s; }
+        .star:nth-child(8) { top: 80%; left: 60%; animation-delay: 1.3s; }
+        .star:nth-child(9) { top: 15%; left: 80%; animation-delay: 1.8s; }
+        .star:nth-child(10) { top: 25%; left: 20%; animation-delay: 2.5s; }
+        .star:nth-child(11) { top: 35%; left: 60%; animation-delay: 0.2s; }
+        .star:nth-child(12) { top: 45%; left: 85%; animation-delay: 0.7s; }
+        .star:nth-child(13) { top: 55%; left: 25%; animation-delay: 1.2s; }
+        .star:nth-child(14) { top: 65%; left: 55%; animation-delay: 1.7s; }
+        .star:nth-child(15) { top: 75%; left: 75%; animation-delay: 2.2s; }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        .planet {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.1));
+            top: -150px;
+            right: -150px;
+            animation: planetRotate 30s linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes planetRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 510px;
+            max-height: 95vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 25px 30px;
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.8),
+                0 0 60px rgba(138, 43, 226, 0.4),
+                inset 0 0 40px rgba(75, 0, 130, 0.2);
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            animation: spacePulse 4s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        @keyframes spacePulse {
+            0%, 100% {
+                box-shadow: 
+                    0 25px 70px rgba(0, 0, 0, 0.8),
+                    0 0 60px rgba(138, 43, 226, 0.4),
+                    inset 0 0 40px rgba(75, 0, 130, 0.2);
+            }
+            50% {
+                box-shadow: 
+                    0 25px 70px rgba(0, 0, 0, 0.8),
+                    0 0 80px rgba(138, 43, 226, 0.6),
+                    inset 0 0 60px rgba(75, 0, 130, 0.3);
+            }
+        }
+        
+        .profile-section {
+            text-align: center;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(138, 43, 226, 0.8);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.6),
+                0 0 50px rgba(138, 43, 226, 0.7),
+                inset 0 0 30px rgba(75, 0, 130, 0.3);
+            margin-bottom: 25px;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            animation: picOrbit 5s ease-in-out infinite;
+        }
+        
+        @keyframes picOrbit {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(180deg); }
+        }
+        
+        .profile-pic:hover {
+            transform: scale(1.2) rotate(360deg);
+            box-shadow: 
+                0 25px 70px rgba(0, 0, 0, 0.8),
+                0 0 80px rgba(138, 43, 226, 1),
+                inset 0 0 50px rgba(75, 0, 130, 0.5);
+        }
+        
+        .username {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #8a2be2, #9370db, #ba55d3, #9370db, #8a2be2);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            animation: spaceText 4s linear infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        @keyframes spaceText {
+            to { background-position: 200% center; }
+        }
+        
+        .bio {
+            font-size: 16px;
+            color: rgba(200, 180, 255, 0.95);
+            line-height: 1.9;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+        
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 5px;
+            margin-bottom: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(138, 43, 226, 0.3) transparent;
+        }
+        
+        .links::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .links::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .links::-webkit-scrollbar-thumb {
+            background: rgba(138, 43, 226, 0.3);
+            border-radius: 3px;
+        }
+        
+        .links::-webkit-scrollbar-thumb:hover {
+            background: rgba(138, 43, 226, 0.5);
+        }
+        
+        .link-item {
+            opacity: 0;
+            transform: translateY(40px) scale(0.8);
+            animation: spaceAppear 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes spaceAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(138, 43, 226, 0.15);
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 18px;
+            text-decoration: none;
+            color: #c8b4ff;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(138, 43, 226, 0.3),
+                inset 0 0 20px rgba(75, 0, 130, 0.1);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.4), transparent);
+            transform: translateY(-50%);
+            transition: left 0.7s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            background: rgba(138, 43, 226, 0.3);
+            border-color: rgba(138, 43, 226, 0.9);
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.7),
+                0 0 60px rgba(138, 43, 226, 0.7),
+                inset 0 0 40px rgba(75, 0, 130, 0.3);
+            color: #fff;
+        }
+        
+        .btn-text {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-arrow {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s ease;
+            font-size: 20px;
+        }
+        
+        .btn:hover .btn-arrow {
+            transform: translateX(12px) scale(1.3);
+        }
+        
+        .no-links {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(200, 180, 255, 0.8);
+        }
+        
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid rgba(138, 43, 226, 0.3);
+            flex-shrink: 0;
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .website {
+            text-decoration: none;
+            color: rgba(200, 180, 255, 0.9);
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        
+        .website:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+            color: #c8b4ff;
+        }
+        
+        .heart {
+            margin: 0 5px;
+            animation: spaceHeart 1.5s ease infinite;
+        }
+        
+        @keyframes spaceHeart {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(138, 43, 226, 0.5)); }
+            25% { transform: scale(1.5); filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
+            50% { transform: scale(1.3); filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.6)); }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 20px 15px; max-height: 98vh; }
+            .profile-section { margin-bottom: 15px; }
+            .links { gap: 12px; margin-bottom: 15px; }
+        }
+        
+        @media (max-height: 600px) {
+            .container { max-height: 98vh; }
+            .profile-section { margin-bottom: 15px; }
+            .profile-pic { width: 90px; height: 90px; }
+            .username { font-size: 24px; }
+            .bio { font-size: 14px; margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+    <div class="planet"></div>
+    
+    <div class="container">
+        <div class="profile-section">
+            <img src="<%=dp.image%>" alt="<%=username.toUpperCase()%>'s Profile" class="profile-pic" onerror="handleImageError(this, '<%=username.charAt(0).toUpperCase()%>')">
+            <h1 class="username"><%= username.toUpperCase() %></h1>
+            <p class="bio"><%=dp.bio||"Welcome to my link hub! Explore all my profiles below."%></p>
+        </div>
+        
+        <div class="links">
+            <% if (tree && tree.length > 0) { %>
+                <% tree.forEach((item, index) => { 
+                    const delay = index * 0.1;
+                    %>
+                    <div class="link-item" data-delay="<%= delay %>">
+                        <a href="<%= getUserLinkUrl(item.username, item.source) %>" class="btn" rel="noopener noreferrer" target="_self">
+                            <span class="btn-text"><%= item.source.toUpperCase() %></span>
+                            <span class="btn-arrow">→</span>
+                        </a>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="no-links">
+                    <p>No links available yet.</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <div class="footer">
+            <a class="website" href="https://clickly.cv" target="_blank">
+                <span>Made with</span>
+                <span class="heart">❤️</span>
+                <span>by LinkBridger</span>
+            </a>
+        </div>
+    </div>
+
+    <%- getTemplateScripts({ bgColor: '#000', textColor: '#8a2be2' }) %>
+</body>
+</html>
+

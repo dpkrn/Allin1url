@@ -12,13 +12,12 @@ const getAvailableTemplates = async (req, res) => {
             });
         }
 
-        // Filter templates where status is true
+        // Filter templates where status is true and format for frontend
         const availableTemplates = project.availableTemplates
             .filter(t => t.status === true)
             .map(t => ({
-                template: t.template,
-                displayName: t.displayName || t.template,
-                description: t.description || ''
+                name: t.template,
+                label: t.displayName || t.template
             }));
 
         return res.status(200).json({
