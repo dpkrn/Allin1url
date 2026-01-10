@@ -11,7 +11,8 @@ import {
   FaSearch,
   FaSpinner,
   FaShieldAlt,
-  FaPalette
+  FaPalette,
+  FaChevronDown
 } from "react-icons/fa";
 
 const Settings = () => {
@@ -62,6 +63,8 @@ const Settings = () => {
   // Template Settings
   const [selectedTemplate, setSelectedTemplate] = useState('default');
   const [availableTemplates, setAvailableTemplates] = useState([]);
+  const [loadingTemplates, setLoadingTemplates] = useState(true);
+  const [showTemplateDropdown, setShowTemplateDropdown] = useState(false);
 
   const [newKeyword, setNewKeyword] = useState("");
   const [updatingFields, setUpdatingFields] = useState(new Set());
@@ -78,33 +81,66 @@ const Settings = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  // Default templates fallback
+  const defaultTemplates = [
+    { template: 'default', displayName: 'Default', description: 'Clean and simple default template' },
+    { template: 'minimal', displayName: 'Minimal', description: 'Minimalist design' },
+    { template: 'modern', displayName: 'Modern', description: 'Modern and sleek design' },
+    { template: 'dark', displayName: 'Dark', description: 'Dark theme template' },
+    { template: 'light', displayName: 'Light', description: 'Light theme template' },
+    { template: 'hacker', displayName: 'Hacker', description: 'Hacker-style template' },
+    { template: 'glass', displayName: 'Glass', description: 'Glassmorphism design' },
+    { template: 'neon', displayName: 'Neon', description: 'Neon glow effects' },
+    { template: 'gradient', displayName: 'Gradient', description: 'Gradient backgrounds' },
+    { template: 'cards', displayName: 'Cards', description: 'Card-based layout' },
+    { template: 'particles', displayName: 'Particles', description: 'Particle effects' },
+    { template: '3d', displayName: '3D', description: '3D effects template' },
+    { template: 'retro', displayName: 'Retro', description: 'Retro style template' }
+  ];
+
+  // Fetch available templates from API
+  const fetchAvailableTemplates = async () => {
+    try {
+      setLoadingTemplates(true);
+      const res = await api.get('/project/templates');
+      if (res.status === 200 && res.data.success) {
+        // Normalize API response (name/label) to expected format (template/displayName)
+        const normalizedTemplates = (res.data.templates || []).map(t => ({
+          template: t.name || t.template,
+          displayName: t.label || t.displayName || t.name || t.template,
+          description: t.description || ''
+        }));
+        setAvailableTemplates(normalizedTemplates.length > 0 ? normalizedTemplates : defaultTemplates);
+      } else {
+        setAvailableTemplates(defaultTemplates);
+      }
+    } catch (error) {
+      console.error("Error fetching available templates:", error);
+      setAvailableTemplates(defaultTemplates);
+    } finally {
+      setLoadingTemplates(false);
+    }
+  };
+
   // Load settings on mount
   useEffect(() => {
     loadSettings();
-    loadTemplates();
+    fetchAvailableTemplates();
   }, [username]);
 
-  // Load available templates from API
-  const loadTemplates = async () => {
-    try {
-      const res = await api.get('/project/templates');
-      if (res.status === 200 && res.data.success) {
-        setAvailableTemplates(res.data.templates || []);
-      } else {
-        console.error("Failed to load templates:", res.data.message);
-        // Fallback to default templates if API fails
-        setAvailableTemplates([
-          { name: 'default', label: 'Default' }
-        ]);
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showTemplateDropdown && !event.target.closest('.template-dropdown-container')) {
+        setShowTemplateDropdown(false);
       }
-    } catch (error) {
-      console.error("Error loading templates:", error);
-      // Fallback to default templates if API fails
-      setAvailableTemplates([
-        { name: 'default', label: 'Default' }
-      ]);
-    }
-  };
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showTemplateDropdown]);
 
   const loadSettings = async () => {
     try {
@@ -370,7 +406,7 @@ const Settings = () => {
             {/* Template Selection Section */}
             <motion.div
               variants={itemVariants}
-              className="bg-white/80 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 md:p-8"
+              className="bg-white/80 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 md:p-8 relative z-10"
             >
               <div className="flex items-center gap-3 mb-6">
                 <FaPalette className="text-2xl text-purple-600 dark:text-purple-400" />
@@ -381,45 +417,157 @@ const Settings = () => {
                 Choose a template style for your public LinkHub profile page
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {availableTemplates.length > 0 ? (
-                  availableTemplates.map((template) => (
-                    <motion.button
-                      key={template.name}
-                      whileHover={{ scale: updatingFields.has('template') ? 1 : 1.05 }}
-                      whileTap={{ scale: updatingFields.has('template') ? 1 : 0.95 }}
-                      onClick={() => !updatingFields.has('template') && updateTemplate(template.name)}
-                      disabled={updatingFields.has('template')}
-                      className={`relative p-4 rounded-xl border-2 transition-all ${
-                        selectedTemplate === template.name
-                          ? 'border-purple-600 dark:border-purple-400 bg-purple-50 dark:bg-purple-900/20 shadow-lg'
-                          : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-purple-400 dark:hover:border-purple-500'
-                      } ${updatingFields.has('template') ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                    >
-                      <div className="absolute top-2 right-2">
-                        {updatingFields.has('template') && selectedTemplate === template.name ? (
-                          <FaSpinner className="animate-spin text-purple-600 dark:text-purple-400 text-sm" />
-                        ) : selectedTemplate === template.name ? (
-                          <div className="w-3 h-3 bg-purple-600 dark:bg-purple-400 rounded-full"></div>
-                        ) : null}
+              {/* Template Dropdown */}
+              <div className="template-dropdown-container relative z-20">
+                <motion.button
+                  whileHover={updatingFields.has('template') || loadingTemplates ? {} : { 
+                    scale: 1.01, 
+                    y: -1,
+                    transition: { duration: 0.2 }
+                  }}
+                  whileTap={updatingFields.has('template') || loadingTemplates ? {} : { 
+                    scale: 0.99,
+                    transition: { duration: 0.1 }
+                  }}
+                  onClick={() => !updatingFields.has('template') && setShowTemplateDropdown(!showTemplateDropdown)}
+                  disabled={updatingFields.has('template') || loadingTemplates}
+                  className={`group w-full flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border-2 ${
+                    selectedTemplate 
+                      ? 'border-purple-600 dark:border-purple-400' 
+                      : 'border-gray-300 dark:border-gray-600'
+                  } rounded-xl text-left transition-all duration-200 ${
+                    updatingFields.has('template') || loadingTemplates 
+                      ? 'opacity-50 cursor-not-allowed' 
+                      : 'cursor-pointer hover:border-purple-500 dark:hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 dark:hover:shadow-purple-400/20'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    {updatingFields.has('template') ? (
+                      <FaSpinner className="animate-spin text-purple-600 dark:text-purple-400 flex-shrink-0" />
+                    ) : (
+                      <motion.div
+                        whileHover={{ rotate: 15, scale: 1.1 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <FaPalette className="text-purple-600 dark:text-purple-400 flex-shrink-0 transition-colors group-hover:text-purple-700 dark:group-hover:text-purple-300" />
+                      </motion.div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-0.5 transition-colors group-hover:text-purple-600 dark:group-hover:text-purple-400">
+                        {loadingTemplates ? (
+                          'Loading templates...'
+                        ) : (
+                          availableTemplates.find(t => (t.template || t.name) === selectedTemplate)?.displayName || 
+                          (selectedTemplate ? selectedTemplate.charAt(0).toUpperCase() + selectedTemplate.slice(1) : 'Select a template') || 
+                          'Select a template'
+                        )}
                       </div>
-                      <div className="text-center">
-                        <div className={`text-lg font-semibold mb-1 ${
-                          selectedTemplate === template.name
-                            ? 'text-purple-700 dark:text-purple-300'
-                            : 'text-gray-700 dark:text-gray-300'
-                        }`}>
-                          {template.label}
+                      {selectedTemplate && !loadingTemplates && availableTemplates.find(t => (t.template || t.name) === selectedTemplate)?.description && (
+                        <div className="text-xs text-gray-500 dark:text-gray-400 truncate transition-colors group-hover:text-gray-600 dark:group-hover:text-gray-300">
+                          {availableTemplates.find(t => (t.template || t.name) === selectedTemplate)?.description}
                         </div>
-                      </div>
-                    </motion.button>
-                  ))
-                ) : (
-                  <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
-                    <FaSpinner className="animate-spin text-2xl mx-auto mb-2" />
-                    <p>Loading templates...</p>
+                      )}
+                    </div>
+                    <motion.div
+                      animate={{ rotate: showTemplateDropdown ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <FaChevronDown 
+                        className="text-gray-400 dark:text-gray-500 flex-shrink-0 transition-colors group-hover:text-purple-600 dark:group-hover:text-purple-400"
+                      />
+                    </motion.div>
                   </div>
-                )}
+                </motion.button>
+
+                {/* Dropdown Menu */}
+                <AnimatePresence>
+                  {showTemplateDropdown && !loadingTemplates && availableTemplates.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute z-[60] w-full mt-2 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl overflow-hidden"
+                    >
+                      <div className="max-h-80 overflow-y-auto custom-scrollbar">
+                        {availableTemplates.map((template, index) => {
+                          const templateName = template.template || template.name || `template-${index}`;
+                          const isSelected = selectedTemplate === templateName;
+                          return (
+                            <motion.button
+                              key={templateName}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.02, duration: 0.2 }}
+                              whileHover={{ 
+                                x: 4,
+                                backgroundColor: isSelected 
+                                  ? "rgba(147, 51, 234, 0.15)" 
+                                  : "rgba(147, 51, 234, 0.1)",
+                                transition: { duration: 0.2 }
+                              }}
+                              whileTap={{ scale: 0.98 }}
+                              onClick={() => {
+                                setShowTemplateDropdown(false);
+                                if (templateName) {
+                                  updateTemplate(templateName);
+                                }
+                              }}
+                              className={`group/item w-full text-left px-4 py-3 transition-all duration-200 ${
+                                isSelected
+                                  ? 'bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-600 dark:border-purple-400'
+                                  : 'hover:bg-gray-50 dark:hover:bg-gray-700/50 border-l-4 border-transparent hover:border-l-4 hover:border-purple-400 dark:hover:border-purple-500'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <motion.div 
+                                    className={`font-semibold mb-1 transition-colors ${
+                                      isSelected
+                                        ? 'text-purple-700 dark:text-purple-300'
+                                        : 'text-gray-900 dark:text-white group-hover/item:text-purple-600 dark:group-hover/item:text-purple-400'
+                                    }`}
+                                    whileHover={{ scale: 1.02 }}
+                                    transition={{ duration: 0.2 }}
+                                  >
+                                    {template.displayName || template.label || (templateName ? templateName.charAt(0).toUpperCase() + templateName.slice(1) : 'Template')}
+                                  </motion.div>
+                                  {template.description && (
+                                    <div className={`text-xs transition-colors ${
+                                      isSelected
+                                        ? 'text-purple-600 dark:text-purple-400'
+                                        : 'text-gray-600 dark:text-gray-400 group-hover/item:text-gray-700 dark:group-hover/item:text-gray-300'
+                                    }`}>
+                                      {template.description}
+                                    </div>
+                                  )}
+                                </div>
+                                {isSelected && (
+                                  <motion.div 
+                                    className="w-5 h-5 rounded-full bg-purple-600 dark:bg-purple-400 flex items-center justify-center flex-shrink-0"
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                                    whileHover={{ scale: 1.1, rotate: 90 }}
+                                  >
+                                    <div className="w-2 h-2 rounded-full bg-white"></div>
+                                  </motion.div>
+                                )}
+                                {!isSelected && (
+                                  <motion.div 
+                                    className="w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center flex-shrink-0 opacity-0 group-hover/item:opacity-100 transition-opacity"
+                                    whileHover={{ scale: 1.1, borderColor: "rgba(147, 51, 234, 0.5)" }}
+                                  >
+                                  </motion.div>
+                                )}
+                              </div>
+                            </motion.button>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
 

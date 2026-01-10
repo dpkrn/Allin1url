@@ -206,7 +206,7 @@
             <% if (tree && tree.length > 0) { %>
                 <% tree.forEach((item, index) => { %>
                     <div class="link-item" >
-                        <a href="<%= getUserLinkUrl(item.username, item.source) %>" class="btn" rel="noopener noreferrer" target="_self">
+                        <a href="<%= getUserLinkUrl(item.username, item.source) %>" class="btn" rel="noopener noreferrer" target="_blank">
                             <span class="btn-text"><%= item.source.toUpperCase() %></span>
                             <span class="btn-arrow">→</span>
                         </a>

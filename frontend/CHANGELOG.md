@@ -9,6 +9,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added - 2024-12-XX (Latest)
 
+- **Comprehensive Analytics Dashboard Enhancement**: Complete analytics system overhaul
+  - **Referrer-Based Analytics**: Added referrer category analytics (Direct, Search, Social, Internal, External)
+  - **Top Referrer Sources**: Domain-level referrer tracking with detailed breakdowns
+  - **Device Analytics**: Complete device type breakdown (Desktop, Mobile, Tablet)
+  - **Browser Analytics**: Browser distribution tracking (Chrome, Safari, Firefox, Edge, etc.)
+  - **Operating System Analytics**: OS-based analytics (Windows, macOS, Linux, iOS, Android)
+  - **Hourly Distribution**: Hourly click patterns throughout the day
+  - **Day of Week Analysis**: Day-of-week click distribution patterns
+  - **Platform Performance**: Individual platform click metrics
+  - **Link-Based Analytics**: Per-link performance tracking
+  - **Multiple Chart Types**: Line, Bar, Area, and Pie charts for different data visualizations
+  - **Customizable Time Ranges**: 7 days, 30 days, 90 days, 1 year, or all time
+  - **Summary Cards**: Quick overview with Total Clicks, Profile Visits, Unique Countries, Top Referrer
+  - **Detailed Breakdown Sections**: Referrer categories, device types, browsers, OS, geographic distribution, hourly patterns, day of week patterns
+  - **Backend Integration**: Real MongoDB aggregation queries replacing mock data
+  - **Data Validation**: Robust data validation with fallback logic for missing keys
+  - **Chart Re-rendering**: Fixed chart updates when switching between metrics
+  - **Immutable Array Handling**: Fixed "read-only array" errors by creating copies before sorting
+  - **Full Theme Support**: Complete dark and light theme support with proper text contrast
+  - **Responsive Design**: Mobile-optimized analytics dashboard with responsive text sizing
+
+- **Responsive Text Sizing**: Implemented responsive typography across all pages
+  - **Global Font Scaling**: Base font size scales from 14px (mobile) to 17px (desktop)
+  - **Tailwind Configuration**: Added responsive font size scale to tailwind.config.js
+  - **Custom Utility Classes**: Created responsive typography classes (.text-h1 to .text-h6, .text-body, .text-btn, etc.)
+  - **Applied to Components**: Updated HomePage, HeroSection, AboutDeveloper, and other key pages
+  - **Mobile Optimization**: Ensures optimal readability on all device sizes
+
+- **Mobile Layout Improvements**: Enhanced mobile user experience
+  - **Hero Section URL Input**: Fixed URL input box to stay on single row on mobile
+    - Changed from flex-col to flex-row flex-nowrap
+    - Added whitespace-nowrap to prevent text wrapping
+    - Adjusted input width and spacing for mobile
+    - Reduced text size on mobile for URL parts
+  - **Mobile Menu Background**: Set solid background for mobile hamburger menu
+    - Removed backdrop-blur for solid background
+    - Added proper z-index (z-[9999]) to ensure visibility
+    - Fixed backdrop overlay z-index (z-[9998])
+    - Ensures menu is always visible above other elements
+
+- **Theme Color Improvements**: Enhanced text colors for dark and light themes
+  - **Analytics Page**: Complete text color overhaul for proper theme support
+    - Updated all select dropdowns with proper light/dark backgrounds and text colors
+    - Fixed card backgrounds from bg-white/10 to bg-white/80 for light mode visibility
+    - Updated all text colors with dark mode variants (text-gray-900 dark:text-white, etc.)
+    - Fixed table headers, labels, and body text for proper contrast
+    - Updated progress bars and background elements for theme consistency
+    - Enhanced icon colors and interactive elements
+  - **Consistent Theme Support**: All text elements now properly adapt to both themes
+
+### Added - 2024-12-XX (Previous)
+
 - **Custom Subdomain Routing**: Revolutionary subdomain-based link format
   - Each user now gets their own custom subdomain (e.g., `username.clickly.cv`)
   - Hub link format: `https://username.clickly.cv` (replaces `https://clickly.cv/username`)

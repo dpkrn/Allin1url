@@ -591,7 +591,7 @@ const ProfilePage = () => {
                   </p>
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <FaLock className="text-gray-500" />
-                    <span>Profile visibility settings coming soon</span>
+                    <span>Profile visibility settings</span>
                   </div>
                 </div>
               </div>

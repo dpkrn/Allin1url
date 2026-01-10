@@ -2,3 +2,158 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Responsive Typography Utilities */
+@layer utilities {
+  /* Headings - Mobile-first responsive sizes */
+  .text-h1 {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold;
+  }
+  
+  .text-h2 {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold;
+  }
+  
+  .text-h3 {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold;
+  }
+  
+  .text-h4 {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold;
+  }
+  
+  .text-h5 {
+    @apply text-base sm:text-lg md:text-xl lg:text-2xl font-medium;
+  }
+  
+  .text-h6 {
+    @apply text-sm sm:text-base md:text-lg lg:text-xl font-medium;
+  }
+  
+  /* Body text - Responsive sizes */
+  .text-body-lg {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+  
+  .text-body {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+  
+  .text-body-sm {
+    @apply text-xs sm:text-sm md:text-base;
+  }
+  
+  /* Labels and captions */
+  .text-label {
+    @apply text-xs sm:text-sm md:text-base font-medium;
+  }
+  
+  .text-caption {
+    @apply text-xs sm:text-sm;
+  }
+  
+  /* Buttons - Responsive sizes */
+  .text-btn-lg {
+    @apply text-sm sm:text-base md:text-lg font-semibold;
+  }
+  
+  .text-btn {
+    @apply text-xs sm:text-sm md:text-base font-semibold;
+  }
+  
+  .text-btn-sm {
+    @apply text-xs sm:text-sm font-medium;
+  }
+  
+  /* Links */
+  .text-link {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+  
+  .text-link-sm {
+    @apply text-xs sm:text-sm md:text-base;
+  }
+  
+  /* Paragraph text with proper line height */
+  .text-paragraph {
+    @apply text-sm sm:text-base md:text-lg leading-relaxed;
+  }
+  
+  .text-paragraph-sm {
+    @apply text-xs sm:text-sm md:text-base leading-relaxed;
+  }
+}
+
+/* Base responsive typography for all pages */
+@layer base {
+  html {
+    font-size: 16px; /* Base font size */
+  }
+  
+  /* Mobile - base font size */
+  @media (max-width: 639px) {
+    html {
+      font-size: 14px;
+    }
+  }
+  
+  /* Tablet - slightly larger */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    html {
+      font-size: 15px;
+    }
+  }
+  
+  /* Desktop - full size */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  
+  /* Large desktop - slightly larger */
+  @media (min-width: 1280px) {
+    html {
+      font-size: 17px;
+    }
+  }
+}
+
+/* Custom Scrollbar Styles */
+@layer utilities {
+  /* Smooth scrolling */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar styling for webkit browsers */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(147, 51, 234, 0.3);
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(147, 51, 234, 0.5);
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.4);
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.6);
+  }
+}

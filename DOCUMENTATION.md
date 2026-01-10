@@ -172,5 +172,28 @@ API endpoints are documented in:
 
 ---
 
+## 📊 Analytics Features
+
+### Comprehensive Analytics Dashboard
+- **Multiple Metrics**: Profile visits, click counts, location, OS, browser, device, referrer, hourly, day of week, platform, and link-based analytics
+- **Visualization Types**: Line charts, bar charts, area charts, and pie charts
+- **Time Ranges**: 7 days, 30 days, 90 days, 1 year, or all time
+- **Summary Cards**: Total clicks, profile visits, unique countries, top referrer
+- **Detailed Breakdowns**: Referrer categories, device types, browsers, operating systems, geographic distribution, hourly patterns, day of week patterns
+- **Theme Support**: Full dark and light theme support with proper text contrast
+
+### Analytics Data Points
+- **Click Tracking**: Real-time click counts with date-based trends
+- **Geographic Data**: Country-level location distribution
+- **Device Types**: Desktop, Mobile, Tablet breakdown
+- **Browsers**: Chrome, Safari, Firefox, Edge, and more
+- **Operating Systems**: Windows, macOS, Linux, iOS, Android
+- **Referrers**: Categorized as Direct, Search, Social, Internal, or External
+- **Temporal Patterns**: Hourly distribution and day-of-week analysis
+- **Platform Performance**: Individual platform click metrics
+- **Link Performance**: Per-link analytics and statistics
+
+---
+
 **Last Updated**: 2024-12-XX
 **Maintained By**: LinkBridger Development Team

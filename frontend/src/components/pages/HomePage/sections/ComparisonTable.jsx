@@ -81,7 +81,7 @@ const ComparisonTable = () => {
     },
     {
       name: 'Analytics',
-      values: ['Built-in click tracking', 'Limited or premium', 'Premium feature', 'Premium feature', 'Varies'],
+      values: ['Comprehensive dashboard with device/browser/OS/referrer analytics', 'Limited or premium', 'Premium feature', 'Premium feature', 'Varies'],
       statuses: ['good', 'warning', 'warning', 'warning', 'warning']
     },
     {
@@ -106,7 +106,22 @@ const ComparisonTable = () => {
     },
     {
       name: 'Dark Mode',
-      values: ['Full support', 'Varies', 'Limited', 'Limited', 'Varies'],
+      values: ['Full support with proper text contrast', 'Varies', 'Limited', 'Limited', 'Varies'],
+      statuses: ['good', 'warning', 'warning', 'warning', 'warning']
+    },
+    {
+      name: 'Mobile Responsive Design',
+      values: ['Fully optimized with responsive text sizing', 'Varies', 'Yes', 'Yes', 'Varies'],
+      statuses: ['good', 'warning', 'good', 'good', 'warning']
+    },
+    {
+      name: 'Advanced Analytics',
+      values: ['Device/Browser/OS/Referrer analytics with multiple chart types', 'Basic click tracking', 'Premium feature', 'Premium feature', 'Varies'],
+      statuses: ['good', 'warning', 'warning', 'warning', 'warning']
+    },
+    {
+      name: 'Security Features',
+      values: ['JWT auth, bcrypt, HTTPS, Helmet.js, password-protected links', 'Basic', 'Standard', 'Standard', 'Varies'],
       statuses: ['good', 'warning', 'warning', 'warning', 'warning']
     }
   ];

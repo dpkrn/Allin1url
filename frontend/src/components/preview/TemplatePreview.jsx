@@ -25,7 +25,13 @@ const TemplatePreview = () => {
       try {
         const res = await api.get('/project/templates');
         if (res.status === 200 && res.data.success) {
-          setAvailableTemplates(res.data.templates || []);
+          // Normalize API response (name/label) to expected format (template/displayName)
+          const normalizedTemplates = (res.data.templates || []).map(t => ({
+            template: t.name || t.template,
+            displayName: t.label || t.displayName || t.name || t.template,
+            description: t.description || ''
+          }));
+          setAvailableTemplates(normalizedTemplates);
         }
       } catch (error) {
         console.error("Error fetching available templates:", error);
@@ -193,6 +199,7 @@ const TemplatePreview = () => {
               {showDeviceDropdown && (
                 <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-2xl z-50">
                   <button
+                    key="desktop"
                     onClick={() => handleDeviceChange('desktop')}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors flex items-center gap-2 ${
                       device === 'desktop'
@@ -204,6 +211,7 @@ const TemplatePreview = () => {
                     <span>Desktop</span>
                   </button>
                   <button
+                    key="phone"
                     onClick={() => handleDeviceChange('phone')}
                     className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors flex items-center gap-2 ${
                       device === 'phone'
@@ -228,7 +236,7 @@ const TemplatePreview = () => {
                 title="Select template to preview"
               >
                 <span className="capitalize">
-                  {availableTemplates.find(t => t.template === template)?.displayName || template}
+                  {availableTemplates.find(t => (t.template || t.name) === template)?.displayName || (template ? template.charAt(0).toUpperCase() + template.slice(1) : 'Default')}
                 </span>
                 <FaChevronDown className={`text-xs transition-transform ${showTemplateDropdown ? 'rotate-180' : ''}`} />
               </motion.button>
@@ -236,24 +244,27 @@ const TemplatePreview = () => {
               {showTemplateDropdown && !loadingTemplates && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto">
                   {availableTemplates.length > 0 ? (
-                    availableTemplates.map((t) => (
-                      <button
-                        key={t.template}
-                        onClick={() => handleTemplateChange(t.template)}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors ${
-                          t.template === template
-                            ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 font-semibold'
-                            : 'text-gray-700 dark:text-gray-300'
-                        }`}
-                      >
-                        <div className="capitalize">{t.displayName || t.template}</div>
-                        {t.description && (
-                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                            {t.description}
-                          </div>
-                        )}
-                      </button>
-                    ))
+                    availableTemplates.map((t, index) => {
+                      const templateName = t.template || t.name || `template-${index}`;
+                      return (
+                        <button
+                          key={templateName}
+                          onClick={() => handleTemplateChange(templateName)}
+                          className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-colors ${
+                            templateName === template
+                              ? 'bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 font-semibold'
+                              : 'text-gray-700 dark:text-gray-300'
+                          }`}
+                        >
+                          <div className="capitalize">{t.displayName || t.label || templateName}</div>
+                          {t.description && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                              {t.description}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })
                   ) : (
                     <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
                       No templates available

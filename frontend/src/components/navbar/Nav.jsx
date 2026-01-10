@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -859,103 +860,118 @@ const Nav = () => {
           </div>
         </div>
 
-        {/* Mobile Sidebar Menu - Only for authenticated users */}
-        {isAuthenticated && (
-        <AnimatePresence>
-          {sidebarMenu && (
-            <motion.div
-              initial={{ opacity: 0, x: -300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -300 }}
-              transition={{ duration: 0.3 }}
-              className="sm:hidden fixed inset-y-0 left-0 w-64 z-50 bg-gray-800/95 dark:bg-gray-900/95 backdrop-blur-xl border-r border-gray-700/50 dark:border-gray-700/50 shadow-2xl"
-              id="mobile-menu"
-            >
-              <div className="p-4 space-y-2">
-                {navLinks.map((link) => {
-                  const Icon = link.icon;
-                  const isActive = location.pathname === link.to;
-                  return (
-                    <Link
-                      key={link.to}
-                      to={link.to}
-                      onClick={() => dispatch(setSidebarMenu(false))}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                        isActive
-                          ? "text-white dark:text-white bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-blue-600/30"
-                          : "text-white dark:text-gray-300 hover:text-white dark:hover:text-white hover:bg-white/10 dark:hover:bg-white/10"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                      {link.label}
-                    </Link>
-                  );
-                })}
-                
-                {/* Mobile Docs Dropdown */}
-                <div className="space-y-1">
-                  <motion.button
-                    type="button"
-                    onClick={() => setDocsMenu(!docsMenu)}
-                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                      location.pathname.startsWith("/docs")
-                        ? "text-white dark:text-white bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-blue-600/30"
-                        : "text-white dark:text-gray-300 hover:text-white dark:hover:text-white hover:bg-white/10 dark:hover:bg-white/10"
-                    }`}
-                  >
-                    <span className="flex items-center gap-3">
-                      <FaBook className="w-5 h-5" />
-                      Docs
-                    </span>
-                    <motion.div
-                      animate={{ rotate: docsMenu ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <MdOutlineArrowDropDownCircle className="w-5 h-5" />
-                    </motion.div>
-                  </motion.button>
-                  
-                  <AnimatePresence>
-                    {docsMenu && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
+        {/* Mobile Sidebar Menu - Only for authenticated users - Using Portal */}
+        {isAuthenticated && typeof document !== 'undefined' && createPortal(
+          <AnimatePresence>
+            {sidebarMenu && (
+              <>
+                {/* Backdrop Overlay */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={() => dispatch(setSidebarMenu(false))}
+                  className="sm:hidden fixed inset-0 bg-black/70 dark:bg-black/80 z-[9998]"
+                  style={{ pointerEvents: 'auto' }}
+                />
+                {/* Mobile Menu */}
+                <motion.div
+                  initial={{ opacity: 0, x: -300 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -300 }}
+                  transition={{ duration: 0.3 }}
+                  className="sm:hidden fixed inset-y-0 left-0 w-64 z-[9999] bg-gray-800 dark:bg-gray-900 border-r-2 border-gray-700 dark:border-gray-700 shadow-2xl"
+                  id="mobile-menu"
+                  style={{ pointerEvents: 'auto' }}
+                >
+                  <div className="p-4 space-y-2 h-full overflow-y-auto">
+                    {navLinks.map((link) => {
+                      const Icon = link.icon;
+                      const isActive = location.pathname === link.to;
+                      return (
+                        <Link
+                          key={link.to}
+                          to={link.to}
+                          onClick={() => dispatch(setSidebarMenu(false))}
+                          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
+                            isActive
+                              ? "text-white dark:text-white bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-blue-600/30"
+                              : "text-white dark:text-gray-300 hover:text-white dark:hover:text-white hover:bg-white/10 dark:hover:bg-white/10"
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          {link.label}
+                        </Link>
+                      );
+                    })}
+                    
+                    {/* Mobile Docs Dropdown */}
+                    <div className="space-y-1">
+                      <motion.button
+                        type="button"
+                        onClick={() => setDocsMenu(!docsMenu)}
+                        className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
+                          location.pathname.startsWith("/docs")
+                            ? "text-white dark:text-white bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-blue-600/30"
+                            : "text-white dark:text-gray-300 hover:text-white dark:hover:text-white hover:bg-white/10 dark:hover:bg-white/10"
+                        }`}
                       >
-                        <div className="pl-4 space-y-1">
-                          {docsMenuItems.map((item) => {
-                            const Icon = item.icon;
-                            const isActive = location.pathname === item.to;
-                            return (
-                              <Link
-                                key={item.to}
-                                to={item.to}
-                                onClick={() => {
-                                  dispatch(setSidebarMenu(false));
-                                  setDocsMenu(false);
-                                }}
-                                className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                                  isActive
-                                    ? "text-white dark:text-white bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-blue-600/20"
-                                    : "text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white hover:bg-white/5 dark:hover:bg-white/5"
-                                }`}
-                              >
-                                <Icon className="w-4 h-4" />
-                                {item.label}
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                        <span className="flex items-center gap-3">
+                          <FaBook className="w-5 h-5" />
+                          Docs
+                        </span>
+                        <motion.div
+                          animate={{ rotate: docsMenu ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <MdOutlineArrowDropDownCircle className="w-5 h-5" />
+                        </motion.div>
+                      </motion.button>
+                      
+                      <AnimatePresence>
+                        {docsMenu && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-4 space-y-1">
+                              {docsMenuItems.map((item) => {
+                                const Icon = item.icon;
+                                const isActive = location.pathname === item.to;
+                                return (
+                                  <Link
+                                    key={item.to}
+                                    to={item.to}
+                                    onClick={() => {
+                                      dispatch(setSidebarMenu(false));
+                                      setDocsMenu(false);
+                                    }}
+                                    className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
+                                      isActive
+                                        ? "text-white dark:text-white bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-blue-600/20"
+                                        : "text-gray-300 dark:text-gray-400 hover:text-white dark:hover:text-white hover:bg-white/5 dark:hover:bg-white/5"
+                                    }`}
+                                  >
+                                    <Icon className="w-4 h-4" />
+                                    {item.label}
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
       </div>
     </nav>
