@@ -29,6 +29,8 @@ services:
       - N8N_HOST=n8n.clickly.cv
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
+      # Required: nginx (another container) can only reach n8n if it listens on 0.0.0.0
+      - N8N_LISTEN_ADDRESS=0.0.0.0
       - NODE_ENV=production
       - WEBHOOK_URL=https://n8n.clickly.cv
       - GENERIC_TIMEZONE=Asia/Kolkata
