@@ -14,71 +14,67 @@
       referrerpolicy="no-referrer"
     />
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="LinkBridger, a tool designed to make your social media links easier to remember and manage. Whether you're sharing your Instagram, GitHub, or LinkedIn profile, LinkBridger allows you to generate personalized URLs that are simple and customizable. It also tracks how often your links are clicked and allows centralized updating, so any changes you make will reflect across all platforms instantly.">
-    <meta name="keywords" content="LinkBridger, social media, links, personalized URLs, tracking, centralized updating">
-    <meta name="author" content="LinkBridger">
+    <!-- Canonical URL - prevents duplicate content issues -->
+    <link rel="canonical" href="https://clickly.cv/app/" />
+
+    <!-- SEO Meta Tags - keyword-rich for search ranking -->
+    <meta name="description" content="LinkBridger - Free link in bio tool &amp; custom URL shortener. Create your username.clickly.cv page, track link clicks, manage Instagram, LinkedIn, GitHub links in one place. Linktree alternative with free custom domain.">
+    <meta name="keywords" content="link in bio, linktree alternative, free link shortener, custom URL shortener, bio link, social media links, Instagram link, LinkedIn link, GitHub link, link manager, click tracking, free link in bio">
+    <meta name="author" content="Deepak Kr">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
     <meta name="bingbot" content="index, follow">
     <meta name="yandexbot" content="index, follow">
-    <meta name="sitemap" content="https://clickly.cv/sitemap.xml">
+    <meta name="theme-color" content="#7c3aed">
 
-    <!-- link preview -->
-    <!-- <link rel="image_src" href="/logo.png">
-    <link rel="icon" href="/logo.png">
-    <link rel="apple-touch-icon" href="/logo.png">
-    <link rel="mask-icon" href="/logo.png" color="#000000">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="shortcut icon" href="/logo.png">
-    <link rel="icon" type="image/png" href="/logo.png">
-    <link rel="icon" type="image/svg+xml" href="/logo.png"> -->
-
-    <!-- link preview -->
-    <meta property="og:description" content="LinkBridger, a tool designed to make your social media links easier to remember and manage by providing your own domain free. Whether you're sharing your Instagram, GitHub, or LinkedIn profile, LinkBridger allows you to generate personalized URLs that are simple and customizable. It also tracks how often your links are clicked and allows centralized updating, so any changes you make will reflect across all platforms instantly.">
-    <meta property="og:title" content="LinkBridger">
-    <meta property="og:image" href="/logo.png">
-    <meta property="og:url" content="https://clickly.cv">
+    <!-- Open Graph - use content (not href) and full absolute URLs -->
+    <meta property="og:title" content="LinkBridger - Free Link in Bio &amp; Custom URL Shortener">
+    <meta property="og:description" content="Create your free link in bio page with custom URL (username.clickly.cv). Track clicks, manage all social links in one place. Free Linktree alternative.">
+    <meta property="og:image" content="https://clickly.cv/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://clickly.cv/app/">
     <meta property="og:site_name" content="LinkBridger">
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
 
+    <!-- Google Search verification -->
+    <meta name="google-site-verification" content="HjKH2b4_C-0bLNeyRuBncBvS5brsEk4EQ5ztP6X9K-g" />
 
-    <!-- owner verification -->
-     <meta name="google-site-verification" content="HjKH2b4_C-0bLNeyRuBncBvS5brsEk4EQ5ztP6X9K-g" />
-
-<!--twitter card preview-->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="LinkBridger - Personalize Your Social Links">
-    <meta name="twitter:description"
-    content="LinkBridger, a tool designed to make your social media links easier to remember and manage by providing your own domain free. Whether you're sharing your Instagram, GitHub, or LinkedIn profile, LinkBridger allows you to generate personalized URLs that are simple and customizable. It also tracks how often your links are clicked and allows centralized updating, so any changes you make will reflect across all platforms instantly.">
-    <meta name="twitter:image" href="/logo.png">
-    <meta name="twitter:image:alt" content="LinkBridger Logo -  - Personalize Your Social Links">
+    <meta name="twitter:title" content="LinkBridger - Free Link in Bio &amp; Custom URL Shortener">
+    <meta name="twitter:description" content="Create your free link in bio page (username.clickly.cv). Track clicks, manage Instagram, LinkedIn, GitHub links. Free Linktree alternative.">
+    <meta name="twitter:image" content="https://clickly.cv/logo.png">
+    <meta name="twitter:image:alt" content="LinkBridger - Free link in bio and custom URL shortener">
 
-     <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Links Manager",
-    "name": "LinkBridger",
-    "description": "LinkBridger, a tool designed to make your social media links easier to remember and manage by providing your own domain free. Whether you're sharing your Instagram, GitHub, or LinkedIn profile, LinkBridger allows you to generate personalized URLs that are simple and customizable. It also tracks how often your links are clicked and allows centralized updating, so any changes you make will reflect across all platforms instantly.",
-    "url": "https://clickly.cv",
-    "logo": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
-    "image": "https://res.cloudinary.com/dlt5gqcdv/image/upload/v1769022150/way2goholiday_logo_kyegcg.png",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Bangalore",
-      "addressCountry": "IN"
-    },
-    "sameAs": [
-      "https://clickly.cv"
-    ],
-    "offers": {
-      "@type": "Offer",
-      "category": "Travel Packages"
+    <!-- Structured Data (JSON-LD) - WebApplication + Organization for rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "LinkBridger",
+      "description": "Free link in bio tool and custom URL shortener. Create username.clickly.cv, track link clicks, manage Instagram, LinkedIn, GitHub and all social links in one place. Linktree alternative with free custom domain.",
+      "url": "https://clickly.cv/app/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "LinkBridger",
+        "url": "https://clickly.cv",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://clickly.cv/logo.png"
+        }
+      }
     }
-  }
-  </script>
-    <title>LinkBridger</title>
+    </script>
+    <title>LinkBridger - Free Link in Bio Tool | Custom URL Shortener for Social Media</title>
   </head>
   <body>
     <div id="root"></div>

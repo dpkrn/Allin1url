@@ -4,4 +4,5 @@ Disallow: /nogooglebot/
 User-agent: *
 Allow: /
 
-Sitemap: https://clickly.cv/sitemap.xml
+# Sitemap (app is under /app/)
+Sitemap: https://clickly.cv/app/sitemap.xml
