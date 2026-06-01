@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌉 LinkBridger
+# 🌉 All in1 url
 
 ### **Personalized Social Profile Link Manager**
 
@@ -10,13 +10,13 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Latest-brightgreen.svg)](https://www.mongodb.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-success.svg)](https://github.com/DpkRn/LinkBridger)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-success.svg)](https://github.com/DpkRn/All in1 url)
 
 **Transform your social media presence with memorable, personalized links that never expire**
 
-[🚀 Live Demo](https://allin1url.in) • [📖 Documentation](./frontend/src/components/Documentation.jsx) • [🐛 Report Bug](https://github.com/DpkRn/LinkBridger/issues) • [💡 Request Feature](https://github.com/DpkRn/LinkBridger/issues) • [💬 Discuss](https://github.com/DpkRn/LinkBridger/discussions)
+[🚀 Live Demo](https://allin1url.in) • [📖 Documentation](./frontend/src/components/Documentation.jsx) • [🐛 Report Bug](https://github.com/DpkRn/All in1 url/issues) • [💡 Request Feature](https://github.com/DpkRn/All in1 url/issues) • [💬 Discuss](https://github.com/DpkRn/All in1 url/discussions)
 
-![LinkBridger Banner](https://via.placeholder.com/1200x400/4F46E5/FFFFFF?text=LinkBridger+-+Your+Personalized+Link+Manager)
+![All in1 url Banner](https://via.placeholder.com/1200x400/4F46E5/FFFFFF?text=All in1 url+-+Your+Personalized+Link+Manager)
 
 </div>
 
@@ -25,9 +25,9 @@
 ## 📋 Table of Contents
 
 - [About The Project](#-about-the-project)
-- [Why LinkBridger?](#-why-linkbridger)
+- [Why All in1 url?](#-why-All in1 url)
 - [Key Benefits](#-key-benefits)
-- [LinkBridger vs. Competitors](#-linkbridger-vs-competitors)
+- [All in1 url vs. Competitors](#-All in1 url-vs-competitors)
 - [Live Examples](#-live-examples)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -41,11 +41,11 @@
 
 ## 🎯 About The Project
 
-**LinkBridger** is a revolutionary, open-source social profile link management platform that empowers users to create personalized, memorable URLs for all their social media profiles. Unlike traditional link shorteners that generate random, forgettable codes, LinkBridger uses your username and platform name to create links that are both human-readable and professional.
+**All in1 url** is a revolutionary, open-source social profile link management platform that empowers users to create personalized, memorable URLs for all their social media profiles. Unlike traditional link shorteners that generate random, forgettable codes, All in1 url uses your username and platform name to create links that are both human-readable and professional.
 
 ### 🎨 The Vision
 
-In today's digital-first world, professionals, creators, and developers manage multiple social media profiles across various platforms. LinkBridger was born from the need to simplify this complexity and provide a unified solution that combines **memorability**, **professionalism**, and **functionality** in one powerful platform.
+In today's digital-first world, professionals, creators, and developers manage multiple social media profiles across various platforms. All in1 url was born from the need to simplify this complexity and provide a unified solution that combines **memorability**, **professionalism**, and **functionality** in one powerful platform.
 
 ### 🔍 The Problem It Solves
 
@@ -61,7 +61,7 @@ In today's digital-first world, professionals, creators, and developers manage m
 
 ### ✨ The Solution
 
-LinkBridger bridges this gap by providing:
+All in1 url bridges this gap by providing:
 
 - 🎯 **Personalized URLs** using your username and platform name (e.g., `yourname.allin1url.in/linkedin`)
 - 🌐 **Single Hub Link** that acts as a landing page for all your profiles
@@ -114,7 +114,7 @@ LinkBridger bridges this gap by providing:
 
 ---
 
-## 💡 Why LinkBridger?
+## 💡 Why All in1 url?
 
 ### 👔 For Professionals
 
@@ -200,7 +200,7 @@ Imagine you've shared your LinkedIn profile link in:
 
 **The Problem**: Your LinkedIn account gets banned or you change your username. Now you need to update links in all these places - but you don't even remember where you shared them!
 
-**The LinkBridger Solution**: Update the destination URL once in your LinkBridger dashboard, and **all your shared links automatically redirect to the new URL**. No more hunting down old links!
+**The All in1 url Solution**: Update the destination URL once in your All in1 url dashboard, and **all your shared links automatically redirect to the new URL**. No more hunting down old links!
 
 ### 4. **Advanced Analytics & Insights** 📊
 
@@ -345,7 +345,7 @@ Unlike many link shorteners that:
 - Delete inactive links
 - Limit the number of links
 
-**LinkBridger links work forever** - as long as you maintain your account, your links remain active. No expiration dates, no premium plans, no limits.
+**All in1 url links work forever** - as long as you maintain your account, your links remain active. No expiration dates, no premium plans, no limits.
 
 ### 7. **Customizable Email Notifications** 📧
 
@@ -521,11 +521,11 @@ Getting started is simple:
 
 ---
 
-## 🆚 LinkBridger vs. Competitors
+## 🆚 All in1 url vs. Competitors
 
 ### Comparison Table
 
-| Feature | LinkBridger | Link Shorteners (bit.ly, tinyurl) | Linktree | Bio.link | Custom Domain Services |
+| Feature | All in1 url | Link Shorteners (bit.ly, tinyurl) | Linktree | Bio.link | Custom Domain Services |
 |---------|------------|-----------------------------------|----------|----------|------------------------|
 | **Link Format** | `username.domain/platform` (🌟 Custom Subdomain) | `bit.ly/xyz123` | `linktr.ee/username` | `bio.link/username` | `custom.com/username` |
 | **Memorability** | ✅ Human-readable, memorable | ❌ Random codes | ⚠️ Platform-dependent | ⚠️ Platform-dependent | ✅ Customizable |
@@ -548,7 +548,7 @@ Getting started is simple:
 | **User Search** | ✅ Built-in | ❌ Not available | ⚠️ Limited | ⚠️ Limited | ⚠️ Varies |
 | **Profile Privacy Settings** | ✅ Granular controls | ❌ Not available | ⚠️ Limited | ⚠️ Limited | ⚠️ Varies |
 
-### Why LinkBridger is Superior
+### Why All in1 url is Superior
 
 #### 1. **Brand Identity** 🎯
 Your links become part of your brand identity, not generic shortened URLs. When someone sees `yourname.allin1url.in/linkedin`, they immediately know it's your link and can easily remember the pattern for other platforms. The custom subdomain format (`username.allin1url.in`) makes your links even more professional and memorable.
@@ -578,7 +578,7 @@ Built by developers, for developers:
 - Transparent development process
 
 #### 6. **Cost Effective** 💰
-- **LinkBridger**: Free forever, open source
+- **All in1 url**: Free forever, open source
 - **Linktree Pro**: $6-24/month
 - **Bio.link Pro**: $3-9/month
 - **Custom Domain Services**: $10-50+/month + setup fees
@@ -600,7 +600,7 @@ Built by developers, for developers:
 
 ## 🎬 Live Examples
 
-See LinkBridger in action with these real-world examples:
+See All in1 url in action with these real-world examples:
 
 ### Example User: `dpkrn`
 
@@ -815,8 +815,8 @@ Visit this link to see a beautiful landing page with all social profiles!
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/DpkRn/LinkBridger.git
-cd LinkBridger
+git clone https://github.com/DpkRn/All in1 url.git
+cd All in1 url
 ```
 
 #### 2. Install Dependencies
@@ -840,9 +840,9 @@ Create a `.env` file in the `backend/` directory:
 JWT_KEY=your_super_secret_jwt_key_here_min_32_chars
 
 # MongoDB Connection String
-DB_URL=mongodb://localhost:27017/linkbridger
+DB_URL=mongodb://localhost:27017/All in1 url
 # Or use MongoDB Atlas:
-# DB_URL=mongodb+srv://username:password@cluster.mongodb.net/linkbridger
+# DB_URL=mongodb+srv://username:password@cluster.mongodb.net/All in1 url
 
 # Email Configuration (for notifications)
 EMAIL_USER=your_email@gmail.com
@@ -897,15 +897,15 @@ docker-compose down
 ```bash
 # Build backend image
 cd backend
-docker build -t linkbridger-backend .
+docker build -t All in1 url-backend .
 
 # Build frontend image
 cd frontend
-docker build -t linkbridger-frontend .
+docker build -t All in1 url-frontend .
 
 # Run containers
-docker run -d -p 8080:8080 linkbridger-backend
-docker run -d -p 5173:5173 linkbridger-frontend
+docker run -d -p 8080:8080 All in1 url-backend
+docker run -d -p 5173:5173 All in1 url-frontend
 ```
 
 ### Production Deployment
@@ -1023,7 +1023,7 @@ This project adheres to professional development standards and best practices:
 
 ## 🤝 Contributing
 
-We **love** contributions! LinkBridger is an open-source project, and we welcome any contributions from the community. Whether you're fixing bugs, adding features, improving documentation, or suggesting ideas, your input is valuable!
+We **love** contributions! All in1 url is an open-source project, and we welcome any contributions from the community. Whether you're fixing bugs, adding features, improving documentation, or suggesting ideas, your input is valuable!
 
 ### 🌟 Why Contribute?
 
@@ -1039,7 +1039,7 @@ We **love** contributions! LinkBridger is an open-source project, and we welcome
 
 ```bash
 # Click the "Fork" button on GitHub, or use:
-gh repo fork DpkRn/LinkBridger
+gh repo fork DpkRn/All in1 url
 ```
 
 #### 2. Create a Feature Branch
@@ -1088,7 +1088,7 @@ git push origin feature/amazing-feature
 
 #### 7. Open a Pull Request
 
-- Go to the [GitHub repository](https://github.com/DpkRn/LinkBridger)
+- Go to the [GitHub repository](https://github.com/DpkRn/All in1 url)
 - Click "New Pull Request"
 - Select your branch
 - Describe your changes clearly
@@ -1164,11 +1164,11 @@ Contributors will be:
 
 ### About the Developer
 
-**Dwizard** is a passionate full-stack developer with expertise in modern web technologies. With a focus on creating user-friendly applications and contributing to the open-source community, Dwizard has built LinkBridger to solve real-world problems faced by professionals, content creators, and developers.
+**Dwizard** is a passionate full-stack developer with expertise in modern web technologies. With a focus on creating user-friendly applications and contributing to the open-source community, Dwizard has built All in1 url to solve real-world problems faced by professionals, content creators, and developers.
 
 ### 🎯 Mission
 
-To create tools that simplify digital life and empower users to build their online presence effectively. LinkBridger represents this mission by providing a free, open-source solution that puts users in control of their digital identity.
+To create tools that simplify digital life and empower users to build their online presence effectively. All in1 url represents this mission by providing a free, open-source solution that puts users in control of their digital identity.
 
 ### 💼 Skills & Expertise
 
@@ -1230,7 +1230,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### What This Means
 
-- ✅ **Free to Use**: Use LinkBridger for personal or commercial projects
+- ✅ **Free to Use**: Use All in1 url for personal or commercial projects
 - ✅ **Modify**: Change the code to fit your needs
 - ✅ **Distribute**: Share the software
 - ✅ **Private Use**: Use it privately
@@ -1247,7 +1247,7 @@ We're grateful to:
 
 - **Open Source Community** - For the amazing tools and libraries that make this project possible
 - **Contributors** - Everyone who has contributed code, documentation, or ideas
-- **Users** - For using LinkBridger and providing valuable feedback
+- **Users** - For using All in1 url and providing valuable feedback
 - **MongoDB** - For the excellent database service and documentation
 - **Vercel** - For seamless frontend hosting and deployment
 - **Tailwind CSS** - For the beautiful utility-first CSS framework
@@ -1277,22 +1277,22 @@ To everyone who:
 
 ### 🌟 Show Your Support
 
-- ⭐ **Star the repo** - Help others discover LinkBridger
+- ⭐ **Star the repo** - Help others discover All in1 url
 - 🍴 **Fork the repo** - Create your own version
 - 🐛 **Report bugs** - Help us improve
 - 💡 **Suggest features** - Share your ideas
 - 📢 **Share with others** - Spread the word
-- 🤝 **Contribute** - Make LinkBridger even better
+- 🤝 **Contribute** - Make All in1 url even better
 
 **Made with ❤️ by [Dwizard](https://github.com/DpkRn)**
 
-[⬆ Back to Top](#-linkbridger)
+[⬆ Back to Top](#-All in1 url)
 
 ---
 
 ### 🚀 Ready to Get Started?
 
-[**Try LinkBridger Now**](https://allin1url.in) • [**View Documentation**](./frontend/src/components/Documentation.jsx) • [**Contribute**](#-contributing)
+[**Try All in1 url Now**](https://allin1url.in) • [**View Documentation**](./frontend/src/components/Documentation.jsx) • [**Contribute**](#-contributing)
 
 **Questions?** [Email us](mailto:d.wizard.techno@gmail.com) - We're here to help! 💬
 

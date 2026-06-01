@@ -293,7 +293,7 @@ const Footer = () => {
               href="https://allin1url.in"
               className="font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent hover:from-purple-300 hover:to-pink-300 transition-all duration-200"
             >
-              LinkBridger™
+              All in1 url™
             </a>
             . All Rights Reserved.
           </motion.span>

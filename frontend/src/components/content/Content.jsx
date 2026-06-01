@@ -101,7 +101,7 @@ const Content = () => {
           >
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold font-montserrat">
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
-                LinkBridger
+                All in1 url
               </span>
             </h1>
             {/* Glowing effect behind text */}

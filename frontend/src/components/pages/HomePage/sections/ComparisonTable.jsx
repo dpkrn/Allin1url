@@ -10,7 +10,7 @@ const ComparisonTable = () => {
   const startWidthRef = useRef(0);
 
   const products = [
-    { name: 'LinkBridger', highlight: true },
+    { name: 'All in1 url', highlight: true },
     { name: 'Link Shorteners', highlight: false },
     { name: 'Linktree', highlight: false },
     { name: 'Bio.link', highlight: false },
@@ -277,7 +277,7 @@ const ComparisonTable = () => {
         {/* Header */}
         <div className="text-center mb-3 sm:mb-4 md:mb-6 lg:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3 px-2">
-            🆚 LinkBridger vs. Competitors
+            🆚 All in1 url vs. Competitors
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 px-2">
             Complete feature comparison at a glance
@@ -429,7 +429,7 @@ const ComparisonTable = () => {
             Ready to get started?
           </h3>
           <p className="text-sm sm:text-base text-blue-100 mb-3 sm:mb-4 px-2">
-            Join thousands using LinkBridger for their professional links
+            Join thousands using All in1 url for their professional links
           </p>
           <button className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-all duration-200 hover:scale-105 shadow-lg text-sm sm:text-base">
             Get Started Free

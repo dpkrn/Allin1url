@@ -48,9 +48,9 @@ const signUpController = async (req, res, next) => {
       console.log("user created");
       // Use name from request body or fallback to username
       const displayName =  username;
-      sendWelcomeEmail(email, username, displayName, "LinkBridger");
+      sendWelcomeEmail(email, username, displayName, "All in1 url");
       adminEmail=process.env.ADMIN_EMAIL || "d.wizard.techno@gmail.com";
-      sendNewUserOnboardingEmail("d.wizard.techno@gmail.com", username, displayName, "LinkBridger");
+      sendNewUserOnboardingEmail("d.wizard.techno@gmail.com", username, displayName, "All in1 url");
       return res
         .status(201)
         .json({ success: true, message: "user registerd !", user });
@@ -320,9 +320,9 @@ const handleAuthCallback=async (req, res) => {
         user = await User.findById(newUser._id).lean();
         // Use name from request body or fallback to username
         const displayName =  username;
-        sendWelcomeEmail(email, username, displayName, "LinkBridger");
+        sendWelcomeEmail(email, username, displayName, "All in1 url");
         adminEmail=process.env.ADMIN_EMAIL || "d.wizard.techno@gmail.com";
-        sendNewUserOnboardingEmail("d.wizard.techno@gmail.com", username, displayName, "LinkBridger");
+        sendNewUserOnboardingEmail("d.wizard.techno@gmail.com", username, displayName, "All in1 url");
       }
     }
     

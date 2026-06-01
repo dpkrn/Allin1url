@@ -1,4 +1,4 @@
-if i have to talk about only one project then i ll choose the project linkBridger. there is reason to choose that its complete my own idea and obviously its around of unique. some idea has been taken from link tree.
+if i have to talk about only one project then i ll choose the project All in1 url. there is reason to choose that its complete my own idea and obviously its around of unique. some idea has been taken from link tree.
 so lets talk about the working of project and what basically it does.
 
 the person who is having many social profiles and also there are many hard or long http links   they can use this project like influencer, it sector person because they all have contain many type of links like github, linkdin, portfolio, instagram, facebook, and some coding profile like leetcode, codeforces etc.

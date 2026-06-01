@@ -1,6 +1,6 @@
 # Sections and Pages Documentation
 
-This document provides comprehensive information about the page structure, section components, and how they are organized in the LinkBridger frontend application.
+This document provides comprehensive information about the page structure, section components, and how they are organized in the All in1 url frontend application.
 
 ## Table of Contents
 
@@ -76,7 +76,7 @@ frontend/src/components/pages/
     { text: "Your", className: "text-5xl font-bold" }
   ]}
   flipWords={["LinkedIn", "GitHub", "Instagram"]}
-  description="LinkBridger transforms your social media presence."
+  description="All in1 url transforms your social media presence."
   highlightText="One link to rule them all."
   ctaText="Get Started Free"
   platforms={[
@@ -274,7 +274,7 @@ frontend/src/components/pages/
 ```jsx
 <CTASection
   title="Ready to Transform Your Links?"
-  subtitle="Join thousands of professionals who trust LinkBridger"
+  subtitle="Join thousands of professionals who trust All in1 url"
   ctaText="Get Started Now"
 />
 ```

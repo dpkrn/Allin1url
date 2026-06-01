@@ -1,6 +1,6 @@
 # Frontend Documentation
 
-This directory contains documentation for the LinkBridger frontend application.
+This directory contains documentation for the All in1 url frontend application.
 
 ## Documentation Files
 

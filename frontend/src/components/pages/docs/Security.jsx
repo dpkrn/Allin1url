@@ -94,7 +94,7 @@ const Security = () => {
     {
       icon: FaShieldAlt,
       title: "Security Features",
-      description: "LinkBridger implements industry-standard security measures:",
+      description: "All in1 url implements industry-standard security measures:",
       features: [
         "JWT Authentication - Secure token-based authentication",
         "Password Hashing - Bcrypt encryption for passwords",

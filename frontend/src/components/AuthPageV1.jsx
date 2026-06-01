@@ -164,7 +164,7 @@ const AuthPageV1 = () => {
                             </div>
 
                             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-fade-in-delay">
-                                Welcome to LinkBridger
+                                Welcome to All in1 url
                             </h1>
 
                             <p className="text-sm sm:text-base md:text-lg text-gray-300 dark:text-gray-400 max-w-md animate-fade-in-delay-2">

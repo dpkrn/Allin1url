@@ -5,7 +5,7 @@ import { FaArrowRight } from 'react-icons/fa';
 
 const CTASection = ({
   title = "Ready to Transform Your Links?",
-  subtitle = "Join thousands of professionals who trust LinkBridger to manage their social presence",
+  subtitle = "Join thousands of professionals who trust All in1 url to manage their social presence",
   ctaText = "Get Started Now",
   ctaAction = null,
   className = ""

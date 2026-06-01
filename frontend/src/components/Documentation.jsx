@@ -512,7 +512,7 @@ const Documentation = () => {
 
   const words = [
     {
-      text: "LinkBridger : ",
+      text: "All in1 url : ",
       className: "text-blue-500 dark:text-blue-400 text-4xl font-bold",
     },
     {
@@ -947,7 +947,7 @@ const Documentation = () => {
             <motion.img
               className="h-8 w-8 rounded-full object-contain bg-white/10 dark:bg-gray-800/20 p-1 transition-all duration-300"
               src={logo}
-              alt="LinkBridger Logo"
+              alt="All in1 url Logo"
               onError={(e) => {
                 e.target.src = 'https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500';
               }}
@@ -957,7 +957,7 @@ const Documentation = () => {
           <span 
             className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent relative"
           >
-            LinkBridger
+            All in1 url
             {/* Text Glow */}
             <motion.span
               className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent blur-sm opacity-50"
@@ -970,7 +970,7 @@ const Documentation = () => {
                 ease: "easeInOut",
               }}
             >
-              LinkBridger
+              All in1 url
             </motion.span>
           </span>
         </motion.div>
@@ -1254,11 +1254,11 @@ const Documentation = () => {
                   }}
                 >
                   <p className="text-base md:text-lg lg:text-[1.125rem] leading-relaxed md:leading-[1.85] text-gray-700 dark:text-gray-300 font-normal tracking-wide">
-                    Welcome to <span className="font-semibold text-gray-900 dark:text-gray-100">LinkBridger</span>, your ultimate partner for streamlined online presence and effortless link management. We offer innovative IT support and services that make your social media profiles, portfolios, and professional links easy to remember, manage, and share.
+                    Welcome to <span className="font-semibold text-gray-900 dark:text-gray-100">All in1 url</span>, your ultimate partner for streamlined online presence and effortless link management. We offer innovative IT support and services that make your social media profiles, portfolios, and professional links easy to remember, manage, and share.
                   </p>
                   
                   <p className="text-base md:text-lg lg:text-[1.125rem] leading-relaxed md:leading-[1.85] text-gray-700 dark:text-gray-300 font-normal tracking-wide">
-                    Whether you're sharing your Instagram, GitHub, LinkedIn, or any other platform, LinkBridger allows you to generate a single, personalized URL that leads to a beautiful, customizable landing page featuring all your profiles. Simply visit <span className="font-medium text-purple-600 dark:text-purple-400">https://<span className="font-bold">yourname</span>.allin1url.in</span> (without any platform name) to access your unified link hub.
+                    Whether you're sharing your Instagram, GitHub, LinkedIn, or any other platform, All in1 url allows you to generate a single, personalized URL that leads to a beautiful, customizable landing page featuring all your profiles. Simply visit <span className="font-medium text-purple-600 dark:text-purple-400">https://<span className="font-bold">yourname</span>.allin1url.in</span> (without any platform name) to access your unified link hub.
                   </p>
                   
                   <p className="text-base md:text-lg lg:text-[1.125rem] leading-relaxed md:leading-[1.85] text-gray-700 dark:text-gray-300 font-normal tracking-wide">
@@ -1859,7 +1859,7 @@ const Documentation = () => {
                 transition={{ delay: 0.1 }}
                 className="text-base md:text-lg lg:text-xl leading-8 text-gray-700 dark:text-gray-300 mb-4 md:mb-6"
               >
-                The core idea behind <b className="text-gray-900 dark:text-white">LinkBridger</b> is to simplify the
+                The core idea behind <b className="text-gray-900 dark:text-white">All in1 url</b> is to simplify the
                 management of social media links. Instead of sharing long,
                 hard-to-remember URLs, you create a single, personalized URL that
                 automatically redirects users to the correct platform. Access all your links at one place by visiting <b className="text-gray-900 dark:text-white">https://<span className="font-bold text-purple-600 dark:text-purple-400">yourname</span>.allin1url.in</b> (without any platform name). Plus, get real-time email notifications every time someone visits your links!
@@ -1870,7 +1870,7 @@ const Documentation = () => {
                   {
                     step: "1",
                     title: "Create an Account",
-                    desc: "Sign up using your email and create an account on LinkBridger.",
+                    desc: "Sign up using your email and create an account on All in1 url.",
                     icon: FaRocket,
                   },
                   {
@@ -1993,7 +1993,7 @@ const Documentation = () => {
                 viewport={{ once: true }}
                 className="text-base md:text-lg lg:text-xl leading-8 text-gray-800 dark:text-gray-300"
               >
-                With <b className="text-gray-900 dark:text-white">LinkBridger</b>, you can track how many times each of your
+                With <b className="text-gray-900 dark:text-white">All in1 url</b>, you can track how many times each of your
                 links has been clicked. This allows you to monitor the engagement on
                 your social media profiles across different platforms. Access the
                 analytics section from your dashboard to see detailed statistics
@@ -2069,7 +2069,7 @@ const Documentation = () => {
                 },
                 {
                   title: "Content Creators",
-                  desc: "Manage all your social media profiles from one place. Share your LinkBridger link in bio and watch engagement grow.",
+                  desc: "Manage all your social media profiles from one place. Share your All in1 url link in bio and watch engagement grow.",
                   icon: FaUserTie,
                   gradient: "from-purple-500 to-pink-500",
                   examples: ["Instagram bio links", "YouTube descriptions", "TikTok profiles"],
@@ -2254,7 +2254,7 @@ const Documentation = () => {
               viewport={{ once: true }}
             >
               <p className="text-lg md:text-xl text-gray-700 dark:text-gray-400 mb-4 md:mb-6 text-center">
-                LinkBridger supports <b className="text-gray-900 dark:text-white">any platform</b> you can think of! Just provide the destination URL and we'll create your personalized link.
+                All in1 url supports <b className="text-gray-900 dark:text-white">any platform</b> you can think of! Just provide the destination URL and we'll create your personalized link.
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {[
@@ -2329,7 +2329,7 @@ const Documentation = () => {
                   },
                   {
                     title: "HTTPS Encryption",
-                    desc: "All connections to LinkBridger are encrypted using HTTPS, ensuring your data is protected during transmission.",
+                    desc: "All connections to All in1 url are encrypted using HTTPS, ensuring your data is protected during transmission.",
                     icon: FaLock,
                     gradient: "from-green-500 to-emerald-500",
                   },
@@ -2567,7 +2567,7 @@ const Documentation = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {[
                 {
-                  text: "LinkBridger made sharing my profiles so much easier. The personalized links look great and are super easy to remember!",
+                  text: "All in1 url made sharing my profiles so much easier. The personalized links look great and are super easy to remember!",
                   author: "Amit S.",
                 },
                 {

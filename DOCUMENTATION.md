@@ -1,6 +1,6 @@
-# LinkBridger Documentation Index
+# All in1 url Documentation Index
 
-This document provides an overview of all documentation available in the LinkBridger project.
+This document provides an overview of all documentation available in the All in1 url project.
 
 ## 📚 Documentation Structure
 
@@ -196,4 +196,4 @@ API endpoints are documented in:
 ---
 
 **Last Updated**: 2024-12-XX
-**Maintained By**: LinkBridger Development Team
+**Maintained By**: All in1 url Development Team

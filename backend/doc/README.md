@@ -1,10 +1,10 @@
 # Database Models Documentation
 
-This directory contains comprehensive documentation for all database models used in the LinkBridger application.
+This directory contains comprehensive documentation for all database models used in the All in1 url application.
 
 ## Overview
 
-The LinkBridger application uses MongoDB with Mongoose ODM. All models are designed with:
+The All in1 url application uses MongoDB with Mongoose ODM. All models are designed with:
 - **Timestamps**: Automatic `createdAt` and `updatedAt` fields
 - **Soft Deletes**: `deletedAt` field for data retention
 - **Indexes**: Optimized for common query patterns

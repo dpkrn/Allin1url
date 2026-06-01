@@ -224,7 +224,7 @@ const HomePage = () => {
     },
     {
       title: "Content Creators",
-      desc: "Manage all your social media profiles from one place. Share your LinkBridger link in bio and watch engagement grow. Track which platforms drive the most traffic with comprehensive analytics including device, browser, OS, and referrer insights.",
+      desc: "Manage all your social media profiles from one place. Share your All in1 url link in bio and watch engagement grow. Track which platforms drive the most traffic with comprehensive analytics including device, browser, OS, and referrer insights.",
       icon: FaUserTie,
       gradient: "from-purple-500 to-pink-500",
       examples: [
@@ -283,7 +283,7 @@ const HomePage = () => {
     {
       step: "1",
       title: "Create an Account",
-      desc: "Sign up using your email and create an account on LinkBridger.",
+      desc: "Sign up using your email and create an account on All in1 url.",
       icon: FaRocket,
     },
     {
@@ -409,7 +409,7 @@ const HomePage = () => {
       <HeroSection
         words={words}
         flipWords={flipWords}
-        description="LinkBridger transforms your social media presence with memorable, personalized URLs by providing your own FREE domain that will reflect your brand identity"
+        description="All in1 url transforms your social media presence with memorable, personalized URLs by providing your own FREE domain that will reflect your brand identity"
         highlightText="One link to rule them all. Update once, reflect everywhere."
         ctaText="Get Started Free"
         secondaryCtaText="Learn More"
@@ -780,7 +780,7 @@ const HomePage = () => {
               className="text-base md:text-lg lg:text-xl leading-8 text-gray-700 dark:text-gray-300 mb-3 sm:mb-4 md:mb-6"
             >
               The core idea behind{" "}
-              <b className="text-gray-900 dark:text-white">LinkBridger</b> is
+              <b className="text-gray-900 dark:text-white">All in1 url</b> is
               to simplify the management of social media links. Instead of
               sharing long, hard-to-remember URLs, you create a single,
               personalized URL that automatically redirects users to the
@@ -861,7 +861,7 @@ const HomePage = () => {
       {/* Final CTA Section */}
       <CTASection
         title="Ready to Transform Your Links?"
-        subtitle="Join thousands of professionals who trust LinkBridger. Get your own domain FREE to manage your links and reflect your brand identity professionally."
+        subtitle="Join thousands of professionals who trust All in1 url. Get your own domain FREE to manage your links and reflect your brand identity professionally."
         ctaText="Get Started Now"
       />
       

@@ -217,7 +217,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added pointer-events-none to hover overlay
 
 ### Added - 2024-12-20
-- **Logo Implementation**: Added LinkBridger logo across all navigation bars
+- **Logo Implementation**: Added All in1 url logo across all navigation bars
   - Imported logo from `assets/logo.png` in all navbar components
   - Added rotating 3D flip animation to logo (20s infinite rotation)
   - Implemented round logo design with proper visibility in both light and dark modes
@@ -838,7 +838,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 +    - Job Seekers, Content Creators, Developers, Students, Businesses, and Freelancers
 +    - Each use case includes description, icon, gradient styling, and example applications
 +    - Interactive cards with hover effects and smooth animations
-+  - **NEW: Best Practices Section**: Added best practices guide for optimal LinkBridger usage
++  - **NEW: Best Practices Section**: Added best practices guide for optimal All in1 url usage
 +    - Six key best practices with icons and detailed explanations
     - Tips on username selection, platform naming, link updates, analytics, testing, and sharing
 +  - **NEW: Platform Support Section**: Added comprehensive list of supported platforms
@@ -1064,7 +1064,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - "you have no any new clicks" → "You have no new clicks"
   - "mark as read" → "Mark as Read"
   - "bridge has been made successfully" → "Bridge has been created successfully"
-  - "Link Bridger" → "LinkBridger" (consistent branding)
+  - "Link Bridger" → "All in1 url" (consistent branding)
   - "No links found. add new link..." → "No links found. Add a new link..."
   - "Codeforce" → "Codeforces"
   - Fixed various capitalization and punctuation issues

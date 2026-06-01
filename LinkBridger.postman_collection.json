@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "linkbridger-api-collection",
-		"name": "LinkBridger API Collection",
-		"description": "Complete API collection for LinkBridger application. Includes all authentication, links, profile, settings, and search endpoints.",
+		"_postman_id": "All in1 url-api-collection",
+		"name": "All in1 url API Collection",
+		"description": "Complete API collection for All in1 url application. Includes all authentication, links, profile, settings, and search endpoints.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

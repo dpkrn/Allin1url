@@ -276,8 +276,8 @@ const AboutDeveloper = () => {
                 variants={fadeInUp}
                 className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-4 sm:mb-5 md:mb-6 leading-relaxed transition-colors duration-300 px-2 sm:px-0"
               >
-                I created LinkBridger to solve a real problem: managing multiple social media and professional links scattered across different platforms. 
-                Instead of sharing long, forgettable URLs, LinkBridger lets you create memorable, personalized links that reflect your brand. With granular
+                I created All in1 url to solve a real problem: managing multiple social media and professional links scattered across different platforms. 
+                Instead of sharing long, forgettable URLs, All in1 url lets you create memorable, personalized links that reflect your brand. With granular
                 privacy controls, customizable notifications, and password protection, you have complete control over your digital presence. Plus, get a free custom domain to make your link truly yours and establish your unique online identity.
               </motion.p>
 
@@ -424,7 +424,7 @@ const AboutDeveloper = () => {
                 ))}
               </div>
               <p className="text-center text-xs sm:text-sm md:text-base text-gray-400 mt-4 sm:mt-5 md:mt-6 px-4">
-                These talented developers contribute to LinkBridger on GitHub
+                These talented developers contribute to All in1 url on GitHub
               </p>
             </motion.div>
           </motion.div>

@@ -86,7 +86,7 @@ const Welcome_Email_Template = `
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Welcome to LinkBridger!</title>
+      <title>Welcome to All in1 url!</title>
       <style>
           * {
               margin: 0;
@@ -291,14 +291,14 @@ const Welcome_Email_Template = `
   <body>
       <div class="email-wrapper">
           <div class="header">
-              <h1>🎉 Welcome to LinkBridger!</h1>
+              <h1>🎉 Welcome to All in1 url!</h1>
               <p>Your journey to better link management starts now</p>
           </div>
           <div class="content">
               <p class="welcome-message">Hello {name} (@{username})!</p>
               
               <p style="color: #4b5563; line-height: 1.8; margin-bottom: 20px;">
-                  We're absolutely thrilled to have you join the LinkBridger community! 🚀 Your account has been successfully created, and you're just moments away from transforming how you share and manage your social media links.
+                  We're absolutely thrilled to have you join the All in1 url community! 🚀 Your account has been successfully created, and you're just moments away from transforming how you share and manage your social media links.
               </p>
 
               <div class="highlight-box">
@@ -414,17 +414,17 @@ const Welcome_Email_Template = `
           </div>
           <div class="footer">
               <p><strong>Happy Linking! 🎯</strong></p>
-              <p>The LinkBridger Team</p>
+              <p>The All in1 url Team</p>
               <div class="social-links">
                   <a href="https://allin1url.in/app/doc">Documentation</a> | 
                   <a href="https://allin1url.in/app/home">Dashboard</a>
               </div>
               <p style="margin-top: 20px; font-size: 12px;">
-                  &copy; ${new Date().getFullYear()} LinkBridger. All rights reserved.
+                  &copy; ${new Date().getFullYear()} All in1 url. All rights reserved.
               </p>
-              <p>For any kind of support you can visit to our Email <a href="mailto:support@linkbridger.com">support@linkbridger.com</a></p>
+              <p>For any kind of support you can visit to our Email <a href="mailto:support@All in1 url.com">support@All in1 url.com</a></p>
               <p style="font-size: 12px; color: #9ca3af;">
-                  This is an automated welcome email from LinkBridger.
+                  This is an automated welcome email from All in1 url.
               </p>
           </div>
       </div>
@@ -526,7 +526,7 @@ const Onboarding_Email_Template = `
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>New User Joined - LinkBridger</title>
+      <title>New User Joined - All in1 url</title>
       <style>
           * {
               margin: 0;
@@ -644,14 +644,14 @@ const Onboarding_Email_Template = `
       <div class="email-wrapper">
           <div class="header">
               <h1>🎉 New User Joined!</h1>
-              <p>Someone just signed up for LinkBridger</p>
+              <p>Someone just signed up for All in1 url</p>
           </div>
           
           <div class="content">
               <div class="notification-box">
                   <h2>Welcome to the Community!</h2>
                   <p style="color: #065f46; font-size: 16px; line-height: 1.6;">
-                      A new user has successfully registered and joined the LinkBridger community!
+                      A new user has successfully registered and joined the All in1 url community!
                   </p>
               </div>
 
@@ -679,19 +679,19 @@ const Onboarding_Email_Template = `
               <div class="stats-box">
                   <p style="margin-bottom: 10px;"><strong>📊 Community Growth:</strong></p>
                   <p style="font-size: 14px;">
-                      Every new member helps grow the LinkBridger community! This user can now create personalized links, track analytics, and manage their social media presence all in one place.
+                      Every new member helps grow the All in1 url community! This user can now create personalized links, track analytics, and manage their social media presence all in one place.
                   </p>
               </div>
 
               <p style="color: #4b5563; line-height: 1.8; margin-top: 25px; text-align: center;">
-                  You can view user activity and manage your LinkBridger platform from your admin dashboard.
+                  You can view user activity and manage your All in1 url platform from your admin dashboard.
               </p>
           </div>
 
           <div class="footer">
-              <p><strong>LinkBridger Admin Notification</strong></p>
+              <p><strong>All in1 url Admin Notification</strong></p>
               <p style="margin-top: 15px; font-size: 12px;">
-                  &copy; ${new Date().getFullYear()} LinkBridger. All rights reserved.
+                  &copy; ${new Date().getFullYear()} All in1 url. All rights reserved.
               </p>
               <p style="font-size: 12px; color: #9ca3af;">
                   This is an automated notification email sent to the project owner.
@@ -939,7 +939,7 @@ const Profile_Visit_Email_Template = `
               <div class="visit-notification">
                   <h2>🎉 Great News!</h2>
                   <p style="color: #1e40af; font-size: 18px; line-height: 1.6;">
-                      {{visitorName}} has visited your LinkBridger profile!
+                      {{visitorName}} has visited your All in1 url profile!
                   </p>
               </div>
 
@@ -994,13 +994,13 @@ const Profile_Visit_Email_Template = `
               </p>
           </div>
           <div class="footer">
-              <p><strong>LinkBridger Notification</strong></p>
+              <p><strong>All in1 url Notification</strong></p>
               <p style="margin-top: 15px;">
                   <a href="https://allin1url.in/app/settings">Manage Notification Settings</a> | 
                   <a href="https://allin1url.in/app/analytics">View Analytics</a>
               </p>
               <p style="margin-top: 20px; font-size: 12px;">
-                  &copy; ${new Date().getFullYear()} LinkBridger. All rights reserved.
+                  &copy; ${new Date().getFullYear()} All in1 url. All rights reserved.
               </p>
               <p style="font-size: 12px; color: #9ca3af;">
                   This is an automated notification email. You can disable these notifications in your settings.

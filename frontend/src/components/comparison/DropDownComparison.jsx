@@ -6,7 +6,7 @@ const ComparisonTable = () => {
   const [hoveredRow, setHoveredRow] = useState(null);
 
   const products = [
-    'LinkBridger',
+    'All in1 url',
     'Link Shorteners',
     'Linktree',
     'Bio.link',
@@ -129,7 +129,7 @@ const ComparisonTable = () => {
         {/* Header */}
         <div className="text-center mb-8 transition-all duration-500 ease-out">
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-            🆚 LinkBridger vs. Competitors
+            🆚 All in1 url vs. Competitors
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-lg">
             See how we compare to other solutions
@@ -239,7 +239,7 @@ const ComparisonTable = () => {
             Ready to get started?
           </h3>
           <p className="text-blue-100 mb-4">
-            Join thousands using LinkBridger for their professional links
+            Join thousands using All in1 url for their professional links
           </p>
           <button className="px-8 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-all duration-200 hover:scale-105">
             Get Started Free

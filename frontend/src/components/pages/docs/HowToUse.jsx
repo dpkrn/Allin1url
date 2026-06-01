@@ -132,7 +132,7 @@ const HowToUse = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Step-by-step guide to get started with LinkBridger
+            Step-by-step guide to get started with All in1 url
           </motion.p>
         </motion.div>
 

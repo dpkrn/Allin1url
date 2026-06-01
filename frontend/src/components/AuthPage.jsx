@@ -257,7 +257,7 @@ const AuthPage = () => {
                 transition={{ delay: 0.4 }}
                 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
               >
-                Welcome to LinkBridger
+                Welcome to All in1 url
               </motion.h1>
 
               <motion.p

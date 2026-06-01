@@ -45,7 +45,7 @@ const sendVisitEmail = async (
 
   const emailUser = process.env.EMAIL_USER || "linkbriger@gmail.com";
   const data = {
-    from: `"LinkBridger" <${emailUser}>`,
+    from: `"All in1 url" <${emailUser}>`,
     to: email,
     subject: `New Visit on Your ${platform}`,
     text: `Hello ${name} (${username}), someone visited your ${platform} link.`,
@@ -184,17 +184,17 @@ const sendWelcomeEmail = async (email, username, name, AppName) => {
   let html = Welcome_Email_Template.replace(/{username}/g, username);
   html = html.replace(/{name}/g, name || username);
   const emailUser = process.env.EMAIL_USER || "linkbriger@gmail.com";
-  const supportEmail = process.env.SUPPORT_EMAIL || "support@linkbridger.com";
+  const supportEmail = process.env.SUPPORT_EMAIL || "support@All in1 url.com";
   
   // Replace support email in template
-  html = html.replace(/support@linkbridger\.com/g, supportEmail);
+  html = html.replace(/support@All in1 url\.com/g, supportEmail);
   html = html.replace(/d\.wizard\.techno@gmail\.com/g, supportEmail);
   
   const data = {
     from: `"${AppName}" <${emailUser}>`,
     to: email,
-    subject: "🎉 Welcome to LinkBridger - Your Link Management Journey Begins!",
-    text: `Hello ${name || username} (@${username})! Welcome to LinkBridger. Your personalized link is ready: https://allin1url.in/${username}`,
+    subject: "🎉 Welcome to All in1 url - Your Link Management Journey Begins!",
+    text: `Hello ${name || username} (@${username})! Welcome to All in1 url. Your personalized link is ready: https://allin1url.in/${username}`,
     html: html,
   };
 
@@ -216,8 +216,8 @@ const sendNewUserOnboardingEmail = async (email, username, name, AppName) => {
   const data = {
     from: `"${AppName}" <${emailUser}>`,
     to: email,
-    subject: `🎉 New User Joined LinkBridger - @${username}`,
-    text: `New user @${username} has joined the LinkBridger community. Profile link: https://allin1url.in/${username}`,
+    subject: `🎉 New User Joined All in1 url - @${username}`,
+    text: `New user @${username} has joined the All in1 url community. Profile link: https://allin1url.in/${username}`,
     html: html,
   };
 
@@ -268,13 +268,13 @@ const sendProfileVisitEmail = async (
   const emailUser = process.env.EMAIL_USER || "linkbriger@gmail.com";
   const subject = visitorUsername 
     ? `👋 ${visitorName || visitorUsername} (@${visitorUsername}) visited your profile!`
-    : `👋 Someone visited your LinkBridger profile!`;
+    : `👋 Someone visited your All in1 url profile!`;
 
   const data = {
-    from: `"LinkBridger" <${emailUser}>`,
+    from: `"All in1 url" <${emailUser}>`,
     to: email,
     subject: subject,
-    text: `Hello ${profileOwnerName} (@${profileOwnerUsername}), ${visitorNameText} has visited your LinkBridger profile!`,
+    text: `Hello ${profileOwnerName} (@${profileOwnerUsername}), ${visitorNameText} has visited your All in1 url profile!`,
     html: emailHTML,
   };
 

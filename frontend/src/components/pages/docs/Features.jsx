@@ -108,7 +108,7 @@ const Features = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Discover what LinkBridger can do for you. Powerful features designed to transform your social media presence.
+            Discover what All in1 url can do for you. Powerful features designed to transform your social media presence.
           </motion.p>
         </motion.div>
 

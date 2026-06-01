@@ -314,7 +314,7 @@ const Nav = () => {
                   <img
                     className={`${isPublicNav ? 'h-8 w-8 sm:h-10 sm:w-10' : 'h-10 w-10'} rounded-full object-contain bg-white/10 dark:bg-gray-800/20 p-1 drop-shadow-lg transition-all duration-300`}
                     src={logo}
-                    alt="LinkBridger Logo"
+                    alt="All in1 url Logo"
                     onError={(e) => {
                       e.target.src = 'https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500';
                     }}
@@ -326,7 +326,7 @@ const Nav = () => {
                 className="hidden sm:block text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
                 whileHover={{ scale: 1.05 }}
               >
-                LinkBridger
+                All in1 url
               </motion.span>
             </Link>
 

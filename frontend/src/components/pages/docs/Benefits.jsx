@@ -69,14 +69,14 @@ const Benefits = () => {
     {
       icon: FaClock,
       title: "Centralized Link Management",
-      description: "Imagine you've shared your LinkedIn link in 10+ places. If your account gets banned or you change usernames, update the destination URL once in LinkBridger, and all your shared links automatically redirect to the new URL.",
+      description: "Imagine you've shared your LinkedIn link in 10+ places. If your account gets banned or you change usernames, update the destination URL once in All in1 url, and all your shared links automatically redirect to the new URL.",
       example: "Update once → All links update automatically",
       gradient: "from-indigo-500 to-purple-500"
     },
     {
       icon: FaCheckCircle,
       title: "No Expiration - Links Work Forever",
-      description: "Unlike many link shorteners that expire links or require premium subscriptions, LinkBridger links work forever. As long as you maintain your account, your links remain active with no expiration dates.",
+      description: "Unlike many link shorteners that expire links or require premium subscriptions, All in1 url links work forever. As long as you maintain your account, your links remain active with no expiration dates.",
       gradient: "from-cyan-500 to-blue-500"
     },
     {
@@ -111,7 +111,7 @@ const Benefits = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Discover the advantages of using LinkBridger for your social media presence
+            Discover the advantages of using All in1 url for your social media presence
           </motion.p>
         </motion.div>
 

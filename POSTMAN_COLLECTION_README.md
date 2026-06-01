@@ -1,6 +1,6 @@
-# LinkBridger API Postman Collection
+# All in1 url API Postman Collection
 
-This directory contains the Postman collection and environment files for testing all LinkBridger APIs.
+This directory contains the Postman collection and environment files for testing all All in1 url APIs.
 
 ## Files
 
@@ -20,7 +20,7 @@ This directory contains the Postman collection and environment files for testing
 
 ### 2. Configure Environment
 
-1. Select **"LinkBridger API Environment"** from the environment dropdown (top right)
+1. Select **"All in1 url API Environment"** from the environment dropdown (top right)
 2. Update `base_url` if your backend is running on a different port:
    - Default: `http://localhost:8080`
    - Production: `https://your-production-url.com`
@@ -178,7 +178,7 @@ If your new API needs new environment variables:
 ## Collection Structure
 
 ```
-LinkBridger API Collection
+All in1 url API Collection
 ├── Authentication
 │   ├── Send OTP (Signup)
 │   ├── Verify Account (Complete Signup)

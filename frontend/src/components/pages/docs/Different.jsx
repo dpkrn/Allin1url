@@ -6,7 +6,7 @@ import Footer from '../../footer/Footer';
 const Different = () => {
   const comparisons = [
     {
-      platform: "LinkBridger",
+      platform: "All in1 url",
       features: [
         "Human-readable, memorable links",
         "Never expires",
@@ -109,7 +109,7 @@ const Different = () => {
     {
       icon: FaDollarSign,
       title: "Cost Effective",
-      description: "LinkBridger is free forever and open source. Compare to Linktree Pro ($6-24/month), Bio.link Pro ($3-9/month), or Custom Domain Services ($10-50+/month + setup fees).",
+      description: "All in1 url is free forever and open source. Compare to Linktree Pro ($6-24/month), Bio.link Pro ($3-9/month), or Custom Domain Services ($10-50+/month + setup fees).",
       gradient: "from-indigo-500 to-purple-500"
     },
     {
@@ -150,7 +150,7 @@ const Different = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            See how LinkBridger compares to other platforms and why it's superior
+            See how All in1 url compares to other platforms and why it's superior
           </motion.p>
         </motion.div>
 
@@ -205,14 +205,14 @@ const Different = () => {
           </div>
         </motion.div>
 
-        {/* Why LinkBridger is Superior */}
+        {/* Why All in1 url is Superior */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-900 dark:text-white">
-            Why LinkBridger is Superior
+            Why All in1 url is Superior
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {advantages.map((advantage, idx) => {

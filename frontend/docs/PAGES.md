@@ -1,6 +1,6 @@
 # Frontend Pages Documentation
 
-This document provides comprehensive information about all pages in the LinkBridger frontend application.
+This document provides comprehensive information about all pages in the All in1 url frontend application.
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@ This document provides comprehensive information about all pages in the LinkBrid
 
 ## Overview
 
-The LinkBridger frontend is built with React 18 and uses React Router for navigation. All pages follow consistent design patterns with:
+The All in1 url frontend is built with React 18 and uses React Router for navigation. All pages follow consistent design patterns with:
 - Animated backgrounds with gradient orbs
 - Glassmorphism effects
 - Smooth animations using Framer Motion
