@@ -8,7 +8,7 @@
 3. Click on **Domain List** from the left sidebar
 
 ### Step 2: Select Your Domain
-1. Find `clickly.cv` in your domain list
+1. Find `allin1url.in` in your domain list
 2. Click the **Manage** button next to it
 
 ### Step 3: Go to Advanced DNS
@@ -34,8 +34,8 @@
 **Important Notes:**
 - ✅ **Host field**: Enter exactly `_acme-challenge` (without quotes, no spaces)
 - ✅ **Value field**: Enter exactly `xgPUGNyXbaKrC1ZSQR57af9lVwZz0Jj4UgoWTFTgLVQ` (no quotes, no spaces)
-- ✅ Namecheap will automatically add `.clickly.cv` to the host name
-- ✅ So `_acme-challenge` becomes `_acme-challenge.clickly.cv` automatically
+- ✅ Namecheap will automatically add `.allin1url.in` to the host name
+- ✅ So `_acme-challenge` becomes `_acme-challenge.allin1url.in` automatically
 
 ### Step 6: Save the Record
 1. Click the **Save All Changes** button (green checkmark icon) at the top right
@@ -45,7 +45,7 @@
 1. After saving, scroll down to see your records
 2. Look for a TXT record that shows:
    - **Type**: TXT Record
-   - **Host**: `_acme-challenge.clickly.cv` (Namecheap shows the full name)
+   - **Host**: `_acme-challenge.allin1url.in` (Namecheap shows the full name)
    - **Value**: `xgPUGNyXbaKrC1ZSQR57af9lVwZz0Jj4UgoWTFTgLVQ`
 
 **If you see this record, it's added correctly!**
@@ -66,16 +66,16 @@ Host Records:
 [Type] [Host]                    [Value]                    [TTL]
 A      @                         123.45.67.89              Automatic
 A      www                       123.45.67.89              Automatic
-TXT    _acme-challenge.clickly.cv xgPUGNyXbaKrC1ZSQR57...  Automatic
+TXT    _acme-challenge.allin1url.in xgPUGNyXbaKrC1ZSQR57...  Automatic
 ```
 
 ## Common Mistakes to Avoid
 
-❌ **DON'T enter**: `_acme-challenge.clickly.cv` in the Host field
-- Namecheap will create: `_acme-challenge.clickly.cv.clickly.cv` (WRONG!)
+❌ **DON'T enter**: `_acme-challenge.allin1url.in` in the Host field
+- Namecheap will create: `_acme-challenge.allin1url.in.allin1url.in` (WRONG!)
 
 ✅ **DO enter**: `_acme-challenge` in the Host field
-- Namecheap creates: `_acme-challenge.clickly.cv` (CORRECT!)
+- Namecheap creates: `_acme-challenge.allin1url.in` (CORRECT!)
 
 ❌ **DON'T add quotes** around the value
 - Wrong: `"xgPUGNyXbaKrC1ZSQR57af9lVwZz0Jj4UgoWTFTgLVQ"`
@@ -94,7 +94,7 @@ After saving:
 **On your EC2 instance, run:**
 
 ```bash
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 ```
 
 **Expected output:**
@@ -125,23 +125,23 @@ Once DNS is verified:
 
 ### Issue: DNS not propagating
 - Wait 5-10 minutes (can take longer)
-- Try different DNS servers: `dig @8.8.8.8 _acme-challenge.clickly.cv TXT`
+- Try different DNS servers: `dig @8.8.8.8 _acme-challenge.allin1url.in TXT`
 - Check if the record shows correctly in Namecheap dashboard
 
 ### Issue: Wrong host name created
-- If you see `_acme-challenge.clickly.cv.clickly.cv`, you entered the full name
+- If you see `_acme-challenge.allin1url.in.allin1url.in`, you entered the full name
 - Delete the record and add it again with just `_acme-challenge`
 
 ## Quick Checklist
 
 - [ ] Logged into Namecheap
-- [ ] Went to Domain List → clickly.cv → Manage → Advanced DNS
+- [ ] Went to Domain List → allin1url.in → Manage → Advanced DNS
 - [ ] Added new TXT record
 - [ ] Host: `_acme-challenge` (just this, no domain)
 - [ ] Value: `xgPUGNyXbaKrC1ZSQR57af9lVwZz0Jj4UgoWTFTgLVQ` (exact value)
 - [ ] TTL: Automatic
 - [ ] Clicked Save All Changes
-- [ ] Verified record shows as `_acme-challenge.clickly.cv` in dashboard
+- [ ] Verified record shows as `_acme-challenge.allin1url.in` in dashboard
 - [ ] Waited 2-5 minutes
 - [ ] Verified with `dig` command
 - [ ] Pressed Enter in certbot
@@ -149,7 +149,7 @@ Once DNS is verified:
 ## Still Having Issues?
 
 1. Double-check the record in Namecheap dashboard
-2. Make sure the Host field shows `_acme-challenge.clickly.cv` (not double domain)
+2. Make sure the Host field shows `_acme-challenge.allin1url.in` (not double domain)
 3. Verify the value matches exactly (no extra spaces)
 4. Wait longer (up to 10 minutes)
 5. Try the verification script: `./verify-dns.sh`

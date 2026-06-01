@@ -606,7 +606,7 @@ const Documentation = () => {
     {
       img: logo,
       title: "All Links at One Place",
-      desc: "Access all your profiles with a single hub link. Simply visit https://clickly.cv/yourname (without any platform name) to see all your links in one beautiful, organized page. Perfect for sharing in bios, resumes, and business cards.",
+      desc: "Access all your profiles with a single hub link. Simply visit https://allin1url.in/yourname (without any platform name) to see all your links in one beautiful, organized page. Perfect for sharing in bios, resumes, and business cards.",
       icon: FaHome,
       gradient: "from-violet-500 to-purple-500",
     },
@@ -1369,7 +1369,7 @@ const Documentation = () => {
                     customizable landing page featuring all your profiles.
                     Simply visit{" "}
                     <span className="font-medium text-purple-600 dark:text-purple-400">
-                      https://clickly.cv/yourname
+                      https://allin1url.in/yourname
                     </span>{" "}
                     (without any platform name) to access your unified link hub.
                   </p>
@@ -1439,37 +1439,37 @@ const Documentation = () => {
                     {[
                       {
                         platform: "LinkedIn",
-                        url: "https://clickly.cv/dpkrn/linkedin",
+                        url: "https://allin1url.in/dpkrn/linkedin",
                         color: "from-blue-500 to-cyan-500",
                         icon: "💼",
                       },
                       {
                         platform: "GitHub",
-                        url: "https://clickly.cv/dpkrn/github",
+                        url: "https://allin1url.in/dpkrn/github",
                         color: "from-gray-600 to-gray-800",
                         icon: "🐙",
                       },
                       {
                         platform: "LeetCode",
-                        url: "https://clickly.cv/dpkrn/leetcode",
+                        url: "https://allin1url.in/dpkrn/leetcode",
                         color: "from-orange-500 to-yellow-500",
                         icon: "💻",
                       },
                       {
                         platform: "Portfolio",
-                        url: "https://clickly.cv/dpkrn/portfolio",
+                        url: "https://allin1url.in/dpkrn/portfolio",
                         color: "from-purple-500 to-pink-500",
                         icon: "🎨",
                       },
                       {
                         platform: "Instagram",
-                        url: "https://clickly.cv/dpkrn/instagram",
+                        url: "https://allin1url.in/dpkrn/instagram",
                         color: "from-pink-500 to-rose-500",
                         icon: "📸",
                       },
                       {
                         platform: "Codeforces",
-                        url: "https://clickly.cv/dpkrn/codeforces",
+                        url: "https://allin1url.in/dpkrn/codeforces",
                         color: "from-red-500 to-orange-500",
                         icon: "⚔️",
                       },
@@ -1820,12 +1820,12 @@ const Documentation = () => {
                     className="text-base md:text-lg lg:text-2xl xl:text-3xl text-center"
                   >
                     <a
-                      href="https://clickly.cv/dpkrn/"
+                      href="https://allin1url.in/dpkrn/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-400 dark:text-blue-300 underline font-mono hover:text-blue-300 dark:hover:text-blue-200 transition-colors break-all md:break-normal"
                     >
-                      https://clickly.cv/dpkrn
+                      https://allin1url.in/dpkrn
                     </a>
                   </motion.p>
 
@@ -1852,12 +1852,12 @@ const Documentation = () => {
                     className="text-base md:text-lg lg:text-2xl xl:text-3xl text-center"
                   >
                     <a
-                      href="https://clickly.cv/dpkrn/"
+                      href="https://allin1url.in/dpkrn/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-400 dark:text-blue-300 underline font-mono hover:text-blue-300 dark:hover:text-blue-200 transition-colors break-all md:break-normal"
                     >
-                      https://clickly.cv/dpkrn/
+                      https://allin1url.in/dpkrn/
                       <FlipWords
                         className="text-blue-400 dark:text-blue-300"
                         words={platforms}
@@ -2038,7 +2038,7 @@ const Documentation = () => {
                 personalized URL that automatically redirects users to the
                 correct platform. Access all your links at one place by visiting{" "}
                 <b className="text-gray-900 dark:text-white">
-                  https://clickly.cv/yourname
+                  https://allin1url.in/yourname
                 </b>{" "}
                 (without any platform name). Plus, get real-time email
                 notifications every time someone visits your links!
@@ -2055,7 +2055,7 @@ const Documentation = () => {
                   {
                     step: "2",
                     title: "Choose a Username",
-                    desc: "Pick a username that's easy to remember (e.g., dpkrn). Your link will follow this format: https://clickly.cv/your-username/instagram.",
+                    desc: "Pick a username that's easy to remember (e.g., dpkrn). Your link will follow this format: https://allin1url.in/your-username/instagram.",
                     icon: FaLink,
                   },
                   {
@@ -2073,7 +2073,7 @@ const Documentation = () => {
                   {
                     step: "5",
                     title: "Share the Link",
-                    desc: "Copy and share your smart link across various platforms. Share your hub link (https://clickly.cv/yourname) to let visitors see all your profiles in one place.",
+                    desc: "Copy and share your smart link across various platforms. Share your hub link (https://allin1url.in/yourname) to let visitors see all your profiles in one place.",
                     icon: FaSyncAlt,
                   },
                   {
@@ -2124,22 +2124,22 @@ const Documentation = () => {
                 </p>
                 <div className="space-y-2">
                   <motion.a
-                    href="https://clickly.cv/dpkrn/instagram"
+                    href="https://allin1url.in/dpkrn/instagram"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.02, x: 5 }}
                     className="block text-blue-400 hover:text-blue-300 underline font-mono text-base md:text-lg"
                   >
-                    Instagram: https://clickly.cv/dpkrn/instagram
+                    Instagram: https://allin1url.in/dpkrn/instagram
                   </motion.a>
                   <motion.a
-                    href="https://clickly.cv/dpkrn/leetcode"
+                    href="https://allin1url.in/dpkrn/leetcode"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.02, x: 5 }}
                     className="block text-blue-400 hover:text-blue-300 underline font-mono text-base md:text-lg"
                   >
-                    LeetCode: https://clickly.cv/dpkrn/leetcode
+                    LeetCode: https://allin1url.in/dpkrn/leetcode
                   </motion.a>
                 </div>
               </motion.div>

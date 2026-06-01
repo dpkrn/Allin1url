@@ -23,14 +23,14 @@ echo ""
 # Step 2: Check if current cert includes wildcard
 echo "Step 2: Checking if certificate includes wildcard..."
 echo "----------------------------------------"
-CERT_PATH="/etc/letsencrypt/live/clickly.cv/fullchain.pem"
+CERT_PATH="/etc/letsencrypt/live/allin1url.in/fullchain.pem"
 
 if [ -f "$CERT_PATH" ]; then
     echo "Checking certificate at: $CERT_PATH"
-    WILDCARD_CHECK=$(sudo openssl x509 -in "$CERT_PATH" -text -noout 2>/dev/null | grep -o "*.clickly.cv" || echo "")
+    WILDCARD_CHECK=$(sudo openssl x509 -in "$CERT_PATH" -text -noout 2>/dev/null | grep -o "*.allin1url.in" || echo "")
     
     if [ -n "$WILDCARD_CHECK" ]; then
-        echo "✅ Certificate includes wildcard (*.clickly.cv)"
+        echo "✅ Certificate includes wildcard (*.allin1url.in)"
     else
         echo "❌ Certificate does NOT include wildcard"
         echo "   Current certificate only covers:"
@@ -56,8 +56,8 @@ if [ -f "$CERT_PATH" ]; then
                 --preferred-challenges dns \
                 --agree-tos \
                 --email "$EMAIL" \
-                -d "*.clickly.cv" \
-                -d "clickly.cv" \
+                -d "*.allin1url.in" \
+                -d "allin1url.in" \
                 --server https://acme-v02.api.letsencrypt.org/directory
             
             # Restart nginx
@@ -97,18 +97,18 @@ echo ""
 # Step 5: Test SSL connection
 echo "Step 5: Testing SSL connections..."
 echo "----------------------------------------"
-echo "Testing main domain (clickly.cv)..."
-curl -I https://clickly.cv 2>&1 | head -5 || echo "Failed to connect"
+echo "Testing main domain (allin1url.in)..."
+curl -I https://allin1url.in 2>&1 | head -5 || echo "Failed to connect"
 echo ""
-echo "Testing subdomain (dpkrn.clickly.cv)..."
-curl -I https://dpkrn.clickly.cv 2>&1 | head -5 || echo "Failed to connect"
+echo "Testing subdomain (dpkrn.allin1url.in)..."
+curl -I https://dpkrn.allin1url.in 2>&1 | head -5 || echo "Failed to connect"
 echo ""
 
 # Step 6: Check DNS
 echo "Step 6: Checking DNS configuration..."
 echo "----------------------------------------"
 echo "Checking wildcard A record..."
-dig *.clickly.cv +short || echo "DNS query failed"
+dig *.allin1url.in +short || echo "DNS query failed"
 echo ""
 
 # Summary
@@ -118,10 +118,10 @@ echo "=========================================="
 echo ""
 echo "If subdomain SSL is still not working:"
 echo "1. Verify wildcard certificate was generated: sudo certbot certificates"
-echo "2. Check certificate includes wildcard: sudo openssl x509 -in /etc/letsencrypt/live/clickly.cv/fullchain.pem -text | grep '*.clickly.cv'"
+echo "2. Check certificate includes wildcard: sudo openssl x509 -in /etc/letsencrypt/live/allin1url.in/fullchain.pem -text | grep '*.allin1url.in'"
 echo "3. Update nginx.conf if certificate is in different location"
 echo "4. Reload nginx: docker exec nginx nginx -s reload"
-echo "5. Check DNS: dig *.clickly.cv"
+echo "5. Check DNS: dig *.allin1url.in"
 echo ""
 echo "For detailed instructions, see: TROUBLESHOOTING_SSL.md"
 echo ""

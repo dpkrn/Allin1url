@@ -62,10 +62,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added - 2024-12-XX (Previous)
 
 - **Custom Subdomain Routing**: Revolutionary subdomain-based link format
-  - Each user now gets their own custom subdomain (e.g., `username.clickly.cv`)
-  - Hub link format: `https://username.clickly.cv` (replaces `https://clickly.cv/username`)
-  - Platform links format: `https://username.clickly.cv/platform` (replaces `https://clickly.cv/username/platform`)
-  - Environment-aware URL generation (dev: `username.localhost:8080`, prod: `username.clickly.cv`)
+  - Each user now gets their own custom subdomain (e.g., `username.allin1url.in`)
+  - Hub link format: `https://username.allin1url.in` (replaces `https://allin1url.in/username`)
+  - Platform links format: `https://username.allin1url.in/platform` (replaces `https://allin1url.in/username/platform`)
+  - Environment-aware URL generation (dev: `username.localhost:8080`, prod: `username.allin1url.in`)
   - Updated all frontend components to use new subdomain format
   - Updated utility functions for consistent URL generation across app
   - All link displays, copy functions, and previews now use subdomain format
@@ -277,7 +277,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **API Configuration**: Updated API base URL configuration
   - Changed from hardcoded `http://localhost:8080` to environment variable-based configuration
-  - Now uses `import.meta.env.VITE_API_URL || 'https://clickly.cv'`
+  - Now uses `import.meta.env.VITE_API_URL || 'https://allin1url.in'`
   - Enabled `withCredentials: true` for proper cookie handling
   - Supports both development and production environments
 
@@ -804,7 +804,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 +- **Added Missing Features to HomePage and Documentation**: Added two important features that were missing
 +  - **All Links at One Place**: Added feature highlighting the hub link functionality
-+    - Users can access all their links by visiting https://clickly.cv/username (without platform name)
++    - Users can access all their links by visiting https://allin1url.in/username (without platform name)
 +    - Creates a beautiful landing page showing all profiles in one place
 +    - Perfect for sharing in bios, resumes, and business cards
 +    - Added to HomePage features section with FaHome icon

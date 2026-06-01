@@ -60,8 +60,8 @@ app.locals.getFaviconScript = getFaviconScript;
 
 // Allowed origins for CORS
 const allowedOrigins = [
-  'https://clickly.cv',
-  'https://www.clickly.cv',
+  'https://allin1url.in',
+  'https://www.allin1url.in',
   'https://linkbriger.vercel.app', 
   'http://localhost:5173',
   'http://localhost:8080'
@@ -80,21 +80,21 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // Allow all subdomains of clickly.cv (for custom user domains)
-    // Examples: https://dpkrn.clickly.cv, https://username.clickly.cv
+    // Allow all subdomains of allin1url.in (for custom user domains)
+    // Examples: https://dpkrn.allin1url.in, https://username.allin1url.in
     try {
       const url = new URL(origin);
       const hostname = url.hostname.toLowerCase();
       
-      // Allow exact match for clickly.cv
-      if (hostname === 'clickly.cv') {
+      // Allow exact match for allin1url.in
+      if (hostname === 'allin1url.in') {
         return callback(null, true);
       }
       
-      // Allow all subdomains (*.clickly.cv)
-      // Supports both single-level (dpkrn.clickly.cv) and multi-level (api.dpkrn.clickly.cv)
-      if (hostname.endsWith('.clickly.cv')) {
-        const subdomain = hostname.replace('.clickly.cv', '');
+      // Allow all subdomains (*.allin1url.in)
+      // Supports both single-level (dpkrn.allin1url.in) and multi-level (api.dpkrn.allin1url.in)
+      if (hostname.endsWith('.allin1url.in')) {
+        const subdomain = hostname.replace('.allin1url.in', '');
         // Subdomain should be non-empty (allows multi-level subdomains)
         if (subdomain && subdomain.length > 0) {
           return callback(null, true);
@@ -134,8 +134,8 @@ app.use(helmet.contentSecurityPolicy({
     imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],  // Add your image host if needed
     styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],  // Allow Google Fonts stylesheets
     fontSrc: ["'self'", "https://fonts.gstatic.com"],  // Allow Google Fonts actual font files
-    connectSrc: ["'self'", "https://clickly.cv","https://clickly.cv/*", "http://localhost:8080"],  // Add your API backend here
-    frameAncestors: ["'self'", "http://localhost:5173", "https://clickly.cv", "https://linkbriger.vercel.app"],  // Allow iframes from these origins
+    connectSrc: ["'self'", "https://allin1url.in","https://allin1url.in/*", "http://localhost:8080"],  // Add your API backend here
+    frameAncestors: ["'self'", "http://localhost:5173", "https://allin1url.in", "https://linkbriger.vercel.app"],  // Allow iframes from these origins
     // Add more directives as needed
   }
 }));
@@ -145,10 +145,10 @@ app.use(helmet.contentSecurityPolicy({
 // Root route - handle main domain redirect and subdomain routing
 app.get('/', resolveUsername, extractInfo, async (req, res) => {
 
-  // If it's the main domain (clickly.cv or www.clickly.cv), redirect to frontend
+  // If it's the main domain (allin1url.in or www.allin1url.in), redirect to frontend
   if (req.isMainDomain || !req.params.username) {
     console.log("Main domain detected, redirecting to frontend");
-    return res.redirect(307, "https://clickly.cv/app/");
+    return res.redirect(307, "https://allin1url.in/app/");
   }
 
   // If it's a subdomain, treat it as username route (show linkhub)
@@ -323,7 +323,7 @@ app.post('/link/verify-password', extractInfo, async (req, res) => {
   });
 });
 
-// Subdomain route handler: dpkrn.clickly.cv/github
+// Subdomain route handler: dpkrn.allin1url.in/github
 // This route handles subdomain-based source access
 // Note: API routes (defined with app.use above) will match first, so this won't interfere
 app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
@@ -331,14 +331,14 @@ app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
   
   if (req.isMainDomain || !req.params.username) {
     // This is main domain, let it fall through to other routes
-    return res.redirect(307, "https://clickly.cv/app/");
+    return res.redirect(307, "https://allin1url.in/app/");
   }
 
 
   const username = req.params.username;
   const source = req.params.source;
   // Generate linkHub in subdomain format for subdomain requests
-  const linkHub = `Available link: ${req.protocol}://${username}.clickly.cv`;
+  const linkHub = `Available link: ${req.protocol}://${username}.allin1url.in`;
 
   const link = await Link.findOne({
     username,
@@ -402,7 +402,7 @@ app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
   return res.redirect(307, destination);
 });
 
-// Main domain route handler: clickly.cv/username/source
+// Main domain route handler: allin1url.in/username/source
 app.get('/:username/:source', extractInfo, async (req, res) => {
   const {username,source}=req.params;
   const linkHub=`Available link: ${req.protocol}://${req.get('host')}/${username}`
@@ -467,7 +467,7 @@ app.get('/:username/:source', extractInfo, async (req, res) => {
 app.get('/:username', extractInfo, verifyTokenOptional, async (req, res) => {
   // Allow iframe embedding for preview (allow from frontend origins)
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  const frontendOrigins = "http://localhost:5173 https://clickly.cv https://linkbriger.vercel.app 'self'";
+  const frontendOrigins = "http://localhost:5173 https://allin1url.in https://linkbriger.vercel.app 'self'";
   res.setHeader('Content-Security-Policy', `frame-ancestors ${frontendOrigins}`);
   
   console.log("backend profile search start")

@@ -4,7 +4,7 @@ This guide explains how to set up SSL certificates for your LinkBridger applicat
 
 ## Prerequisites
 
-- Domain `clickly.cv` pointing to your EC2 instance
+- Domain `allin1url.in` pointing to your EC2 instance
 - Wildcard A record (`*`) pointing to your EC2 instance IP
 - Ports 80 and 443 open in your EC2 security group
 - Docker and docker-compose installed
@@ -13,7 +13,7 @@ This guide explains how to set up SSL certificates for your LinkBridger applicat
 
 ### Option 1: Standard Certificate (Main Domain Only)
 
-Covers: `clickly.cv` and `www.clickly.cv`
+Covers: `allin1url.in` and `www.allin1url.in`
 
 ```bash
 ./generate-cert.sh
@@ -23,7 +23,7 @@ Covers: `clickly.cv` and `www.clickly.cv`
 
 ### Option 2: Wildcard Certificate (Recommended for Subdomains)
 
-Covers: `*.clickly.cv` and `clickly.cv`
+Covers: `*.allin1url.in` and `allin1url.in`
 
 ```bash
 ./generate-cert.sh --wildcard
@@ -47,7 +47,7 @@ chmod +x generate-cert.sh
 When certbot prompts you, it will ask you to add a TXT record:
 
 ```
-Name: _acme-challenge.clickly.cv
+Name: _acme-challenge.allin1url.in
 Value: [provided by certbot]
 TTL: 300 (or default)
 ```
@@ -64,7 +64,7 @@ TTL: 300 (or default)
 
 ```bash
 # Check if TXT record is propagated
-dig _acme-challenge.clickly.cv TXT
+dig _acme-challenge.allin1url.in TXT
 ```
 
 Wait 1-5 minutes for DNS to propagate, then press Enter in the certbot prompt.
@@ -76,10 +76,10 @@ Wait 1-5 minutes for DNS to propagate, then press Enter in the certbot prompt.
 sudo ls -la /etc/letsencrypt/live/
 
 # Test SSL connection
-openssl s_client -connect clickly.cv:443 -servername clickly.cv
+openssl s_client -connect allin1url.in:443 -servername allin1url.in
 
 # Test subdomain
-openssl s_client -connect dpkrn.clickly.cv:443 -servername dpkrn.clickly.cv
+openssl s_client -connect dpkrn.allin1url.in:443 -servername dpkrn.allin1url.in
 ```
 
 ### 5. Update Nginx Configuration (if needed)
@@ -88,8 +88,8 @@ If your wildcard certificate is in a different location, update `nginx/nginx.con
 
 ```nginx
 # For subdomain server block
-ssl_certificate /etc/letsencrypt/live/clickly.cv-0001/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/clickly.cv-0001/privkey.pem;
+ssl_certificate /etc/letsencrypt/live/allin1url.in-0001/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/allin1url.in-0001/privkey.pem;
 ```
 
 ### 6. Reload Nginx
@@ -140,10 +140,10 @@ sudo certbot certificates
 
 ```bash
 # Check TXT record
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 
 # Use different DNS server
-dig @8.8.8.8 _acme-challenge.clickly.cv TXT
+dig @8.8.8.8 _acme-challenge.allin1url.in TXT
 ```
 
 ### Nginx SSL Errors
@@ -156,29 +156,29 @@ docker logs nginx
 docker exec nginx nginx -t
 
 # Check certificate permissions
-sudo ls -la /etc/letsencrypt/live/clickly.cv/
+sudo ls -la /etc/letsencrypt/live/allin1url.in/
 ```
 
 ### Subdomain SSL Not Working
 
-1. Verify wildcard certificate includes `*.clickly.cv`:
+1. Verify wildcard certificate includes `*.allin1url.in`:
    ```bash
-   sudo openssl x509 -in /etc/letsencrypt/live/clickly.cv/fullchain.pem -text -noout | grep -A 1 "Subject Alternative Name"
+   sudo openssl x509 -in /etc/letsencrypt/live/allin1url.in/fullchain.pem -text -noout | grep -A 1 "Subject Alternative Name"
    ```
 
 2. Check nginx is using the correct certificate path
 
 3. Ensure subdomain DNS is pointing to your server:
    ```bash
-   dig dpkrn.clickly.cv
+   dig dpkrn.allin1url.in
    ```
 
 ## Verification Checklist
 
-- [ ] Main domain (`clickly.cv`) loads with HTTPS
-- [ ] WWW domain (`www.clickly.cv`) redirects or loads with HTTPS
-- [ ] Subdomain (`dpkrn.clickly.cv`) loads with HTTPS (no SSL warnings)
-- [ ] Subdomain path (`dpkrn.clickly.cv/github`) works
+- [ ] Main domain (`allin1url.in`) loads with HTTPS
+- [ ] WWW domain (`www.allin1url.in`) redirects or loads with HTTPS
+- [ ] Subdomain (`dpkrn.allin1url.in`) loads with HTTPS (no SSL warnings)
+- [ ] Subdomain path (`dpkrn.allin1url.in/github`) works
 - [ ] Certificate auto-renewal is configured
 - [ ] Nginx configuration is tested and reloaded
 

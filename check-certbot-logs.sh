@@ -38,6 +38,6 @@ echo ""
 
 echo "Most recent certificate attempt:"
 echo "----------------------------------------"
-sudo grep -A 10 "clickly.cv" "$LOG_FILE" | tail -30
+sudo grep -A 10 "allin1url.in" "$LOG_FILE" | tail -30
 echo ""
 

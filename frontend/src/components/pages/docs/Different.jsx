@@ -79,7 +79,7 @@ const Different = () => {
     {
       icon: FaStar,
       title: "Brand Identity",
-      description: "Your links become part of your brand identity, not generic shortened URLs. When someone sees 'yourname.clickly.cv/linkedin', they immediately know it's your link and can easily remember the pattern for other platforms.",
+      description: "Your links become part of your brand identity, not generic shortened URLs. When someone sees 'yourname.allin1url.in/linkedin', they immediately know it's your link and can easily remember the pattern for other platforms.",
       gradient: "from-purple-500 to-pink-500"
     },
     {

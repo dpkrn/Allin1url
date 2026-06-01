@@ -180,32 +180,32 @@ const HomePage = () => {
   const exampleLinks = [
     {
       platform: "LinkedIn",
-      url: "https://dpkrn.clickly.cv/linkedin",
+      url: "https://dpkrn.allin1url.in/linkedin",
       color: "from-blue-500 to-cyan-500",
     },
     {
       platform: "GitHub",
-      url: "https://dpkrn.clickly.cv/github",
+      url: "https://dpkrn.allin1url.in/github",
       color: "from-gray-600 to-gray-800",
     },
     {
       platform: "LeetCode",
-      url: "https://dpkrn.clickly.cv/leetcode",
+      url: "https://dpkrn.allin1url.in/leetcode",
       color: "from-orange-500 to-yellow-500",
     },
     {
       platform: "Portfolio",
-      url: "https://dpkrn.clickly.cv/portfolio",
+      url: "https://dpkrn.allin1url.in/portfolio",
       color: "from-purple-500 to-pink-500",
     },
     {
       platform: "Instagram",
-      url: "https://dpkrn.clickly.cv/instagram",
+      url: "https://dpkrn.allin1url.in/instagram",
       color: "from-pink-500 to-rose-500",
     },
     {
       platform: "Codeforces",
-      url: "https://dpkrn.clickly.cv/codeforces",
+      url: "https://dpkrn.allin1url.in/codeforces",
       color: "from-red-500 to-orange-500",
     },
   ];
@@ -289,7 +289,7 @@ const HomePage = () => {
     {
       step: "2",
       title: "Choose a Username",
-      desc: "Pick a username that's easy to remember (e.g., dpkrn). Your link will follow this format: https://your-username.clickly.cv/instagram.",
+      desc: "Pick a username that's easy to remember (e.g., dpkrn). Your link will follow this format: https://your-username.allin1url.in/instagram.",
       icon: FaLink,
     },
     {
@@ -307,7 +307,7 @@ const HomePage = () => {
     {
       step: "5",
       title: "Share the Link",
-      desc: "Copy and share your smart link across various platforms. Share your hub link (https://yourname.clickly.cv) to let visitors see all your profiles in one place.",
+      desc: "Copy and share your smart link across various platforms. Share your hub link (https://yourname.allin1url.in) to let visitors see all your profiles in one place.",
       icon: FaSyncAlt,
     },
     {
@@ -469,12 +469,12 @@ const HomePage = () => {
                     className="flex items-center gap-1.5 sm:gap-2 flex-wrap"
                   >
                     <a
-                      href="https://dpkrn.clickly.cv/"
+                      href="https://dpkrn.allin1url.in/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs sm:text-xs md:text-sm lg:text-base font-mono font-bold text-purple-300 dark:text-purple-200 bg-purple-500/20 dark:bg-purple-500/30 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg border border-purple-400/30 hover:bg-purple-500/30 dark:hover:bg-purple-500/40 hover:border-purple-400/50 transition-all duration-300 inline-block break-all"
                     >
-                      https://<span className="font-bold text-purple-200 dark:text-purple-100 bg-purple-400/20 dark:bg-purple-400/30 px-0.5 sm:px-1 rounded">dpkrn</span>.clickly.cv/
+                      https://<span className="font-bold text-purple-200 dark:text-purple-100 bg-purple-400/20 dark:bg-purple-400/30 px-0.5 sm:px-1 rounded">dpkrn</span>.allin1url.in/
                     </a>
                     <span className="text-xs sm:text-xs md:text-sm text-gray-400 dark:text-gray-500 italic">
                       (accessible for all generated link at one place)
@@ -490,13 +490,13 @@ const HomePage = () => {
                 {/* Links List - Perfectly Aligned */}
                 <div className="space-y-1.5 md:space-y-2">
                   {[
-                    { platform: "LinkedIn", url: "https://dpkrn.clickly.cv/linkedin", color: "from-blue-500 to-cyan-500" },
-                    { platform: "GitHub", url: "https://dpkrn.clickly.cv/github", color: "from-gray-400 to-gray-600" },
-                    { platform: "LeetCode", url: "https://dpkrn.clickly.cv/leetcode", color: "from-orange-500 to-yellow-500" },
-                    { platform: "Portfolio", url: "https://dpkrn.clickly.cv/portfolio", color: "from-purple-500 to-pink-500" },
-                    { platform: "Instagram", url: "https://dpkrn.clickly.cv/instagram", color: "from-pink-500 to-rose-500" },
-                    { platform: "Facebook", url: "https://dpkrn.clickly.cv/facebook", color: "from-blue-600 to-blue-700" },
-                    { platform: "Codeforces", url: "https://dpkrn.clickly.cv/codeforces", color: "from-red-500 to-orange-500" },
+                    { platform: "LinkedIn", url: "https://dpkrn.allin1url.in/linkedin", color: "from-blue-500 to-cyan-500" },
+                    { platform: "GitHub", url: "https://dpkrn.allin1url.in/github", color: "from-gray-400 to-gray-600" },
+                    { platform: "LeetCode", url: "https://dpkrn.allin1url.in/leetcode", color: "from-orange-500 to-yellow-500" },
+                    { platform: "Portfolio", url: "https://dpkrn.allin1url.in/portfolio", color: "from-purple-500 to-pink-500" },
+                    { platform: "Instagram", url: "https://dpkrn.allin1url.in/instagram", color: "from-pink-500 to-rose-500" },
+                    { platform: "Facebook", url: "https://dpkrn.allin1url.in/facebook", color: "from-blue-600 to-blue-700" },
+                    { platform: "Codeforces", url: "https://dpkrn.allin1url.in/codeforces", color: "from-red-500 to-orange-500" },
                   ].map((link, idx) => (
                     <div
                       key={link.platform}
@@ -522,7 +522,7 @@ const HomePage = () => {
                         <div className="flex items-center font-mono flex-wrap gap-0.5 sm:gap-1">
                           {/* Base URL - Static with highlighted username */}
                           <span className="text-xs sm:text-xs md:text-sm lg:text-base text-gray-400 dark:text-gray-500 select-all break-all">
-                            https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-0.5 sm:px-1 rounded">dpkrn</span>.clickly.cv/
+                            https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-0.5 sm:px-1 rounded">dpkrn</span>.allin1url.in/
                           </span>
                           {/* Platform Name - Animated (no space before) */}
                           <motion.a
@@ -654,12 +654,12 @@ const HomePage = () => {
                   className="text-base md:text-lg lg:text-2xl xl:text-3xl text-center"
                 >
                   <a
-                    href="https://dpkrn.clickly.cv/"
+                    href="https://dpkrn.allin1url.in/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 dark:text-blue-300 underline font-mono hover:text-blue-300 dark:hover:text-blue-200 transition-colors break-all md:break-normal"
                   >
-                    https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.clickly.cv
+                    https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.allin1url.in
                   </a>
                 </p>
 
@@ -677,12 +677,12 @@ const HomePage = () => {
                   className="text-base md:text-lg lg:text-2xl xl:text-3xl text-center"
                 >
                   <a
-                    href="https://dpkrn.clickly.cv/"
+                    href="https://dpkrn.allin1url.in/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 dark:text-blue-300 underline font-mono hover:text-blue-300 dark:hover:text-blue-200 transition-colors break-all md:break-normal"
                   >
-                    https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.clickly.cv/
+                    https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.allin1url.in/
                     <FlipWords
                     duration={100}
                       className="text-blue-400 dark:text-blue-300"
@@ -786,7 +786,7 @@ const HomePage = () => {
               personalized URL that automatically redirects users to the
               correct platform. Access all your links at one place by visiting{" "}
               <b className="text-gray-900 dark:text-white">
-                https://<span className="font-bold text-purple-600 dark:text-purple-400">yourname</span>.clickly.cv
+                https://<span className="font-bold text-purple-600 dark:text-purple-400">yourname</span>.allin1url.in
               </b>{" "}
               (without any platform name). Plus, get real-time email
               notifications every time someone visits your links! Analyze your
@@ -829,20 +829,20 @@ const HomePage = () => {
               </p>
               <div className="space-y-2">
                 <a
-                  href="https://dpkrn.clickly.cv/instagram"
+                  href="https://dpkrn.allin1url.in/instagram"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block text-blue-400 hover:text-blue-300 underline font-mono text-base md:text-lg"
                 >
-                  Instagram: https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.clickly.cv/instagram
+                  Instagram: https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.allin1url.in/instagram
                 </a>
                 <a
-                  href="https://dpkrn.clickly.cv/leetcode"
+                  href="https://dpkrn.allin1url.in/leetcode"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block text-blue-400 hover:text-blue-300 underline font-mono text-base md:text-lg"
                 >
-                  LeetCode: https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.clickly.cv/leetcode
+                  LeetCode: https://<span className="font-bold text-purple-400 dark:text-purple-300 bg-purple-500/10 dark:bg-purple-500/20 px-1 rounded">dpkrn</span>.allin1url.in/leetcode
                 </a>
               </div>
             </div>

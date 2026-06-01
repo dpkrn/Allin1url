@@ -5,8 +5,8 @@
 Stop juggling multiple long, forgettable links across your resume, business cards, and social media. LinkBridger creates personalized, memorable links that work forever and update everywhere automatically.
 
 **Why professionals choose LinkBridger:**
-✅ **Get your own FREE domain** - Your personalized subdomain (yourname.clickly.cv) that reflects your brand
-✅ **Memorable link format** - Clean URLs like yourname.clickly.cv/platform (not random codes!)
+✅ **Get your own FREE domain** - Your personalized subdomain (yourname.allin1url.in) that reflects your brand
+✅ **Memorable link format** - Clean URLs like yourname.allin1url.in/platform (not random codes!)
 ✅ **Centralized management** - Update once, changes reflect everywhere instantly
 ✅ **Advanced analytics** - Track clicks with detailed insights (location, device, browser, referrer)
 ✅ **Click details dashboard** - See exactly who clicked, when, and from where
@@ -18,7 +18,7 @@ Stop juggling multiple long, forgettable links across your resume, business card
 
 Perfect for professionals, content creators, and anyone managing multiple online profiles. Create your personalized link hub today and simplify your digital identity.
 
-Try it free: clickly.cv
+Try it free: allin1url.in
 
 ---
 

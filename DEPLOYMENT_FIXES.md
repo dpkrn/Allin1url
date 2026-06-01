@@ -10,7 +10,7 @@
 
 ### 2. **API Base URL Configuration** ❌
    - **Problem**: `VITE_API_URL` was set to `http://backend:8080` (internal Docker network), but browser requests need the public URL.
-   - **Fix**: Changed to `https://clickly.cv` in docker-compose.yml and updated api.js to use environment variable with fallback.
+   - **Fix**: Changed to `https://allin1url.in` in docker-compose.yml and updated api.js to use environment variable with fallback.
 
 ### 3. **Vite Dev Server Proxy Configuration** ⚠️
    - **Problem**: Vite dev server needs proper proxy headers for HMR (Hot Module Replacement).
@@ -29,7 +29,7 @@
 - Added `withCredentials: true` for cookie support
 
 ### docker-compose.yml
-- Changed `VITE_API_URL` from `http://backend:8080` to `https://clickly.cv`
+- Changed `VITE_API_URL` from `http://backend:8080` to `https://allin1url.in`
 
 ## Deployment Steps on EC2:
 
@@ -53,7 +53,7 @@
 
 4. **Verify SSL certificates exist:**
    ```bash
-   sudo ls -la /etc/letsencrypt/live/clickly.cv/
+   sudo ls -la /etc/letsencrypt/live/allin1url.in/
    ```
 
 5. **If certificates don't exist, generate them:**
@@ -64,16 +64,16 @@
 ## Testing:
 
 1. **Frontend should be accessible at:**
-   - `https://clickly.cv/app/`
-   - `https://www.clickly.cv/app/`
+   - `https://allin1url.in/app/`
+   - `https://www.allin1url.in/app/`
 
 2. **Backend API should work at:**
-   - `https://clickly.cv/auth/...`
-   - `https://clickly.cv/source/...`
+   - `https://allin1url.in/auth/...`
+   - `https://allin1url.in/source/...`
 
 3. **User profiles should work at:**
-   - `https://clickly.cv/username`
-   - `https://clickly.cv/username/source`
+   - `https://allin1url.in/username`
+   - `https://allin1url.in/username/source`
 
 ## Troubleshooting:
 
@@ -98,6 +98,6 @@ If frontend still not accessible:
 
 5. **Verify DNS is pointing to EC2 IP:**
    ```bash
-   dig clickly.cv
+   dig allin1url.in
    ```
 

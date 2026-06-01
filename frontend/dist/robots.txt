@@ -5,4 +5,4 @@ User-agent: *
 Allow: /
 
 # Sitemap (app is under /app/)
-Sitemap: https://clickly.cv/app/sitemap.xml
+Sitemap: https://allin1url.in/app/sitemap.xml

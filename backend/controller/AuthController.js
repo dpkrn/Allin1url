@@ -266,7 +266,7 @@ const handleAuthCallback=async (req, res) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: `${process.env.TIER=='dev'?"http://localhost:8080":"https://clickly.cv"}/auth/google`,
+        redirect_uri: `${process.env.TIER=='dev'?"http://localhost:8080":"https://allin1url.in"}/auth/google`,
         grant_type: "authorization_code",
       }),
     });

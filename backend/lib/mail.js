@@ -194,7 +194,7 @@ const sendWelcomeEmail = async (email, username, name, AppName) => {
     from: `"${AppName}" <${emailUser}>`,
     to: email,
     subject: "🎉 Welcome to LinkBridger - Your Link Management Journey Begins!",
-    text: `Hello ${name || username} (@${username})! Welcome to LinkBridger. Your personalized link is ready: https://clickly.cv/${username}`,
+    text: `Hello ${name || username} (@${username})! Welcome to LinkBridger. Your personalized link is ready: https://allin1url.in/${username}`,
     html: html,
   };
 
@@ -217,7 +217,7 @@ const sendNewUserOnboardingEmail = async (email, username, name, AppName) => {
     from: `"${AppName}" <${emailUser}>`,
     to: email,
     subject: `🎉 New User Joined LinkBridger - @${username}`,
-    text: `New user @${username} has joined the LinkBridger community. Profile link: https://clickly.cv/${username}`,
+    text: `New user @${username} has joined the LinkBridger community. Profile link: https://allin1url.in/${username}`,
     html: html,
   };
 

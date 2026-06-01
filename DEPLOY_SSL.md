@@ -67,16 +67,16 @@ The script will:
 - **Run with sudo**: The script needs root privileges to access `/etc/letsencrypt/`
 - **DNS TXT Record**: You'll need to add a TXT record in your DNS provider (Namecheap, GoDaddy, etc.)
 - **Wait for DNS Propagation**: After adding the TXT record, wait 1-5 minutes before pressing Enter
-- **Certificate Location**: The certificate will be stored at `/etc/letsencrypt/live/clickly.cv/`
+- **Certificate Location**: The certificate will be stored at `/etc/letsencrypt/live/allin1url.in/`
 
 ## Verification After Running
 
 ```bash
 # Check certificate exists
-sudo ls -la /etc/letsencrypt/live/clickly.cv/
+sudo ls -la /etc/letsencrypt/live/allin1url.in/
 
 # Verify it's a wildcard certificate
-sudo openssl x509 -in /etc/letsencrypt/live/clickly.cv/fullchain.pem -text -noout | grep "*.clickly.cv"
+sudo openssl x509 -in /etc/letsencrypt/live/allin1url.in/fullchain.pem -text -noout | grep "*.allin1url.in"
 
 # Test nginx configuration
 docker exec nginx nginx -t
@@ -85,7 +85,7 @@ docker exec nginx nginx -t
 docker exec nginx nginx -s reload
 
 # Test subdomain SSL
-curl -I https://dpkrn.clickly.cv
+curl -I https://dpkrn.allin1url.in
 ```
 
 ## Troubleshooting
@@ -112,10 +112,10 @@ docker ps | grep nginx
 ### If DNS TXT record doesn't work
 ```bash
 # Check DNS propagation
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 
 # Try different DNS server
-dig @8.8.8.8 _acme-challenge.clickly.cv TXT
+dig @8.8.8.8 _acme-challenge.allin1url.in TXT
 ```
 
 ## Alternative: Run Commands Directly on EC2
@@ -128,8 +128,8 @@ sudo certbot certonly --manual \
     --preferred-challenges dns \
     --agree-tos \
     --email your-email@example.com \
-    -d "*.clickly.cv" \
-    -d "clickly.cv" \
+    -d "*.allin1url.in" \
+    -d "allin1url.in" \
     --server https://acme-v02.api.letsencrypt.org/directory
 ```
 

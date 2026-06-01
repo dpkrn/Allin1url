@@ -29,7 +29,7 @@ The Link model stores information about user-created personalized links (bridges
 - **Type**: String
 - **Required**: Yes
 - **Unique**: Yes
-- **Purpose**: Unique identifier for each link. Used as a foreign key in the linkAnalytics model to track clicks and analytics for this specific link. Also used in URL generation (e.g., `clickly.cv/username/linkId`).
+- **Purpose**: Unique identifier for each link. Used as a foreign key in the linkAnalytics model to track clicks and analytics for this specific link. Also used in URL generation (e.g., `allin1url.in/username/linkId`).
 - **Example**: `"linkedin"`, `"github"`, `"instagram"`
 - **Why Required**: Essential for:
   - Creating unique URLs for each link

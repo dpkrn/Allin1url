@@ -12,7 +12,7 @@ const HowToUse = () => {
       details: [
         "Visit the signup page",
         "Enter your email address",
-        "Choose a short, memorable username (this becomes your FREE domain like username.clickly.cv)",
+        "Choose a short, memorable username (this becomes your FREE domain like username.allin1url.in)",
         "Get your own domain FREE to reflect your brand identity",
         "Create a strong password",
         "Click 'Sign Up' to create your account"
@@ -54,7 +54,7 @@ const HowToUse = () => {
         "Enter the destination URL (the actual link to your profile)",
         "Get your own domain FREE to manage all your links professionally",
         "Click 'Create' to generate your personalized link",
-        "Your professional link will be: clickly.cv/yourusername/platformname"
+        "Your professional link will be: allin1url.in/yourusername/platformname"
       ],
       gradient: "from-orange-500 to-red-500"
     },
@@ -78,7 +78,7 @@ const HowToUse = () => {
       title: "6. Share LinkHub",
       description: "Share your main hub link that reflects your brand identity",
       details: [
-        "Your professional hub link is: yourusername.clickly.cv",
+        "Your professional hub link is: yourusername.allin1url.in",
         "Get your own domain FREE to manage all your links professionally",
         "This link acts as a beautiful landing page for all your profiles",
         "Share it on:",
@@ -96,7 +96,7 @@ const HowToUse = () => {
       title: "7. Share Particular Links",
       description: "Share individual platform links when needed",
       details: [
-        "Each platform has its own link: clickly.cv/yourusername/platformname",
+        "Each platform has its own link: allin1url.in/yourusername/platformname",
         "Share specific links when you want to direct someone to a particular profile",
         "Examples:",
         "  • Share LinkedIn link in job applications",

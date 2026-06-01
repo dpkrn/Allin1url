@@ -125,7 +125,7 @@ const getLinkByUsernameAndSource = async (req, res) => {
 const getProfileByUsername = async (req, res) => {
   // Allow iframe embedding for preview (allow from frontend origins)
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  const frontendOrigins = "http://localhost:5173 https://clickly.cv https://linkbriger.vercel.app 'self'";
+  const frontendOrigins = "http://localhost:5173 https://allin1url.in https://linkbriger.vercel.app 'self'";
   res.setHeader('Content-Security-Policy', `frame-ancestors ${frontendOrigins}`);
   
   console.log("backend profile search start")

@@ -21,7 +21,7 @@ function isProduction() {
 function getSubdomainConfig() {
   if (isProduction()) {
     return {
-      domain: 'clickly.cv',
+      domain: 'allin1url.in',
       protocol: 'https',
       port: '' // No port in production
     };
@@ -39,7 +39,7 @@ function getSubdomainConfig() {
  * Generate user link URL in subdomain format for both dev and prod
  * @param {string} username - User's username
  * @param {string} source - Optional source/platform name
- * @returns {string} Full URL (e.g., https://username.clickly.cv or http://username.localhost:8080)
+ * @returns {string} Full URL (e.g., https://username.allin1url.in or http://username.localhost:8080)
  */
 export function getUserLinkUrl(username, source = null) {
   if (!username) return '';
@@ -51,7 +51,7 @@ export function getUserLinkUrl(username, source = null) {
 
 /**
  * Get the base URL for the application (main domain, not subdomain)
- * @returns {string} Base URL (production: https://clickly.cv, dev: http://localhost:8080)
+ * @returns {string} Base URL (production: https://allin1url.in, dev: http://localhost:8080)
  */
 function getBaseUrl() {
   return serverUrl();
@@ -61,7 +61,7 @@ function getBaseUrl() {
  * Generate user link URL in legacy format (for backward compatibility or main domain)
  * @param {string} username - User's username
  * @param {string} source - Optional source/platform name
- * @returns {string} Full URL (e.g., https://clickly.cv/username or https://clickly.cv/username/source)
+ * @returns {string} Full URL (e.g., https://allin1url.in/username or https://allin1url.in/username/source)
  */
 export function getUserLinkUrlLegacy(username, source = null) {
   if (!username) return '';

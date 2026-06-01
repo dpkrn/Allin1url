@@ -44,7 +44,7 @@ const HeroSection = ({
     }
     const params = new URLSearchParams({
       client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-      redirect_uri: "https://clickly.cv/auth/google",
+      redirect_uri: "https://allin1url.in/auth/google",
       response_type: "code",
       scope: "openid email profile",
       access_type: "offline",
@@ -219,7 +219,7 @@ const HeroSection = ({
                   spellCheck="false"
                 />
               </div>
-              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">.clickly.cv/</span>
+              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">.allin1url.in/</span>
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}

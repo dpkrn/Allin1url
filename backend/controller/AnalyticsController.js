@@ -255,7 +255,7 @@ const getAnalytics = async (req, res) => {
                         category = 'search';
                     } else if (name.includes('facebook') || name.includes('twitter') || name.includes('linkedin') || name.includes('instagram') || name.includes('youtube') || name.includes('tiktok')) {
                         category = 'social';
-                    } else if (name.includes('clickly.cv') || name.includes(username)) {
+                    } else if (name.includes('allin1url.in') || name.includes(username)) {
                         category = 'internal';
                     } else {
                         category = 'external';
@@ -602,7 +602,7 @@ const getClickDetailsV1 = async (req, res) => {
             linkId: click.linkId?._id?.toString() || "undefined",
             linkSource: click.linkId?.source || 'linkhub',
             shortUrl: `/${click.linkId?.source || 'unknown'}`,
-            linkDestination: click.linkId?.destination || `${username}.clickly.cv`,
+            linkDestination: click.linkId?.destination || `${username}.allin1url.in`,
             clickDate: click.clickDate,
             clickedTime: click.clickedTime,
             location: click.location,

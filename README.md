@@ -14,7 +14,7 @@
 
 **Transform your social media presence with memorable, personalized links that never expire**
 
-[🚀 Live Demo](https://clickly.cv) • [📖 Documentation](./frontend/src/components/Documentation.jsx) • [🐛 Report Bug](https://github.com/DpkRn/LinkBridger/issues) • [💡 Request Feature](https://github.com/DpkRn/LinkBridger/issues) • [💬 Discuss](https://github.com/DpkRn/LinkBridger/discussions)
+[🚀 Live Demo](https://allin1url.in) • [📖 Documentation](./frontend/src/components/Documentation.jsx) • [🐛 Report Bug](https://github.com/DpkRn/LinkBridger/issues) • [💡 Request Feature](https://github.com/DpkRn/LinkBridger/issues) • [💬 Discuss](https://github.com/DpkRn/LinkBridger/discussions)
 
 ![LinkBridger Banner](https://via.placeholder.com/1200x400/4F46E5/FFFFFF?text=LinkBridger+-+Your+Personalized+Link+Manager)
 
@@ -63,7 +63,7 @@ In today's digital-first world, professionals, creators, and developers manage m
 
 LinkBridger bridges this gap by providing:
 
-- 🎯 **Personalized URLs** using your username and platform name (e.g., `yourname.clickly.cv/linkedin`)
+- 🎯 **Personalized URLs** using your username and platform name (e.g., `yourname.allin1url.in/linkedin`)
 - 🌐 **Single Hub Link** that acts as a landing page for all your profiles
 - 📊 **Built-in Analytics** to track clicks and understand your audience
 - 🔄 **Centralized Updates** that reflect instantly across all platforms
@@ -87,7 +87,7 @@ LinkBridger bridges this gap by providing:
 
 1. **Sign Up**: Create an account with your email and choose a username
 2. **Add Platforms**: Add any social media platform with its destination URL
-3. **Get Your Links**: Receive personalized links like `username.clickly.cv/platform`
+3. **Get Your Links**: Receive personalized links like `username.allin1url.in/platform`
 4. **Set Link Privacy**: Choose visibility for each link:
    - **Public**: Visible everywhere (link hub, profile preview, search)
    - **Unlisted**: Visible in profile preview only, NOT in link hub (perfect for 100+ links without cluttering hub)
@@ -158,23 +158,23 @@ LinkBridger bridges this gap by providing:
 ### 1. **Memorable & Professional Links** 🎯
 
 **Before**: `https://www.linkedin.com/in/john-doe-software-engineer-123456789/`  
-**After**: `https://johndoe.clickly.cv/linkedin`
+**After**: `https://johndoe.allin1url.in/linkedin`
 
 Your audience will remember it! The pattern is simple: `username.domain/platform`. Once someone knows your username, they can easily guess your other platform links.
 
 **🌟 New: Custom Subdomain Format**
-- Each user gets their own custom subdomain (e.g., `username.clickly.cv`)
-- Hub link: `https://username.clickly.cv` (shows all your profiles)
-- Platform links: `https://username.clickly.cv/platform` (direct redirects)
+- Each user gets their own custom subdomain (e.g., `username.allin1url.in`)
+- Hub link: `https://username.allin1url.in` (shows all your profiles)
+- Platform links: `https://username.allin1url.in/platform` (direct redirects)
 - More professional and memorable than path-based URLs
 - Works seamlessly in both development and production environments
 
 ### 2. **Single Hub for All Profiles** 🌐
 
-Share one link (`https://yourname.clickly.cv`) that acts as a beautiful landing page for all your social profiles. Visitors can browse and choose which platform to visit, creating a professional digital business card.
+Share one link (`https://yourname.allin1url.in`) that acts as a beautiful landing page for all your social profiles. Visitors can browse and choose which platform to visit, creating a professional digital business card.
 
 **🌟 Custom Subdomain Hub**
-- Your personal subdomain: `https://yourname.clickly.cv`
+- Your personal subdomain: `https://yourname.allin1url.in`
 - Beautiful landing page showcasing all your profiles
 - Easy to remember and share
 - Professional digital business card
@@ -551,7 +551,7 @@ Getting started is simple:
 ### Why LinkBridger is Superior
 
 #### 1. **Brand Identity** 🎯
-Your links become part of your brand identity, not generic shortened URLs. When someone sees `yourname.clickly.cv/linkedin`, they immediately know it's your link and can easily remember the pattern for other platforms. The custom subdomain format (`username.clickly.cv`) makes your links even more professional and memorable.
+Your links become part of your brand identity, not generic shortened URLs. When someone sees `yourname.allin1url.in/linkedin`, they immediately know it's your link and can easily remember the pattern for other platforms. The custom subdomain format (`username.allin1url.in`) makes your links even more professional and memorable.
 
 #### 2. **User Trust** 🤝
 Transparent, readable URLs build more trust than mysterious short codes. Users can see where the link will take them before clicking, reducing phishing concerns.
@@ -606,18 +606,18 @@ See LinkBridger in action with these real-world examples:
 
 **Single Hub Link** (Access all profiles - acts as a digital business card):
 ```
-https://dpkrn.clickly.cv
+https://dpkrn.allin1url.in
 ```
 Visit this link to see a beautiful landing page with all social profiles!
 
 **Individual Platform Links** (Direct redirects to specific platforms):
-- **LinkedIn**: [`https://dpkrn.clickly.cv/linkedin`](https://dpkrn.clickly.cv/linkedin)
-- **GitHub**: [`https://dpkrn.clickly.cv/github`](https://dpkrn.clickly.cv/github)
-- **LeetCode**: [`https://dpkrn.clickly.cv/leetcode`](https://dpkrn.clickly.cv/leetcode)
-- **Portfolio**: [`https://dpkrn.clickly.cv/portfolio`](https://dpkrn.clickly.cv/portfolio)
-- **Instagram**: [`https://dpkrn.clickly.cv/instagram`](https://dpkrn.clickly.cv/instagram)
-- **Facebook**: [`https://dpkrn.clickly.cv/facebook`](https://dpkrn.clickly.cv/facebook)
-- **Codeforces**: [`https://dpkrn.clickly.cv/codeforces`](https://dpkrn.clickly.cv/codeforces)
+- **LinkedIn**: [`https://dpkrn.allin1url.in/linkedin`](https://dpkrn.allin1url.in/linkedin)
+- **GitHub**: [`https://dpkrn.allin1url.in/github`](https://dpkrn.allin1url.in/github)
+- **LeetCode**: [`https://dpkrn.allin1url.in/leetcode`](https://dpkrn.allin1url.in/leetcode)
+- **Portfolio**: [`https://dpkrn.allin1url.in/portfolio`](https://dpkrn.allin1url.in/portfolio)
+- **Instagram**: [`https://dpkrn.allin1url.in/instagram`](https://dpkrn.allin1url.in/instagram)
+- **Facebook**: [`https://dpkrn.allin1url.in/facebook`](https://dpkrn.allin1url.in/facebook)
+- **Codeforces**: [`https://dpkrn.allin1url.in/codeforces`](https://dpkrn.allin1url.in/codeforces)
 
 **Notice**: Only the platform name changes; the username remains consistent across all links! This makes it incredibly easy to remember and share.
 
@@ -1156,7 +1156,7 @@ Contributors will be:
 [![GitHub](https://img.shields.io/badge/GitHub-DpkRn-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/DpkRn)
 [![Email](https://img.shields.io/badge/Email-d.wizard.techno@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:d.wizard.techno@gmail.com)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dpkrn)
-[![Portfolio](https://img.shields.io/badge/Portfolio-Website-FF6B6B?style=for-the-badge&logo=firefox&logoColor=white)](https://dpkrn.clickly.cv)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Website-FF6B6B?style=for-the-badge&logo=firefox&logoColor=white)](https://dpkrn.allin1url.in)
 
 **Passionate about building innovative solutions and contributing to open source**
 
@@ -1186,14 +1186,14 @@ To create tools that simplify digital life and empower users to build their onli
 **Professional Links:**
 - 💼 **LinkedIn**: [Connect on LinkedIn](https://www.linkedin.com/in/dpkrn) - Let's network!
 - 🐙 **GitHub**: [@DpkRn](https://github.com/DpkRn) - Check out my other projects
-- 🌐 **Portfolio**: [View Portfolio](https://dpkrn.clickly.cv) - See my work
+- 🌐 **Portfolio**: [View Portfolio](https://dpkrn.allin1url.in) - See my work
 - 📧 **Email**: [d.wizard.techno@gmail.com](mailto:d.wizard.techno@gmail.com) - Let's collaborate!
 
 **Social Media:**
-- 📸 **Instagram**: [Follow on Instagram](https://dpkrn.clickly.cv/instagram) (if available)
-- 👨‍💻 **GitHub Profile**: [View GitHub Profile](https://dpkrn.clickly.cv/github)
-- 💻 **LeetCode**: [LeetCode Profile](https://dpkrn.clickly.cv/leetcode) (if available)
-- 🎯 **Codeforces**: [Codeforces Profile](https://dpkrn.clickly.cv/codeforces) (if available)
+- 📸 **Instagram**: [Follow on Instagram](https://dpkrn.allin1url.in/instagram) (if available)
+- 👨‍💻 **GitHub Profile**: [View GitHub Profile](https://dpkrn.allin1url.in/github)
+- 💻 **LeetCode**: [LeetCode Profile](https://dpkrn.allin1url.in/leetcode) (if available)
+- 🎯 **Codeforces**: [Codeforces Profile](https://dpkrn.allin1url.in/codeforces) (if available)
 
 ### 🎓 Learning & Growth
 
@@ -1292,7 +1292,7 @@ To everyone who:
 
 ### 🚀 Ready to Get Started?
 
-[**Try LinkBridger Now**](https://clickly.cv) • [**View Documentation**](./frontend/src/components/Documentation.jsx) • [**Contribute**](#-contributing)
+[**Try LinkBridger Now**](https://allin1url.in) • [**View Documentation**](./frontend/src/components/Documentation.jsx) • [**Contribute**](#-contributing)
 
 **Questions?** [Email us](mailto:d.wizard.techno@gmail.com) - We're here to help! 💬
 

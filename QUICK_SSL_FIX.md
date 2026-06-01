@@ -3,9 +3,9 @@
 ## ✅ Good News
 
 You already have a **wildcard certificate** that covers all subdomains:
-- **Certificate Name**: `clickly.cv-0001`
-- **Covers**: `*.clickly.cv` and `clickly.cv`
-- **Location**: `/etc/letsencrypt/live/clickly.cv-0001/`
+- **Certificate Name**: `allin1url.in-0001`
+- **Covers**: `*.allin1url.in` and `allin1url.in`
+- **Location**: `/etc/letsencrypt/live/allin1url.in-0001/`
 - **Expires**: 2026-03-23 (89 days valid)
 
 ## What You Need to Do
@@ -21,9 +21,9 @@ grep -A 5 "server_name \*\.clickly\.cv" nginx/nginx.conf
 
 **Should show:**
 ```
-ssl_certificate /etc/letsencrypt/live/clickly.cv-0001/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/clickly.cv-0001/privkey.pem;
-ssl_trusted_certificate /etc/letsencrypt/live/clickly.cv-0001/chain.pem;
+ssl_certificate /etc/letsencrypt/live/allin1url.in-0001/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/allin1url.in-0001/privkey.pem;
+ssl_trusted_certificate /etc/letsencrypt/live/allin1url.in-0001/chain.pem;
 ```
 
 ### 2. If Nginx Config is Wrong, Update It
@@ -32,17 +32,17 @@ If nginx is pointing to the wrong certificate, update `nginx/nginx.conf`:
 
 **For subdomain server block (around line 134):**
 ```nginx
-ssl_certificate /etc/letsencrypt/live/clickly.cv-0001/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/clickly.cv-0001/privkey.pem;
-ssl_trusted_certificate /etc/letsencrypt/live/clickly.cv-0001/chain.pem;
+ssl_certificate /etc/letsencrypt/live/allin1url.in-0001/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/allin1url.in-0001/privkey.pem;
+ssl_trusted_certificate /etc/letsencrypt/live/allin1url.in-0001/chain.pem;
 ```
 
 **For main domain server block (around line 63):**
-You can use either certificate, but `clickly.cv-0001` is recommended:
+You can use either certificate, but `allin1url.in-0001` is recommended:
 ```nginx
-ssl_certificate /etc/letsencrypt/live/clickly.cv-0001/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/clickly.cv-0001/privkey.pem;
-ssl_trusted_certificate /etc/letsencrypt/live/clickly.cv-0001/chain.pem;
+ssl_certificate /etc/letsencrypt/live/allin1url.in-0001/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/allin1url.in-0001/privkey.pem;
+ssl_trusted_certificate /etc/letsencrypt/live/allin1url.in-0001/chain.pem;
 ```
 
 ### 3. Test and Reload Nginx
@@ -62,18 +62,18 @@ docker-compose restart nginx
 
 ```bash
 # Test main domain
-curl -I https://clickly.cv
+curl -I https://allin1url.in
 
 # Test subdomain (this should work now!)
-curl -I https://dpkrn.clickly.cv
+curl -I https://dpkrn.allin1url.in
 
 # Check SSL certificate details
-openssl s_client -connect dpkrn.clickly.cv:443 -servername dpkrn.clickly.cv < /dev/null 2>/dev/null | openssl x509 -noout -text | grep -A 1 "Subject Alternative Name"
+openssl s_client -connect dpkrn.allin1url.in:443 -servername dpkrn.allin1url.in < /dev/null 2>/dev/null | openssl x509 -noout -text | grep -A 1 "Subject Alternative Name"
 ```
 
 **Expected output should show:**
 ```
-DNS:*.clickly.cv, DNS:clickly.cv
+DNS:*.allin1url.in, DNS:allin1url.in
 ```
 
 ## Quick Verification Script
@@ -93,10 +93,10 @@ This will:
 
 | Certificate | Covers | Use For |
 |------------|--------|---------|
-| `clickly.cv-0001` | `*.clickly.cv`, `clickly.cv` | ✅ **Subdomains** (dpkrn.clickly.cv, etc.) |
-| `clickly.cv` | `clickly.cv`, `www.clickly.cv` | ❌ Main domain only (no subdomains) |
+| `allin1url.in-0001` | `*.allin1url.in`, `allin1url.in` | ✅ **Subdomains** (dpkrn.allin1url.in, etc.) |
+| `allin1url.in` | `allin1url.in`, `www.allin1url.in` | ❌ Main domain only (no subdomains) |
 
-**Use `clickly.cv-0001` for subdomain server block!**
+**Use `allin1url.in-0001` for subdomain server block!**
 
 ## Troubleshooting
 
@@ -109,7 +109,7 @@ This will:
 
 2. **Verify certificate is accessible:**
    ```bash
-   sudo ls -la /etc/letsencrypt/live/clickly.cv-0001/
+   sudo ls -la /etc/letsencrypt/live/allin1url.in-0001/
    ```
 
 3. **Check nginx error logs:**
@@ -125,7 +125,7 @@ This will:
 ## Next Steps After Fix
 
 Once SSL is working:
-- ✅ `https://dpkrn.clickly.cv/` should work without warnings
-- ✅ `https://dpkrn.clickly.cv/github` should work
+- ✅ `https://dpkrn.allin1url.in/` should work without warnings
+- ✅ `https://dpkrn.allin1url.in/github` should work
 - ✅ All subdomains will be secured automatically
 

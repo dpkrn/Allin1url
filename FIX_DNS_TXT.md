@@ -1,7 +1,7 @@
 # Fixing DNS TXT Record Issue
 
 ## Problem
-Certbot can't find the TXT record at `_acme-challenge.clickly.cv`
+Certbot can't find the TXT record at `_acme-challenge.allin1url.in`
 
 ## Step-by-Step Fix
 
@@ -11,7 +11,7 @@ When certbot prompts you, it will show something like:
 
 ```
 Please deploy a DNS TXT record under the name
-_acme-challenge.clickly.cv with the following value:
+_acme-challenge.allin1url.in with the following value:
 
 abc123xyz789... (long string)
 ```
@@ -27,9 +27,9 @@ abc123xyz789... (long string)
 4. Select **TXT Record**
 5. Fill in:
    - **Host**: `_acme-challenge` 
-     - ⚠️ **IMPORTANT**: Namecheap automatically adds `.clickly.cv` to the host name
+     - ⚠️ **IMPORTANT**: Namecheap automatically adds `.allin1url.in` to the host name
      - So you enter: `_acme-challenge`
-     - Namecheap creates: `_acme-challenge.clickly.cv`
+     - Namecheap creates: `_acme-challenge.allin1url.in`
    - **Value**: `xgPUGNyXbaKrC1ZSQR57af9lVwZz0Jj4UgoWTFTgLVQ` (paste the exact value from certbot)
    - **TTL**: Automatic (or 300)
 6. Click **Save** (green checkmark)
@@ -60,13 +60,13 @@ abc123xyz789... (long string)
 
 ```bash
 # Check if TXT record exists
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 
 # If empty, try with Google DNS
-dig @8.8.8.8 _acme-challenge.clickly.cv TXT +short
+dig @8.8.8.8 _acme-challenge.allin1url.in TXT +short
 
 # Or with Cloudflare DNS
-dig @1.1.1.1 _acme-challenge.clickly.cv TXT +short
+dig @1.1.1.1 _acme-challenge.allin1url.in TXT +short
 ```
 
 **You should see output like:**
@@ -77,11 +77,11 @@ dig @1.1.1.1 _acme-challenge.clickly.cv TXT +short
 **If you see nothing or empty output:**
 - Wait 2-5 more minutes
 - Double-check the record was saved in your DNS provider
-- Make sure the Host/Name is exactly `_acme-challenge` (not `_acme-challenge.clickly.cv`)
+- Make sure the Host/Name is exactly `_acme-challenge` (not `_acme-challenge.allin1url.in`)
 
 ### 4. Common Mistakes to Avoid
 
-❌ **WRONG**: Host = `_acme-challenge.clickly.cv`
+❌ **WRONG**: Host = `_acme-challenge.allin1url.in`
 ✅ **CORRECT**: Host = `_acme-challenge`
 
 ❌ **WRONG**: Value has extra spaces or quotes
@@ -106,8 +106,8 @@ sudo certbot certonly --manual \
     --preferred-challenges dns \
     --agree-tos \
     --email your-email@example.com \
-    -d "*.clickly.cv" \
-    -d "clickly.cv" \
+    -d "*.allin1url.in" \
+    -d "allin1url.in" \
     --server https://acme-v02.api.letsencrypt.org/directory
 ```
 
@@ -119,13 +119,13 @@ Run this on EC2 to check DNS:
 echo "Checking DNS TXT record..."
 echo ""
 echo "Using default DNS:"
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 echo ""
 echo "Using Google DNS (8.8.8.8):"
-dig @8.8.8.8 _acme-challenge.clickly.cv TXT +short
+dig @8.8.8.8 _acme-challenge.allin1url.in TXT +short
 echo ""
 echo "Using Cloudflare DNS (1.1.1.1):"
-dig @1.1.1.1 _acme-challenge.clickly.cv TXT +short
+dig @1.1.1.1 _acme-challenge.allin1url.in TXT +short
 ```
 
 If all three show the TXT record value, DNS is ready!
@@ -138,18 +138,18 @@ If all three show the TXT record value, DNS is ready!
 1. Wait longer (can take 5-10 minutes)
 2. **Check what your DNS provider expects:**
    - Most providers (Namecheap, GoDaddy): Enter just `_acme-challenge`
-   - Some providers: Need full `_acme-challenge.clickly.cv`
+   - Some providers: Need full `_acme-challenge.allin1url.in`
    - Check your provider's documentation or look at existing records
 3. Verify the value matches exactly: `xgPUGNyXbaKrC1ZSQR57af9lVwZz0Jj4UgoWTFTgLVQ` (no extra spaces)
-4. Try different DNS servers: `dig @8.8.8.8 _acme-challenge.clickly.cv TXT`
+4. Try different DNS servers: `dig @8.8.8.8 _acme-challenge.allin1url.in TXT`
 5. Check your DNS provider's dashboard to confirm the record exists
-6. **Verify the final DNS name**: After saving, check that the record shows as `_acme-challenge.clickly.cv` in your DNS dashboard
+6. **Verify the final DNS name**: After saving, check that the record shows as `_acme-challenge.allin1url.in` in your DNS dashboard
 
 ### Issue: DNS shows record but certbot still fails
 
 **Solutions:**
 1. Wait 2-3 more minutes (propagation can be slow)
-2. Make sure you're checking the right domain (clickly.cv)
+2. Make sure you're checking the right domain (allin1url.in)
 3. Try running certbot with verbose mode: `sudo certbot certonly --manual -v ...`
 
 ### Issue: Multiple TXT records
@@ -168,7 +168,7 @@ TTL: Automatic
 
 **Result when checking:**
 ```bash
-$ dig _acme-challenge.clickly.cv TXT +short
+$ dig _acme-challenge.allin1url.in TXT +short
 "abc123xyz789def456ghi012jkl345mno678pqr901stu234vwx567yz"
 ```
 
@@ -176,6 +176,6 @@ $ dig _acme-challenge.clickly.cv TXT +short
 
 1. Check certbot logs: `sudo cat /var/log/letsencrypt/letsencrypt.log`
 2. Verify DNS record in your provider's dashboard
-3. Try using a different DNS server to check: `dig @1.1.1.1 _acme-challenge.clickly.cv TXT`
-4. Make sure you're adding the record for the correct domain (clickly.cv)
+3. Try using a different DNS server to check: `dig @1.1.1.1 _acme-challenge.allin1url.in TXT`
+4. Make sure you're adding the record for the correct domain (allin1url.in)
 

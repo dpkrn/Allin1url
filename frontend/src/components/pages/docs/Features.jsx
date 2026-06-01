@@ -8,7 +8,7 @@ const Features = () => {
     {
       icon: FaLink,
       title: "Personalized Smart Links",
-      description: "Create memorable, branded links using your username and platform name. Instead of random codes like 'bit.ly/xyz123', get clean URLs like 'yourname.clickly.cv/linkedin' that reflect your brand identity. Get your own domain FREE to manage all your links professionally.",
+      description: "Create memorable, branded links using your username and platform name. Instead of random codes like 'bit.ly/xyz123', get clean URLs like 'yourname.allin1url.in/linkedin' that reflect your brand identity. Get your own domain FREE to manage all your links professionally.",
       gradient: "from-purple-500 to-pink-500",
       color: "from-blue-500 to-cyan-500"
     },
@@ -36,7 +36,7 @@ const Features = () => {
     {
       icon: FaPalette,
       title: "Single Hub Link",
-      description: "Share one link (clickly.cv/yourname) that acts as a beautiful landing page for all your social profiles. Visitors can browse and choose which platform to visit, creating a professional digital business card.",
+      description: "Share one link (allin1url.in/yourname) that acts as a beautiful landing page for all your social profiles. Visitors can browse and choose which platform to visit, creating a professional digital business card.",
       gradient: "from-pink-500 to-rose-500",
       color: "from-blue-500 to-cyan-500"
     },

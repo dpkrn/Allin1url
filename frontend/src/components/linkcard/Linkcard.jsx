@@ -640,7 +640,7 @@ const Linkcard = ({ sources }) => {
               </motion.button>
 
               <motion.a
-                href={`https://clickly.cv/${username}/${source}`}
+                href={`https://allin1url.in/${username}/${source}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -1 }}

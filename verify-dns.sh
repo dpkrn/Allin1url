@@ -14,12 +14,12 @@ if ! command -v dig &> /dev/null; then
     sudo apt-get install -y dnsutils
 fi
 
-echo "Checking DNS TXT record for: _acme-challenge.clickly.cv"
+echo "Checking DNS TXT record for: _acme-challenge.allin1url.in"
 echo ""
 
 # Check with multiple DNS servers
 echo "1. Checking with default DNS server:"
-RESULT1=$(dig _acme-challenge.clickly.cv TXT +short)
+RESULT1=$(dig _acme-challenge.allin1url.in TXT +short)
 if [ -z "$RESULT1" ]; then
     echo "   ❌ No TXT record found"
 else
@@ -28,7 +28,7 @@ fi
 echo ""
 
 echo "2. Checking with Google DNS (8.8.8.8):"
-RESULT2=$(dig @8.8.8.8 _acme-challenge.clickly.cv TXT +short)
+RESULT2=$(dig @8.8.8.8 _acme-challenge.allin1url.in TXT +short)
 if [ -z "$RESULT2" ]; then
     echo "   ❌ No TXT record found"
 else
@@ -37,7 +37,7 @@ fi
 echo ""
 
 echo "3. Checking with Cloudflare DNS (1.1.1.1):"
-RESULT3=$(dig @1.1.1.1 _acme-challenge.clickly.cv TXT +short)
+RESULT3=$(dig @1.1.1.1 _acme-challenge.allin1url.in TXT +short)
 if [ -z "$RESULT3" ]; then
     echo "   ❌ No TXT record found"
 else
@@ -46,7 +46,7 @@ fi
 echo ""
 
 echo "4. Checking with Quad9 DNS (9.9.9.9):"
-RESULT4=$(dig @9.9.9.9 _acme-challenge.clickly.cv TXT +short)
+RESULT4=$(dig @9.9.9.9 _acme-challenge.allin1url.in TXT +short)
 if [ -z "$RESULT4" ]; then
     echo "   ❌ No TXT record found"
 else
@@ -64,7 +64,7 @@ if [ -z "$RESULT1" ] && [ -z "$RESULT2" ] && [ -z "$RESULT3" ] && [ -z "$RESULT4
     echo ""
     echo "Please check:"
     echo "  1. Did you add the TXT record in your DNS provider?"
-    echo "  2. Is the Host/Name field exactly: _acme-challenge (not _acme-challenge.clickly.cv)?"
+    echo "  2. Is the Host/Name field exactly: _acme-challenge (not _acme-challenge.allin1url.in)?"
     echo "  3. Did you wait 5-10 minutes after adding the record?"
     echo "  4. Is the record type TXT (not A or CNAME)?"
     echo "  5. Does the value match exactly what certbot showed you?"
@@ -93,10 +93,10 @@ echo "=========================================="
 echo "Additional DNS Information"
 echo "=========================================="
 echo ""
-echo "Checking all TXT records for clickly.cv:"
-dig clickly.cv TXT +short
+echo "Checking all TXT records for allin1url.in:"
+dig allin1url.in TXT +short
 echo ""
-echo "Checking A record for clickly.cv:"
-dig clickly.cv A +short
+echo "Checking A record for allin1url.in:"
+dig allin1url.in A +short
 echo ""
 

@@ -9,9 +9,9 @@ echo ""
 
 # Check certificate locations
 CERT_LOCATIONS=(
-    "/etc/letsencrypt/live/clickly.cv-0001/fullchain.pem"
-    "/etc/letsencrypt/live/clickly.cv/fullchain.pem"
-    "/etc/letsencrypt/live/clickly.cv-0002/fullchain.pem"
+    "/etc/letsencrypt/live/allin1url.in-0001/fullchain.pem"
+    "/etc/letsencrypt/live/allin1url.in/fullchain.pem"
+    "/etc/letsencrypt/live/allin1url.in-0002/fullchain.pem"
 )
 
 CERT_PATH=""
@@ -22,10 +22,10 @@ for location in "${CERT_LOCATIONS[@]}"; do
         
         # Check if it's a wildcard certificate
         echo "Checking certificate details..."
-        WILDCARD_CHECK=$(sudo openssl x509 -in "$location" -text -noout 2>/dev/null | grep -o "*.clickly.cv" || echo "")
+        WILDCARD_CHECK=$(sudo openssl x509 -in "$location" -text -noout 2>/dev/null | grep -o "*.allin1url.in" || echo "")
         
         if [ -n "$WILDCARD_CHECK" ]; then
-            echo "✅ This is a WILDCARD certificate (covers *.clickly.cv)"
+            echo "✅ This is a WILDCARD certificate (covers *.allin1url.in)"
         else
             echo "⚠️  This is NOT a wildcard certificate (doesn't cover subdomains)"
         fi
@@ -33,7 +33,7 @@ for location in "${CERT_LOCATIONS[@]}"; do
         echo ""
         echo "Certificate details:"
         echo "----------------------------------------"
-        sudo openssl x509 -in "$location" -text -noout 2>/dev/null | grep -A 1 "Subject Alternative Name" || echo "  *.clickly.cv, clickly.cv"
+        sudo openssl x509 -in "$location" -text -noout 2>/dev/null | grep -A 1 "Subject Alternative Name" || echo "  *.allin1url.in, allin1url.in"
         echo ""
         echo "Certificate expires:"
         sudo openssl x509 -in "$location" -noout -enddate 2>/dev/null | cut -d= -f2
@@ -93,6 +93,6 @@ echo ""
 echo "1. If nginx config needs updating, edit nginx/nginx.conf"
 echo "2. Test nginx config: docker exec nginx nginx -t"
 echo "3. Reload nginx: docker exec nginx nginx -s reload"
-echo "4. Test SSL: curl -I https://dpkrn.clickly.cv"
+echo "4. Test SSL: curl -I https://dpkrn.allin1url.in"
 echo ""
 

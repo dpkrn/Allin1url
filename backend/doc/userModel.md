@@ -40,7 +40,7 @@ The User model stores core authentication and account information for registered
 - **Required**: Yes
 - **Unique**: Yes
 - **Purpose**: Unique username for the user. Used for:
-  - Public profile URLs (e.g., `clickly.cv/username`)
+  - Public profile URLs (e.g., `allin1url.in/username`)
   - User identification
   - Login
   - Display purposes

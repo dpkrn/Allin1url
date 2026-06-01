@@ -12,7 +12,7 @@
 
 2. **Is the Host name correct?**
    - ✅ CORRECT: `_acme-challenge`
-   - ❌ WRONG: `_acme-challenge.clickly.cv` (don't include the domain)
+   - ❌ WRONG: `_acme-challenge.allin1url.in` (don't include the domain)
 
 3. **Is the value correct?**
    - Must match EXACTLY what certbot showed you
@@ -51,7 +51,7 @@ chmod +x verify-dns.sh
 
 **Or check manually:**
 ```bash
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 ```
 
 **You should see output like:**
@@ -79,27 +79,27 @@ sudo cat /var/log/letsencrypt/letsencrypt.log | tail -50
 ### Common Issues Checklist
 
 - [ ] TXT record exists in DNS provider
-- [ ] Host name is exactly `_acme-challenge` (not `_acme-challenge.clickly.cv`)
+- [ ] Host name is exactly `_acme-challenge` (not `_acme-challenge.allin1url.in`)
 - [ ] Value matches exactly what certbot showed
 - [ ] Record type is TXT (not A or CNAME)
 - [ ] Waited 5-10 minutes after adding record
-- [ ] Verified with `dig _acme-challenge.clickly.cv TXT +short`
+- [ ] Verified with `dig _acme-challenge.allin1url.in TXT +short`
 
 ### Alternative: Use HTTP-01 Challenge (Temporary Workaround)
 
 If DNS-01 keeps failing, you can generate a standard certificate first (main domain only), then upgrade to wildcard later:
 
 ```bash
-# This will only work for clickly.cv, not subdomains
+# This will only work for allin1url.in, not subdomains
 sudo ./generate-cert.sh --standard
 ```
 
-**Note:** This won't work for subdomains. You'll still need wildcard cert for `*.clickly.cv`.
+**Note:** This won't work for subdomains. You'll still need wildcard cert for `*.allin1url.in`.
 
 ## Need More Help?
 
 1. Check the detailed guide: `FIX_DNS_TXT.md`
 2. Run verification script: `./verify-dns.sh`
 3. Check certbot logs: `./check-certbot-logs.sh`
-4. Verify DNS propagation: `dig @8.8.8.8 _acme-challenge.clickly.cv TXT`
+4. Verify DNS propagation: `dig @8.8.8.8 _acme-challenge.allin1url.in TXT`
 

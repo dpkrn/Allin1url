@@ -8,8 +8,8 @@ const Benefits = () => {
     {
       icon: FaStar,
       title: "Memorable & Professional Links",
-      description: "Transform long, complex URLs into clean, branded links. Instead of 'linkedin.com/in/john-doe-software-engineer-123456789', get 'johndoe.clickly.cv/linkedin' that's easy to remember and share. Get your own domain FREE that will reflect your brand identity.",
-      example: "Before: https://www.linkedin.com/in/john-doe-software-engineer-123456789/\nAfter: https://johndoe.clickly.cv/linkedin",
+      description: "Transform long, complex URLs into clean, branded links. Instead of 'linkedin.com/in/john-doe-software-engineer-123456789', get 'johndoe.allin1url.in/linkedin' that's easy to remember and share. Get your own domain FREE that will reflect your brand identity.",
+      example: "Before: https://www.linkedin.com/in/john-doe-software-engineer-123456789/\nAfter: https://johndoe.allin1url.in/linkedin",
       gradient: "from-purple-500 to-pink-500"
     },
     {

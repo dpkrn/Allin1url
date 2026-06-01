@@ -13,7 +13,7 @@ const detectTier = () => {
     }
 
     // Check if running on production domain
-    if (hostname.includes('clickly.cv')) {
+    if (hostname.includes('allin1url.in')) {
       return 'prod';
     }
   }
@@ -42,7 +42,7 @@ export const serverUrl=(tierOverride)=>{
     if(currentTier=='dev'){
         return "http://localhost:8080"
     }
-    return "https://clickly.cv"
+    return "https://allin1url.in"
 }
 
 export const clientUrl=(tierOverride)=>{
@@ -50,7 +50,7 @@ export const clientUrl=(tierOverride)=>{
     if(currentTier=='dev'){
       return "http://localhost:5173"
     }
-    return "https://clickly.cv/app"
+    return "https://allin1url.in/app"
   }
 
 // Utility function to check if we're in development

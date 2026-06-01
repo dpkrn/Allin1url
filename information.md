@@ -31,7 +31,7 @@ In today's hyper-connected world, professionals maintain dozens of online profil
 LinkBridger introduces an intelligent ecosystem that revolutionizes digital presence management through:
 
 #### 🔗 **Personalized Smart Links**
-- **Format**: `username.clickly.cv/platform` (e.g., `john.clickly.cv/linkedin`)
+- **Format**: `username.allin1url.in/platform` (e.g., `john.allin1url.in/linkedin`)
 - **Memorable**: Short, branded URLs that are easy to remember and share
 - **SEO-Optimized**: Clean URLs that perform well in search engines
 - **Mobile-First**: Optimized for sharing across all devices
@@ -436,7 +436,7 @@ Templates: { themes, customizations, previews }
 ## 📞 Contact & Next Steps
 
 ### Get Started Today
-- **Website**: [https://clickly.cv](https://clickly.cv)
+- **Website**: [https://allin1url.in](https://allin1url.in)
 - **Demo**: Schedule a personalized product walkthrough
 - **Documentation**: Comprehensive API and integration guides
 - **Support**: 24/7 customer success team
@@ -450,10 +450,10 @@ Templates: { themes, customizations, previews }
 
 ## 🔗 Quick Links
 
-- **Live Demo**: [clickly.cv/demo](https://clickly.cv/demo)
-- **API Documentation**: [docs.clickly.cv](https://docs.clickly.cv)
-- **Status Page**: [status.clickly.cv](https://status.clickly.cv)
-- **Blog**: [blog.clickly.cv](https://blog.clickly.cv)
+- **Live Demo**: [allin1url.in/demo](https://allin1url.in/demo)
+- **API Documentation**: [docs.allin1url.in](https://docs.allin1url.in)
+- **Status Page**: [status.allin1url.in](https://status.allin1url.in)
+- **Blog**: [blog.allin1url.in](https://blog.allin1url.in)
 
 ---
 

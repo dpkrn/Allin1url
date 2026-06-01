@@ -34,7 +34,7 @@ const clientUrl=(tier)=>{
   if(tier==='dev'){
     return "http://localhost:5173/app"
   }
-  return "https://clickly.cv/app"
+  return "https://allin1url.in/app"
 }
 
 
@@ -42,7 +42,7 @@ const serverUrl=(tier)=>{
   if(tier==='dev'){
       return "http://localhost:8080"
   }
-  return "https://clickly.cv"
+  return "https://allin1url.in"
 }
 
 const getUserLinkUrl = (username, source = null) => {
@@ -59,7 +59,7 @@ const getUserLinkUrl = (username, source = null) => {
     return source ? `${baseUrl}/${source}` : baseUrl;
   } else {
     // Production: Use subdomain format (default)
-    const baseUrl = `https://${username}.clickly.cv`;
+    const baseUrl = `https://${username}.allin1url.in`;
     return source ? `${baseUrl}/${source}` : baseUrl;
   }
 };

@@ -2,7 +2,7 @@
 
 ## Problem: "Unsecure" or SSL Warning for Subdomains
 
-If you're seeing SSL warnings for subdomains like `https://dpkrn.clickly.cv/`, it means your SSL certificate doesn't cover wildcard subdomains.
+If you're seeing SSL warnings for subdomains like `https://dpkrn.allin1url.in/`, it means your SSL certificate doesn't cover wildcard subdomains.
 
 ## Quick Fix: Generate Wildcard SSL Certificate
 
@@ -13,10 +13,10 @@ If you're seeing SSL warnings for subdomains like `https://dpkrn.clickly.cv/`, i
 sudo certbot certificates
 
 # Check if certificate includes wildcard
-sudo openssl x509 -in /etc/letsencrypt/live/clickly.cv/fullchain.pem -text -noout | grep -A 1 "Subject Alternative Name"
+sudo openssl x509 -in /etc/letsencrypt/live/allin1url.in/fullchain.pem -text -noout | grep -A 1 "Subject Alternative Name"
 ```
 
-If you see `DNS:*.clickly.cv` in the output, you have a wildcard cert. If not, you need to generate one.
+If you see `DNS:*.allin1url.in` in the output, you have a wildcard cert. If not, you need to generate one.
 
 ### Step 2: Generate Wildcard Certificate
 
@@ -44,8 +44,8 @@ sudo certbot certonly --manual \
     --preferred-challenges dns \
     --agree-tos \
     --email your-email@example.com \
-    -d "*.clickly.cv" \
-    -d "clickly.cv" \
+    -d "*.allin1url.in" \
+    -d "allin1url.in" \
     --server https://acme-v02.api.letsencrypt.org/directory
 ```
 
@@ -55,7 +55,7 @@ When certbot prompts you, it will show something like:
 
 ```
 Please deploy a DNS TXT record under the name
-_acme-challenge.clickly.cv with the following value:
+_acme-challenge.allin1url.in with the following value:
 
 [some-long-string-here]
 ```
@@ -73,10 +73,10 @@ _acme-challenge.clickly.cv with the following value:
 
 ```bash
 # Check if TXT record is propagated
-dig _acme-challenge.clickly.cv TXT +short
+dig _acme-challenge.allin1url.in TXT +short
 
 # Or use Google DNS
-dig @8.8.8.8 _acme-challenge.clickly.cv TXT
+dig @8.8.8.8 _acme-challenge.allin1url.in TXT
 ```
 
 Wait 1-5 minutes for DNS to propagate, then press Enter in the certbot terminal.
@@ -90,8 +90,8 @@ sudo ls -la /etc/letsencrypt/live/
 ```
 
 Common locations:
-- `/etc/letsencrypt/live/clickly.cv-0001/` (if you had a previous cert)
-- `/etc/letsencrypt/live/clickly.cv/` (if this is the first wildcard cert)
+- `/etc/letsencrypt/live/allin1url.in-0001/` (if you had a previous cert)
+- `/etc/letsencrypt/live/allin1url.in/` (if this is the first wildcard cert)
 
 ### Step 6: Update Nginx Configuration
 
@@ -99,12 +99,12 @@ Update `nginx/nginx.conf` to use the correct certificate path:
 
 ```nginx
 # For wildcard subdomain server block (around line 134)
-ssl_certificate /etc/letsencrypt/live/clickly.cv/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/clickly.cv/privkey.pem;
-ssl_trusted_certificate /etc/letsencrypt/live/clickly.cv/chain.pem;
+ssl_certificate /etc/letsencrypt/live/allin1url.in/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/allin1url.in/privkey.pem;
+ssl_trusted_certificate /etc/letsencrypt/live/allin1url.in/chain.pem;
 ```
 
-If your certificate is in a different location (like `clickly.cv-0001`), update the paths accordingly.
+If your certificate is in a different location (like `allin1url.in-0001`), update the paths accordingly.
 
 ### Step 7: Test and Reload Nginx
 
@@ -123,22 +123,22 @@ docker-compose restart nginx
 
 ```bash
 # Test main domain
-curl -I https://clickly.cv
+curl -I https://allin1url.in
 
 # Test subdomain
-curl -I https://dpkrn.clickly.cv
+curl -I https://dpkrn.allin1url.in
 
 # Check SSL certificate details
-openssl s_client -connect dpkrn.clickly.cv:443 -servername dpkrn.clickly.cv < /dev/null 2>/dev/null | openssl x509 -noout -text | grep -A 1 "Subject Alternative Name"
+openssl s_client -connect dpkrn.allin1url.in:443 -servername dpkrn.allin1url.in < /dev/null 2>/dev/null | openssl x509 -noout -text | grep -A 1 "Subject Alternative Name"
 ```
 
-You should see `DNS:*.clickly.cv` in the output.
+You should see `DNS:*.allin1url.in` in the output.
 
 ## Alternative: Use Same Certificate for Both (If Wildcard Cert is in Same Location)
 
-If your wildcard certificate is stored in the same location as your main domain certificate (`/etc/letsencrypt/live/clickly.cv/`), the nginx config should already work. Just make sure:
+If your wildcard certificate is stored in the same location as your main domain certificate (`/etc/letsencrypt/live/allin1url.in/`), the nginx config should already work. Just make sure:
 
-1. The certificate includes `*.clickly.cv` in Subject Alternative Names
+1. The certificate includes `*.allin1url.in` in Subject Alternative Names
 2. Nginx is using the correct certificate path
 3. Nginx has been reloaded after certificate generation
 
@@ -146,13 +146,13 @@ If your wildcard certificate is stored in the same location as your main domain 
 
 ### Issue: Certificate doesn't include wildcard
 
-**Solution**: Generate a new wildcard certificate. The old certificate only covers `clickly.cv` and `www.clickly.cv`.
+**Solution**: Generate a new wildcard certificate. The old certificate only covers `allin1url.in` and `www.allin1url.in`.
 
 ### Issue: DNS TXT record not propagating
 
 **Solution**: 
 - Wait longer (can take up to 10 minutes)
-- Check with different DNS servers: `dig @8.8.8.8 _acme-challenge.clickly.cv TXT`
+- Check with different DNS servers: `dig @8.8.8.8 _acme-challenge.allin1url.in TXT`
 - Make sure the TXT record is added correctly (no extra spaces, correct host name)
 
 ### Issue: Nginx can't find certificate
@@ -160,14 +160,14 @@ If your wildcard certificate is stored in the same location as your main domain 
 **Solution**:
 - Check certificate location: `sudo ls -la /etc/letsencrypt/live/`
 - Update nginx.conf with correct path
-- Check file permissions: `sudo ls -la /etc/letsencrypt/live/clickly.cv/`
+- Check file permissions: `sudo ls -la /etc/letsencrypt/live/allin1url.in/`
 
 ### Issue: Certificate works for main domain but not subdomain
 
 **Solution**:
-- Verify wildcard cert was generated: `sudo openssl x509 -in /etc/letsencrypt/live/clickly.cv/fullchain.pem -text -noout | grep "*.clickly.cv"`
+- Verify wildcard cert was generated: `sudo openssl x509 -in /etc/letsencrypt/live/allin1url.in/fullchain.pem -text -noout | grep "*.allin1url.in"`
 - Check nginx subdomain server block is using correct certificate
-- Ensure DNS wildcard A record exists: `dig *.clickly.cv`
+- Ensure DNS wildcard A record exists: `dig *.allin1url.in`
 
 ## Auto-Renewal for Wildcard Certificates
 
@@ -183,11 +183,11 @@ sudo certbot renew --dry-run
 
 ## Quick Verification Checklist
 
-- [ ] Wildcard certificate generated: `sudo certbot certificates` shows `*.clickly.cv`
-- [ ] Certificate includes wildcard: `openssl x509 -in /path/to/cert -text | grep "*.clickly.cv"`
+- [ ] Wildcard certificate generated: `sudo certbot certificates` shows `*.allin1url.in`
+- [ ] Certificate includes wildcard: `openssl x509 -in /path/to/cert -text | grep "*.allin1url.in"`
 - [ ] Nginx config updated with correct certificate path
 - [ ] Nginx reloaded: `docker exec nginx nginx -s reload`
-- [ ] DNS wildcard A record exists: `dig *.clickly.cv`
-- [ ] Subdomain loads with HTTPS: `curl -I https://dpkrn.clickly.cv`
+- [ ] DNS wildcard A record exists: `dig *.allin1url.in`
+- [ ] Subdomain loads with HTTPS: `curl -I https://dpkrn.allin1url.in`
 - [ ] No SSL warnings in browser
 

@@ -304,7 +304,7 @@ const Welcome_Email_Template = `
               <div class="highlight-box">
                   <strong>✨ Your Personalized Link is Ready!</strong>
                   <p style="margin-top: 10px; color: #6b7280;">
-                      Share all your profiles with one simple link: <code style="color: #9333ea; background: white; padding: 5px 10px; border-radius: 4px;">https://clickly.cv/{username}</code>
+                      Share all your profiles with one simple link: <code style="color: #9333ea; background: white; padding: 5px 10px; border-radius: 4px;">https://allin1url.in/{username}</code>
                   </p>
               </div>
 
@@ -353,12 +353,12 @@ const Welcome_Email_Template = `
               </div>
 
               <div class="cta-section">
-                  <a href="https://clickly.cv/app/home" class="cta-button">Start Building Your Links →</a>
+                  <a href="https://allin1url.in/app/home" class="cta-button">Start Building Your Links →</a>
               </div>
 
               <div class="link-preview">
                   <p style="color: #6b7280; margin-bottom: 10px; font-size: 14px;">Your personalized link:</p>
-                  <code>https://clickly.cv/{username}</code>
+                  <code>https://allin1url.in/{username}</code>
               </div>
 
               <div class="step-section">
@@ -384,7 +384,7 @@ const Welcome_Email_Template = `
                       <div class="step-number">3</div>
                       <div class="step-content">
                           <h3>Share Your Link</h3>
-                          <p>Copy your personalized link <code style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px;">https://clickly.cv/{username}</code> and share it everywhere - in your bio, email signature, business cards, and more!</p>
+                          <p>Copy your personalized link <code style="background: #f3f4f6; padding: 2px 8px; border-radius: 4px;">https://allin1url.in/{username}</code> and share it everywhere - in your bio, email signature, business cards, and more!</p>
                       </div>
                   </div>
 
@@ -409,15 +409,15 @@ const Welcome_Email_Template = `
               </div>
 
               <p style="color: #4b5563; line-height: 1.8; margin-top: 30px; text-align: center;">
-                  Questions? We're here to help! Check out our <a href="https://clickly.cv/app/doc" style="color: #9333ea; text-decoration: none;">documentation</a> or reply to this email.
+                  Questions? We're here to help! Check out our <a href="https://allin1url.in/app/doc" style="color: #9333ea; text-decoration: none;">documentation</a> or reply to this email.
               </p>
           </div>
           <div class="footer">
               <p><strong>Happy Linking! 🎯</strong></p>
               <p>The LinkBridger Team</p>
               <div class="social-links">
-                  <a href="https://clickly.cv/app/doc">Documentation</a> | 
-                  <a href="https://clickly.cv/app/home">Dashboard</a>
+                  <a href="https://allin1url.in/app/doc">Documentation</a> | 
+                  <a href="https://allin1url.in/app/home">Dashboard</a>
               </div>
               <p style="margin-top: 20px; font-size: 12px;">
                   &copy; ${new Date().getFullYear()} LinkBridger. All rights reserved.
@@ -663,7 +663,7 @@ const Onboarding_Email_Template = `
                   <div class="user-info-item">
                       <span class="user-info-label">Profile Link:</span>
                       <span class="user-info-value">
-                          <a href="https://clickly.cv/{username}" target="_blank">https://clickly.cv/{username}</a>
+                          <a href="https://allin1url.in/{username}" target="_blank">https://allin1url.in/{username}</a>
                       </span>
                   </div>
                   <div class="user-info-item">
@@ -975,7 +975,7 @@ const Profile_Visit_Email_Template = `
 
               <div class="profile-link-box">
                   <p>Your profile link:</p>
-                  <code>https://clickly.cv/{{username}}</code>
+                  <code>https://allin1url.in/{{username}}</code>
               </div>
 
               <div class="stats-box">
@@ -986,7 +986,7 @@ const Profile_Visit_Email_Template = `
               </div>
 
               <div class="cta-section">
-                  <a href="https://clickly.cv/app/analytics" class="cta-button">View Full Analytics →</a>
+                  <a href="https://allin1url.in/app/analytics" class="cta-button">View Full Analytics →</a>
               </div>
 
               <p style="color: #4b5563; line-height: 1.8; margin-top: 30px; text-align: center; font-size: 14px;">
@@ -996,8 +996,8 @@ const Profile_Visit_Email_Template = `
           <div class="footer">
               <p><strong>LinkBridger Notification</strong></p>
               <p style="margin-top: 15px;">
-                  <a href="https://clickly.cv/app/settings">Manage Notification Settings</a> | 
-                  <a href="https://clickly.cv/app/analytics">View Analytics</a>
+                  <a href="https://allin1url.in/app/settings">Manage Notification Settings</a> | 
+                  <a href="https://allin1url.in/app/analytics">View Analytics</a>
               </p>
               <p style="margin-top: 20px; font-size: 12px;">
                   &copy; ${new Date().getFullYear()} LinkBridger. All rights reserved.
