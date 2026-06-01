@@ -505,3 +505,5 @@ when the real certificate lives at:
 ```
 
 go and change the auth 2.0 redirection url
+Linkbridger gmail
+https://console.cloud.google.com/auth/clients?project=linkbridger
