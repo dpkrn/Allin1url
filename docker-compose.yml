@@ -20,26 +20,26 @@ services:
     depends_on:
       - backend
 
-  n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
-    container_name: n8n
-    expose:
-      - "5678"
-    environment:
-      - N8N_HOST=n8n.allin1url.in
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=https
-      # Trust nginx (1 proxy): fixes "X-Forwarded-For header set but trust proxy is false"
-      - N8N_PROXY_HOPS=1
-      # Required: nginx (another container) can only reach n8n if it listens on 0.0.0.0
-      - N8N_LISTEN_ADDRESS=0.0.0.0
-      - NODE_ENV=production
-      - WEBHOOK_URL=https://n8n.allin1url.in
-      - GENERIC_TIMEZONE=Asia/Kolkata
-    volumes:
-      - n8n_data:/home/node/.n8n
-    depends_on:
-      - backend
+  # n8n:
+  #   image: docker.n8n.io/n8nio/n8n:latest
+  #   container_name: n8n
+  #   expose:
+  #     - "5678"
+  #   environment:
+  #     - N8N_HOST=n8n.allin1url.in
+  #     - N8N_PORT=5678
+  #     - N8N_PROTOCOL=https
+  #     # Trust nginx (1 proxy): fixes "X-Forwarded-For header set but trust proxy is false"
+  #     - N8N_PROXY_HOPS=1
+  #     # Required: nginx (another container) can only reach n8n if it listens on 0.0.0.0
+  #     - N8N_LISTEN_ADDRESS=0.0.0.0
+  #     - NODE_ENV=production
+  #     - WEBHOOK_URL=https://n8n.allin1url.in
+  #     - GENERIC_TIMEZONE=Asia/Kolkata
+  #   volumes:
+  #     - n8n_data:/home/node/.n8n
+  #   depends_on:
+  #     - backend
 
   nginx:
     image: nginx:latest
@@ -54,7 +54,7 @@ services:
     depends_on:
       - frontend
       - backend
-      - n8n
+      # - n8n
 
-volumes:
-  n8n_data:
+# volumes:
+#   n8n_data:
