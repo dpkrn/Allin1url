@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- ============================================ -->
+    <!-- BASIC META TAGS -->
+    <!-- ============================================ -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/app/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- FedCM meta tag for Google Sign-In (disabled to avoid CORS issues) -->
-    <!-- <meta http-equiv="Permissions-Policy" content="identity-credentials-get=*" /> -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
 
-    <!-- Canonical URL - prevents duplicate content issues -->
-    <link rel="canonical" href="https://allin1url.in/app/" />
+    <!-- ============================================ -->
+    <!-- TAB PROPERTIES (Title & Favicon) -->
+    <!-- ============================================ -->
+    <title>All in1 url - Free Link in Bio Tool | Custom URL Shortener for Social Media</title>
+    <!-- Favicon — square PNGs for Google Search result icon -->
+    <link rel="icon" type="image/png" href="/app/web-app-manifest-512x512.png" sizes="512x512" />
+    <link rel="icon" type="image/png" href="/app/web-app-manifest-192x192.png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/app/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
+    <link rel="shortcut icon" href="/app/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/app/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="allin1url" />
+    <link rel="manifest" href="/app/site.webmanifest" />
 
-    <!-- SEO Meta Tags - keyword-rich for search ranking -->
+    <!-- ============================================ -->
+    <!-- SEO META TAGS -->
+    <!-- ============================================ -->
     <meta name="description" content="All in1 url - Free link in bio tool &amp; custom URL shortener. Create your username.allin1url.in page, track link clicks, manage Instagram, LinkedIn, GitHub links in one place. Linktree alternative with free custom domain.">
     <meta name="keywords" content="link in bio, linktree alternative, free link shortener, custom URL shortener, bio link, social media links, Instagram link, LinkedIn link, GitHub link, link manager, click tracking, free link in bio">
     <meta name="author" content="Deepak Kr">
@@ -26,55 +32,126 @@
     <meta name="bingbot" content="index, follow">
     <meta name="yandexbot" content="index, follow">
     <meta name="theme-color" content="#7c3aed">
+    <link rel="canonical" href="https://allin1url.in/app/" />
 
-    <!-- Open Graph - use content (not href) and full absolute URLs -->
-    <meta property="og:title" content="All in1 url - Free Link in Bio &amp; Custom URL Shortener">
-    <meta property="og:description" content="Create your free link in bio page with custom URL (username.allin1url.in). Track clicks, manage all social links in one place. Free Linktree alternative.">
-    <meta property="og:image" content="https://allin1url.in/logo.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://allin1url.in/app/">
-    <meta property="og:site_name" content="All in1 url">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:type" content="website">
+    <!-- ============================================ -->
+    <!-- SITEMAP -->
+    <!-- ============================================ -->
+    <link rel="sitemap" type="application/xml" href="/app/sitemap.xml" />
 
-    <!-- Google Search verification -->
-    <meta name="google-site-verification" content="HjKH2b4_C-0bLNeyRuBncBvS5brsEk4EQ5ztP6X9K-g" />
+    <!-- ============================================ -->
+    <!-- GOOGLE INDEXING & VERIFICATION -->
+    <!-- ============================================ -->
+    <meta name="google-site-verification" content="wj1oh1Rllfel_Tl9LYSSQC9V8Ae-IgthES45Q1oJxsM" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="All in1 url - Free Link in Bio &amp; Custom URL Shortener">
-    <meta name="twitter:description" content="Create your free link in bio page (username.allin1url.in). Track clicks, manage Instagram, LinkedIn, GitHub links. Free Linktree alternative.">
-    <meta name="twitter:image" content="https://allin1url.in/logo.png">
-    <meta name="twitter:image:alt" content="All in1 url - Free link in bio and custom URL shortener">
-
-    <!-- Structured Data (JSON-LD) - WebApplication + Organization for rich results -->
+    <!-- ============================================ -->
+    <!-- STRUCTURED DATA (JSON-LD) - Google Rich Results -->
+    <!-- Logo in Google Search Results comes from here -->
+    <!-- ============================================ -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "All in1 url",
-      "description": "Free link in bio tool and custom URL shortener. Create username.allin1url.in, track link clicks, manage Instagram, LinkedIn, GitHub and all social links in one place. Linktree alternative with free custom domain.",
-      "url": "https://allin1url.in/app/",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "All in1 url",
-        "url": "https://allin1url.in",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://allin1url.in/logo.png"
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://allin1url.in/#organization",
+          "name": "All in1 url",
+          "description": "Free link in bio tool and custom URL shortener. Create username.allin1url.in, track link clicks, manage Instagram, LinkedIn, GitHub and all social links in one place.",
+          "url": "https://allin1url.in",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://allin1url.in/web-app-manifest-512x512.png",
+            "width": 512,
+            "height": 512
+          },
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://allin1url.in/web-app-manifest-512x512.png",
+            "width": 512,
+            "height": 512
+          },
+          "founder": {
+            "@type": "Person",
+            "name": "Deepak Kr"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://allin1url.in/#website",
+          "name": "All in1 url",
+          "url": "https://allin1url.in",
+          "publisher": {
+            "@id": "https://allin1url.in/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://allin1url.in/app/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://allin1url.in/app/#webapp",
+          "name": "All in1 url",
+          "description": "Free link in bio tool and custom URL shortener. Create username.allin1url.in, track link clicks, manage Instagram, LinkedIn, GitHub and all social links in one place. Linktree alternative with free custom domain.",
+          "url": "https://allin1url.in/app/",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Web",
+          "publisher": {
+            "@id": "https://allin1url.in/#organization"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
         }
-      }
+      ]
     }
     </script>
-    <title>All in1 url - Free Link in Bio Tool | Custom URL Shortener for Social Media</title>
+
+    <!-- ============================================ -->
+    <!-- OPEN GRAPH (Facebook, LinkedIn, WhatsApp) -->
+    <!-- ============================================ -->
+    <meta property="og:url" content="https://allin1url.in/app/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="All in1 url - Free Link in Bio &amp; Custom URL Shortener">
+    <meta property="og:description" content="Create your free link in bio page with custom URL (username.allin1url.in). Track clicks, manage all social links in one place. Free Linktree alternative.">
+    <meta property="og:image" content="https://allin1url.in/web-app-manifest-512x512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="All in1 url - Free link in bio and custom URL shortener">
+    <meta property="og:site_name" content="All in1 url">
+    <meta property="og:locale" content="en_US">
+
+    <!-- ============================================ -->
+    <!-- GOOGLE SEARCH - Image & Schema Optimization -->
+    <!-- ============================================ -->
+    <meta name="image" content="https://allin1url.in/web-app-manifest-512x512.png">
+    <link itemprop="image" href="https://allin1url.in/web-app-manifest-512x512.png">
+
+    <!-- ============================================ -->
+    <!-- TWITTER CARD PREVIEW -->
+    <!-- ============================================ -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="All in1 url - Free Link in Bio &amp; Custom URL Shortener">
+    <meta name="twitter:description" content="Create your free link in bio page (username.allin1url.in). Track clicks, manage Instagram, LinkedIn, GitHub links. Free Linktree alternative.">
+    <meta name="twitter:image" content="https://allin1url.in/web-app-manifest-512x512.png">
+    <meta name="twitter:image:alt" content="All in1 url - Free link in bio and custom URL shortener">
+
+    <!-- ============================================ -->
+    <!-- EXTERNAL STYLES -->
+    <!-- ============================================ -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <script type="module" crossorigin src="/app/assets/index-Cec1goc5.js"></script>
     <link rel="stylesheet" crossorigin href="/app/assets/index-BXrOK7sz.css">
   </head>
