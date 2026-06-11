@@ -37,6 +37,15 @@ const clientUrl=(tier)=>{
   return "https://allin1url.in/app"
 }
 
+const tier=process.env.TIER || 'prod';
+
+const domain=(tier)=>{
+  if(tier==='dev'){
+    return "localhost:8080"
+  }
+  return "allin1url.in"
+}
+
 
 const serverUrl=(tier)=>{
   if(tier==='dev'){
@@ -205,4 +214,4 @@ const getFaviconScript = () => {
             });`;
 };
 
-module.exports = { hashData, unhashData, getUserLinkUrl, clientUrl, serverUrl, getTemplateScripts, getFaviconScript };
+module.exports = { hashData, unhashData, getUserLinkUrl, clientUrl, serverUrl, getTemplateScripts, getFaviconScript,domain };

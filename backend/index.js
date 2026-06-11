@@ -7,7 +7,7 @@ const dotenv = require('dotenv')
 const helmet = require('helmet'); 
 const cloudinary = require('cloudinary')
 const crypto = require('crypto')
-
+  const { domain } = require('./utils')
 const authRoute=require('./routes/AuthRoute')
 const linkRoute=require('./routes/LinkRoute')
 const analyticsRoute=require('./routes/AnalyticsRoute')
@@ -329,16 +329,16 @@ app.post('/link/verify-password', extractInfo, async (req, res) => {
 app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
   // Only process if username was extracted from subdomain (not main domain)
   
-  if (req.isMainDomain || !req.params.username) {
-    // This is main domain, let it fall through to other routes
-    return res.redirect(307, "https://allin1url.in/app/");
-  }
+  // if (req.isMainDomain || !req.params.username) {
+  //   // This is main domain, let it fall through to other routes
+  //   return res.redirect(307, "https://allin1url.in/app/");
+  // }
 
 
   const username = req.params.username;
   const source = req.params.source;
   // Generate linkHub in subdomain format for subdomain requests
-  const linkHub = `Available link: ${req.protocol}://${username}.allin1url.in`;
+  const linkHub = `Available link: ${req.protocol}://${username}.${domain(tier)}`;
 
   const link = await Link.findOne({
     username,

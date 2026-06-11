@@ -9,7 +9,7 @@ const resolveUsername = async (req, res, next) => {
   const subdomain = hostParts[0].toLowerCase();
 
   // Handle main domain cases - redirect to frontend
-  if (subdomain === 'clickly' || subdomain === 'www' || subdomain === '') {
+  if (subdomain === 'allin1url' || subdomain === 'www' || subdomain === '') {
     // This is the main domain, not a subdomain
     // Set a flag so routes know to redirect to frontend
     req.isMainDomain = true;
