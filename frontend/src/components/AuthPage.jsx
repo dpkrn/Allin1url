@@ -4,16 +4,17 @@ import toast from "react-hot-toast";
 import api from "../utils/api";
 import { useDispatch } from "react-redux";
 import { setAuthenticated, setUser } from "../redux/userSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { GiSkullCrossedBones } from "react-icons/gi";
 import { FaCheck, FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { HiSparkles } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
-import { serverUrl } from "../utils/urlConfig";
+import { buildGoogleOAuthUrl } from "../utils/urlConfig";
 
 const AuthPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [isAvailable, setAvailable] = useState(false);
@@ -36,6 +37,15 @@ const AuthPage = () => {
       isMountedRef.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    const oauthError = searchParams.get("error");
+    if (oauthError) {
+      toast.error(oauthError);
+      searchParams.delete("error");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   // Mouse tracking for interactive background
   useEffect(() => {
@@ -151,33 +161,22 @@ const AuthPage = () => {
       return;
     }
 
-    const params = new URLSearchParams({
-      client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-      redirect_uri: `${serverUrl()}/auth/google`,
-      response_type: "code",
-      scope: "openid email profile",
-      access_type: "offline",
-      prompt: "select_account",
-      state: btoa(JSON.stringify({ username: uname, usertype: "onboarding" }))
-    });
-    window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
+    try {
+      window.location.href = buildGoogleOAuthUrl({
+        username: uname.toLowerCase(),
+        usertype: "onboarding",
+      });
+    } catch (err) {
+      toast.error(err.message || "Google sign-up is unavailable");
+    }
   };
 
-  const handleGoogleSignIn = async (usr) => {
-    let uname = usr;
-    if (typeof usr === 'object' && usr !== null) {
-      uname = username;
+  const handleGoogleSignIn = async () => {
+    try {
+      window.location.href = buildGoogleOAuthUrl({ usertype: "onboarded" });
+    } catch (err) {
+      toast.error(err.message || "Google sign-in is unavailable");
     }
-    const params = new URLSearchParams({
-      client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-      redirect_uri: `${serverUrl()}/auth/google`,
-      response_type: "code",
-      scope: "openid email profile",
-      access_type: "offline",
-      prompt: "select_account",
-      state: btoa(JSON.stringify({ username: uname, usertype: "onboarded" }))
-    });
-    window.location.href = "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
   };
 
   return (
@@ -374,7 +373,7 @@ const AuthPage = () => {
                         {/* Google Sign In Button */}
                         <motion.button
                           type="button"
-                          onClick={() => handleGoogleSignIn(username)}
+                          onClick={handleGoogleSignIn}
                           disabled={loading}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}

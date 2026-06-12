@@ -2,7 +2,6 @@ const express = require('express')
 const cors = require('cors')
 const cookieParser=require('cookie-parser')
 const path =require('path')
-const mongoose=require('mongoose')
 const dotenv = require('dotenv')
 const helmet = require('helmet'); 
 const cloudinary = require('cloudinary')
@@ -30,6 +29,7 @@ const { getUserLinkUrl, getTemplateScripts, getFaviconScript } = require('./util
 const bcryptjs = require('bcryptjs')
 const { time } = require('console')
 const { saveAnalytics } = require('./controller/AnalyticsController')
+const connectDB = require('./lib/db')
 
 
 dotenv.config()
@@ -572,11 +572,14 @@ app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (
 
 
 
-mongoose.connect(db_url).then(()=>{
-    console.log('db connected')
-}).catch(err=>console.log(err))
+connectDB()
+  .then(() => console.log('db connected'))
+  .catch((err) => console.log('db connection error:', err));
 
+if (process.env.VERCEL !== '1') {
+  app.listen(port, () => {
+    console.log(`Example app http://localhost:${process.env.PORT || port}`)
+  });
+}
 
-app.listen(port, () => {
-  console.log(`Example app http://localhost:${process.env.PORT}`)
-})
+module.exports = app;

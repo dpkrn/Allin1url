@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import "./App.css"
 import AuthPage from './components/AuthPage'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import DashBoard from './components/DashBoard'
 import { useDispatch, useSelector } from 'react-redux'
 import api from './utils/api'
@@ -32,6 +32,7 @@ import LinkClickDetailsV1 from './components/pages/LinkClickDetailsV1'
 
 function App() {
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
   const isAuthenticated = useSelector(store => store.admin.isAuthenticated);
@@ -45,6 +46,15 @@ function App() {
   const AuthRoute = ({ children }) => {
     return isAuthenticated === false ? children : <Navigate to='/home' />;
   };
+
+  useEffect(() => {
+    const oauthError = searchParams.get('error');
+    if (oauthError) {
+      toast.error(oauthError);
+      searchParams.delete('error');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     // Apply dark mode class to document based on Redux state

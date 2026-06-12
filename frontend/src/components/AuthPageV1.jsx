@@ -7,7 +7,7 @@ import { GiSkullCrossedBones } from "react-icons/gi";
 import { HiSparkles } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
 import api from "../utils/api";
-import { serverUrl } from "../utils/urlConfig";
+import { buildGoogleOAuthUrl } from "../utils/urlConfig";
 // import { signUp, signIn } from "../utils/authUtils";
 
 const AuthPageV1 = () => {
@@ -74,39 +74,22 @@ const AuthPageV1 = () => {
             return;
         }
 
-        const params = new URLSearchParams({
-            client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-            redirect_uri: `${serverUrl()}/auth/google`,
-            response_type: "code",
-            scope: "openid email profile",
-            access_type: "offline",
-            prompt: "select_account",
-            state: btoa(JSON.stringify({ username: uname, usertype: "onboarding" }))
-        });
-        window.location.href =
-            "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
+        try {
+            window.location.href = buildGoogleOAuthUrl({
+                username: uname.toLowerCase(),
+                usertype: "onboarding",
+            });
+        } catch (err) {
+            toast.error(err.message || "Google sign-up is unavailable");
+        }
     };
 
-    const handleSignIn = async (usr) => {
-        let uname = usr;
-        if (typeof usr === 'object' && usr !== null) {
-            uname = username;
+    const handleSignIn = async () => {
+        try {
+            window.location.href = buildGoogleOAuthUrl({ usertype: "onboarded" });
+        } catch (err) {
+            toast.error(err.message || "Google sign-in is unavailable");
         }
-        if (!uname) {
-            toast.error("Please enter a valid username");
-            return;
-        }
-        const params = new URLSearchParams({
-            client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-            redirect_uri: `${serverUrl()}/auth/google`,
-            response_type: "code",
-            scope: "openid email profile",
-            access_type: "offline",
-            prompt: "select_account",
-            state: btoa(JSON.stringify({ username: uname, usertype: "onboarded" }))
-        });
-        window.location.href =
-            "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
     };
 
     // Initialize Google Sign-In when signin tab is active

@@ -7,7 +7,7 @@ import { TypewriterEffect } from '../../../ui/typewriter-effect';
 import { FlipWords } from '../../../ui/flip-words';
 import { FaArrowRight } from 'react-icons/fa';
 import api from '../../../../utils/api';
-import { serverUrl } from '../../../../utils/urlConfig';
+import { buildGoogleOAuthUrl } from '../../../../utils/urlConfig';
 
 const HeroSection = ({
   words = [],
@@ -43,17 +43,14 @@ const HeroSection = ({
       toast.error("Username is not available. Please choose another one.");
       return;
     }
-    const params = new URLSearchParams({
-      client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-      redirect_uri: `${serverUrl()}/auth/google`,
-      response_type: "code",
-      scope: "openid email profile",
-      access_type: "offline",
-      prompt: "select_account",
-      state: btoa(JSON.stringify({ username: uname, usertype: "onboarding" }))
-    });
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/v2/auth?" + params.toString();
+    try {
+      window.location.href = buildGoogleOAuthUrl({
+        username: uname.toLowerCase(),
+        usertype: "onboarding",
+      });
+    } catch (err) {
+      toast.error(err.message || "Google sign-up is unavailable");
+    }
   };
 
   const handleCtaClick = (usernameValue) => {

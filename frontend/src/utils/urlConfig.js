@@ -58,3 +58,29 @@ export const isDevelopment = () => tier === 'dev';
 
 // Utility function to check if we're in production
 export const isProduction = () => tier === 'prod';
+
+/** URL-safe base64 OAuth state (avoids +/= breaking in query strings) */
+export const encodeOAuthState = (data) => {
+  const json = JSON.stringify(data);
+  const base64 = btoa(json);
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
+export const buildGoogleOAuthUrl = (stateData) => {
+  const clientId = import.meta.env?.VITE_GOOGLE_CLIENT_ID;
+  if (!clientId) {
+    throw new Error('Google sign-in is not configured');
+  }
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: `${serverUrl()}/auth/google`,
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'select_account',
+    state: encodeOAuthState(stateData),
+  });
+
+  return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+};

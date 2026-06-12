@@ -4,7 +4,38 @@ const jwt = require("jsonwebtoken");
 const { sendOtpVerification, sendWelcomeEmail, sendNewUserOnboardingEmail } = require("../lib/mail");
 const Profile=require('../model/userProfile')
 const Otp = require("../model/otpModel");
-const { clientUrl } = require("../utils");
+const { clientUrl, serverUrl } = require("../utils");
+const connectDB = require("../lib/db");
+
+const getAuthCookieOptions = () => {
+  const options = {
+    maxAge: 24 * 60 * 60 * 1000,
+    sameSite: "None",
+    secure: true,
+    httpOnly: true,
+  };
+
+  if (process.env.TIER !== "dev") {
+    const domain = process.env.DOMAIN || "allin1url.in";
+    options.domain = `.${domain}`;
+  }
+
+  return options;
+};
+
+const parseOAuthState = (stateParam) => {
+  if (!stateParam) {
+    return { usertype: "onboarded" };
+  }
+
+  let state = String(stateParam).replace(/ /g, "+");
+  state = state.replace(/-/g, "+").replace(/_/g, "/");
+  while (state.length % 4) {
+    state += "=";
+  }
+
+  return JSON.parse(Buffer.from(state, "base64").toString("utf8"));
+};
 
 function generateOTP() {
   let otp = Math.floor(1000 + Math.random() * 9000);
@@ -73,7 +104,8 @@ const signInController = async (req, res) => {
         .json({ success: false, message: "All fields are required" });
     }
 
-    const user = await User.findOne({ email }).lean();
+    const normalizedEmail = (email || "").toLowerCase().trim();
+    const user = await User.findOne({ email: normalizedEmail, deletedAt: null }).lean();
     console.log("user",user)
     
     if (!user)
@@ -87,15 +119,11 @@ const signInController = async (req, res) => {
         .json({ success: false, message: "Invalid Credentials !" });
     }
     const token = jwt.sign(
-      { email: email, id: user._id },
+      { email: normalizedEmail, id: user._id },
       process.env.JWT_KEY,
       { expiresIn: "24h" }
     );
-    res.cookie("token", token, {
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "None",
-      secure: true,
-    });
+    res.cookie("token", token, getAuthCookieOptions());
     delete user.password
     return res
       .status(200)
@@ -134,9 +162,8 @@ const signOut = async (req, res) => {
   try {
     //  const token=jwt.sign({email:email,id:user._id},process.env.JWT_KEY,{expiresIn:'24h'})
     res.cookie("token", "", {
+      ...getAuthCookieOptions(),
       expires: new Date(0),
-      sameSite: "None",
-      secure: true,
     });
     return res
       .status(200)
@@ -247,17 +274,23 @@ const changePassword = async (req, res, next) => {
 };
 
 const handleAuthCallback=async (req, res) => {
+  const frontendBase = clientUrl(process.env.TIER);
+
   try {
-    console.log("handleAuthCallback",req)
+    await connectDB();
+
     const { code, state } = req.query;
-    // console.log("code and status=",code,state)
 
     if (!code) {
-      console.log("Authorization code missing")
-      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Authorization code missing`);
+      return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Authorization code missing")}`);
     }
 
-    // 🔁 Exchange auth code for tokens (SERVER ONLY)
+    if (!process.env.JWT_KEY) {
+      throw new Error("JWT_KEY is not configured");
+    }
+
+    const redirectUri = `${serverUrl(process.env.TIER)}/auth/google`;
+
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: {
@@ -267,7 +300,7 @@ const handleAuthCallback=async (req, res) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: `${process.env.TIER=='dev'?"http://localhost:8080":"https://api.allin1url.in"}/auth/google`,
+        redirect_uri: redirectUri,
         grant_type: "authorization_code",
       }),
     });
@@ -275,96 +308,73 @@ const handleAuthCallback=async (req, res) => {
     const tokens = await tokenRes.json();
 
     if (!tokens.id_token) {
-      console.log("Failed to get ID token")
-      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Failed to get ID token`);
+      console.error("Google token exchange failed:", tokens);
+      const tokenError = tokens.error_description || tokens.error || "Failed to get ID token";
+      return res.redirect(`${frontendBase}/?error=${encodeURIComponent(tokenError)}`);
     }
 
-    // 🔐 Decode ID token (basic decode for now)
+    const tokenParts = tokens.id_token.split(".");
+    if (tokenParts.length < 2) {
+      throw new Error("Invalid ID token format");
+    }
+
     const payload = JSON.parse(
-      Buffer.from(tokens.id_token.split(".")[1], "base64").toString()
+      Buffer.from(tokenParts[1], "base64").toString("utf8")
     );
 
-    /**
-     * payload contains:
-     * sub, email, name, picture, email_verified, aud, iss, exp
-     */
-
-    // ✅ Verify audience
- 
     if (payload.aud !== process.env.GOOGLE_CLIENT_ID) {
-      console.log("Invalid audience")
-      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Invalid audience`);
+      return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Invalid audience")}`);
     }
 
-    const {username,usertype}=JSON.parse(
-      Buffer.from(state,'base64').toString()
-    )
-    
-    const email=payload.email
-    const picture=payload.picture
-    const email_verified=payload.email_verified
+    const { username, usertype = "onboarded" } = parseOAuthState(state);
+    const email = (payload.email || "").toLowerCase().trim();
+    const picture = payload.picture;
 
-    // console.log("user payload and username",payload,username)
+    if (!email) {
+      return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Google account has no email")}`);
+    }
 
-    //check user already exist or have to create
-    let user = await User.findOne({ email }).lean();
-   
-    
-    if (!user && usertype=='onboarding'){
+    let user = await User.findOne({ email, deletedAt: null }).lean();
+
+    if (!user && usertype === "onboarding") {
+      if (!username || username.length < 5) {
+        return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Username is required for signup")}`);
+      }
+
+      const normalizedUsername = username.toLowerCase();
       const newUser = await User.create({
         email,
-        // password: hashedPassword,
-        username:username.toLowerCase(),
+        username: normalizedUsername,
       });
-      const newUserInfo=await Profile.create({username,image:picture});
-      if (newUser&&newUserInfo) {
-        console.log("user created");
-        // Update user variable to reference the newly created user
-        user = await User.findById(newUser._id).lean();
-        // Use name from request body or fallback to username
-        const displayName =  username;
-        sendWelcomeEmail(email, username, displayName, "All in1 url");
-        const adminEmail = process.env.ADMIN_EMAIL || "d.wizard.techno@gmail.com";
-        sendNewUserOnboardingEmail(adminEmail, username, displayName, "All in1 url");
-      }
-    }
-    
-    if (!user && usertype=='onboarded') {
-      // Redirect to login page with error message instead of returning JSON
-      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Email does not exist`);
-    }
-    
-    if (!user) {
-      console.log("Authentication failed")
-      // Fallback: if user still doesn't exist for any reason, redirect with error
-      return res.redirect(`${clientUrl(process.env.TIER)}/?error=Authentication failed`);
-    }
-    
-    // console.log("id=",user._id)
+      await Profile.create({ username: normalizedUsername, image: picture });
+      user = await User.findById(newUser._id).lean();
 
-    // 🧠 Create your app JWT
+      sendWelcomeEmail(email, normalizedUsername, normalizedUsername, "All in1 url");
+      const adminEmail = process.env.ADMIN_EMAIL || "d.wizard.techno@gmail.com";
+      sendNewUserOnboardingEmail(adminEmail, normalizedUsername, normalizedUsername, "All in1 url");
+    }
+
+    if (!user && usertype === "onboarded") {
+      return res.redirect(`${frontendBase}/login?error=${encodeURIComponent("No account found for this Google email. Please sign up first.")}`);
+    }
+
+    if (!user) {
+      return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Authentication failed")}`);
+    }
+
     const token = jwt.sign(
-      { email:email, id: user._id },
+      { email, id: user._id },
       process.env.JWT_KEY,
       { expiresIn: "24h" }
     );
-    console.log("generated token:",token)
-    res.cookie("token", token, {
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "None",
-      secure: true,
-    });
 
-    // 🔁 Redirect to frontend dashboard (authenticated users go to /home)
-    const frontendUrl = `${clientUrl(process.env.TIER)}/home`;
-    res.redirect(frontendUrl);
-
-    // 🔵 Option 2 (testing only): return JSON
-    // res.json({ tokens, user: payload });
+    res.cookie("token", token, getAuthCookieOptions());
+    return res.redirect(`${frontendBase}/home`);
 
   } catch (err) {
     console.error("Google auth error:", err);
-    return res.redirect(`${clientUrl(process.env.TIER)}/?error=Google authentication failed`);
+    const message = err.message || "Google authentication failed";
+    return res.redirect(`${frontendBase}/?error=${encodeURIComponent(message)}`);
   }
 }
 
