@@ -409,15 +409,15 @@ const Welcome_Email_Template = `
               </div>
 
               <p style="color: #4b5563; line-height: 1.8; margin-top: 30px; text-align: center;">
-                  Questions? We're here to help! Check out our <a href="https://allin1url.in/app/doc" style="color: #9333ea; text-decoration: none;">documentation</a> or reply to this email.
+                  Questions? We're here to help! Check out our <a href="https://allin1url.in/doc" style="color: #9333ea; text-decoration: none;">documentation</a> or reply to this email.
               </p>
           </div>
           <div class="footer">
               <p><strong>Happy Linking! 🎯</strong></p>
               <p>The All in1 url Team</p>
               <div class="social-links">
-                  <a href="https://allin1url.in/app/doc">Documentation</a> | 
-                  <a href="https://allin1url.in/app/home">Dashboard</a>
+                  <a href="https://allin1url.in/doc">Documentation</a> | 
+                  <a href="https://allin1url.in/home">Dashboard</a>
               </div>
               <p style="margin-top: 20px; font-size: 12px;">
                   &copy; ${new Date().getFullYear()} All in1 url. All rights reserved.
@@ -502,14 +502,14 @@ const Notification_Email_Template=`<!DOCTYPE html>
                             </div>
 
 
-                            <a href="https://linkbriger.com/analytics" class="button">View Analytics</a>
+                            <a href="https://allin1url.in/analytics" class="button">View Analytics</a>
 
                             <p style="font-size:14px;color:#555;margin-top:20px;">This is an automatic notification from <b>LinkBriger</b>.</p>
                         </td>
                     </tr>
                     <tr>
                         <td bgcolor="#f4f4f4" align="center" style="padding:15px;color:#999;font-size:12px;">
-                            © 2025 LinkBriger. All rights reserved.
+                            © 2025 All in1 url. All rights reserved.
                         </td>
                     </tr>
                 </table>
@@ -663,7 +663,7 @@ const Onboarding_Email_Template = `
                   <div class="user-info-item">
                       <span class="user-info-label">Profile Link:</span>
                       <span class="user-info-value">
-                          <a href="https://allin1url.in/{username}" target="_blank">https://allin1url.in/{username}</a>
+                          <a href="https://{username}.${process.env.DOMAIN}/" target="_blank">https://{username}.${process.env.DOMAIN}/</a>
                       </span>
                   </div>
                   <div class="user-info-item">
@@ -975,7 +975,7 @@ const Profile_Visit_Email_Template = `
 
               <div class="profile-link-box">
                   <p>Your profile link:</p>
-                  <code>https://allin1url.in/{{username}}</code>
+                  <code>https://{{username}}.allin1url.in/</code>
               </div>
 
               <div class="stats-box">
@@ -986,7 +986,7 @@ const Profile_Visit_Email_Template = `
               </div>
 
               <div class="cta-section">
-                  <a href="https://allin1url.in/app/analytics" class="cta-button">View Full Analytics →</a>
+                  <a href="https://allin1url.in/analytics" class="cta-button">View Full Analytics →</a>
               </div>
 
               <p style="color: #4b5563; line-height: 1.8; margin-top: 30px; text-align: center; font-size: 14px;">
@@ -996,8 +996,8 @@ const Profile_Visit_Email_Template = `
           <div class="footer">
               <p><strong>All in1 url Notification</strong></p>
               <p style="margin-top: 15px;">
-                  <a href="https://allin1url.in/app/settings">Manage Notification Settings</a> | 
-                  <a href="https://allin1url.in/app/analytics">View Analytics</a>
+                  <a href="https://allin1url.in/settings">Manage Notification Settings</a> | 
+                  <a href="https://allin1url.in/analytics">View Analytics</a>
               </p>
               <p style="margin-top: 20px; font-size: 12px;">
                   &copy; ${new Date().getFullYear()} All in1 url. All rights reserved.

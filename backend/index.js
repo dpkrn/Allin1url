@@ -65,7 +65,7 @@ app.locals.getFaviconScript = getFaviconScript;
 const allowedOrigins = [
   'https://allin1url.in',
   'https://www.allin1url.in',
-  'https://linkbriger.vercel.app', 
+  'https://*.allin1url.in', 
   'http://localhost:5173',
   'http://localhost:8080'
 ];
@@ -138,7 +138,7 @@ app.use(helmet.contentSecurityPolicy({
     styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],  // Allow Google Fonts stylesheets
     fontSrc: ["'self'", "https://fonts.gstatic.com"],  // Allow Google Fonts actual font files
     connectSrc: ["'self'", "https://allin1url.in", "https://api.allin1url.in", "http://localhost:8080"],
-    frameAncestors: ["'self'", "http://localhost:5173", "https://allin1url.in", "https://linkbriger.vercel.app"],  // Allow iframes from these origins
+    frameAncestors: ["'self'", "http://localhost:5173", "https://allin1url.in", "https://*.allin1url.in"],  // Allow iframes from these origins
     // Add more directives as needed
   }
 }));
@@ -469,7 +469,7 @@ app.get('/:username/:source', extractInfo, async (req, res) => {
 app.get('/:username', extractInfo, verifyTokenOptional, async (req, res) => {
   // Allow iframe embedding for preview (allow from frontend origins)
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  const frontendOrigins = "http://localhost:5173 https://allin1url.in https://linkbriger.vercel.app 'self'";
+  const frontendOrigins = "http://localhost:5173 https://allin1url.in https://*.allin1url.in 'self'";
   res.setHeader('Content-Security-Policy', `frame-ancestors ${frontendOrigins}`);
   
   console.log("backend profile search start")
