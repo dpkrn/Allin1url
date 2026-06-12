@@ -10,13 +10,13 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Latest-brightgreen.svg)](https://www.mongodb.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-success.svg)](https://github.com/DpkRn/All in1 url)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Yes-success.svg)](https://github.com/DpkRn/Allin1url)
 
 **Transform your social media presence with memorable, personalized links that never expire**
 
-[🚀 Live Demo](https://allin1url.in) • [📖 Documentation](./frontend/src/components/Documentation.jsx) • [🐛 Report Bug](https://github.com/DpkRn/All in1 url/issues) • [💡 Request Feature](https://github.com/DpkRn/All in1 url/issues) • [💬 Discuss](https://github.com/DpkRn/All in1 url/discussions)
+[🚀 Live Demo](https://allin1url.in) • [📖 Documentation](./frontend/src/components/Documentation.jsx) • [🐛 Report Bug](https://github.com/DpkRn/Allin1url/issues) • [💡 Request Feature](https://github.com/DpkRn/Allin1url/issues) • [💬 Discuss](https://github.com/DpkRn/Allin1url/discussions)
 
-![All in1 url Banner](https://via.placeholder.com/1200x400/4F46E5/FFFFFF?text=All in1 url+-+Your+Personalized+Link+Manager)
+![All in1 url Banner](https://via.placeholder.com/1200x400/4F46E5/FFFFFF?text=Allin1url+-+Your+Personalized+Link+Manager)
 
 </div>
 
@@ -41,7 +41,7 @@
 
 ## 🎯 About The Project
 
-**All in1 url** is a revolutionary, open-source social profile link management platform that gives every user their **own free personalized subdomain** — `yourname.allin1url.in` — to manage all their social links from one place. Unlike traditional link shorteners that generate random, forgettable codes, All in1 url uses your username and platform name to create links that are both human-readable and professional (e.g., `yourname.allin1url.in/linkedin`).
+**All in1 url** is a revolutionary, open-source social profile link management platform that gives every user their own free personalized subdomain — **yourname.allin1url.in** — to manage all their social links from one place. Unlike traditional link shorteners that generate random, forgettable codes, All in1 url uses your username and platform name to create links that are both human-readable and professional **(e.g., yourname.allin1url.in/linkedin)**.
 
 ### 🎨 The Vision
 
