@@ -32,9 +32,10 @@ const unhashData = (hashedData) => {
 
 const clientUrl=(tier)=>{
   if(tier==='dev'){
-    return "http://localhost:5173/"
+    return "http://localhost:5173"
   }
-  return `https://${process.env.DOMAIN}/`||"https://allin1url.in/"
+  const domain = process.env.DOMAIN || "allin1url.in";
+  return `https://${domain}`
 }
 
 const tier=process.env.TIER || 'prod';
@@ -51,7 +52,8 @@ const serverUrl=(tier)=>{
   if(tier==='dev'){
       return "http://localhost:8080"
   }
-  return `https://api.${process.env.DOMAIN}`||"https://api.allin1url.in"
+  const domain = process.env.DOMAIN || "allin1url.in";
+  return `https://api.${domain}`
 }
 
 const getUserLinkUrl = (username, source = null) => {

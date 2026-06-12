@@ -4,5 +4,4 @@ Disallow: /nogooglebot/
 User-agent: *
 Allow: /
 
-# Sitemap (app is under /app/)
-Sitemap: https://allin1url.in/app/sitemap.xml
+Sitemap: https://allin1url.in/sitemap.xml

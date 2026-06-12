@@ -16,7 +16,7 @@ services:
     expose:
       - "80"
     environment:
-      - VITE_API_URL=https://allin1url.in
+      - VITE_API_URL=https://api.allin1url.in
     depends_on:
       - backend
 

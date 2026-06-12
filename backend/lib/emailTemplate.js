@@ -353,7 +353,7 @@ const Welcome_Email_Template = `
               </div>
 
               <div class="cta-section">
-                  <a href="https://allin1url.in/app/home" class="cta-button">Start Building Your Links →</a>
+                  <a href="https://allin1url.in/home" class="cta-button">Start Building Your Links →</a>
               </div>
 
               <div class="link-preview">

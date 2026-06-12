@@ -24,6 +24,8 @@ const { extractInfo } = require('./middleware/deviceInfo')
 const { sendVisitEmail, sendProfileVisitEmail } = require('./lib/mail')
 const { verifyTokenOptional } = require('./middleware/verifyToken')
 const resolveUsername = require('./middleware/resolveUsername')
+const requireApiSubdomain = require('./middleware/requireApiSubdomain')
+const requireLinkHubSubdomain = require('./middleware/requireLinkHubSubdomain')
 const { getUserLinkUrl, getTemplateScripts, getFaviconScript } = require('./utils')
 const bcryptjs = require('bcryptjs')
 const { time } = require('console')
@@ -65,7 +67,6 @@ app.locals.getFaviconScript = getFaviconScript;
 const allowedOrigins = [
   'https://allin1url.in',
   'https://www.allin1url.in',
-  'https://*.allin1url.in', 
   'http://localhost:5173',
   'http://localhost:8080'
 ];
@@ -143,24 +144,17 @@ app.use(helmet.contentSecurityPolicy({
   }
 }));
 
-// API routes — mount once at startup before catch-all profile routes
-app.use('/auth', authRoute);
-app.use('/source', linkRoute);
-app.use('/profile', profileRoute);
-app.use('/settings', settingsRoute);
-app.use('/search', searchRoute);
-app.use('/analytics', analyticsRoute);
-app.use('/project', projectRoute);
+// API routes — only on api.allin1url.in in production (before link-hub catch-alls)
+app.use('/auth', requireApiSubdomain, authRoute);
+app.use('/source', requireApiSubdomain, linkRoute);
+app.use('/profile', requireApiSubdomain, profileRoute);
+app.use('/settings', requireApiSubdomain, settingsRoute);
+app.use('/search', requireApiSubdomain, searchRoute);
+app.use('/analytics', requireApiSubdomain, analyticsRoute);
+app.use('/project', requireApiSubdomain, projectRoute);
 
 // Root route - user subdomain link hub (e.g. dpkrn.allin1url.in/)
-app.get('/', resolveUsername, extractInfo, async (req, res) => {
-  if (req.isApiSubdomain) {
-    return res.status(404).json({ success: false, message: 'Not found' });
-  }
-  if (req.isMainDomain || !req.params.username) {
-    return res.redirect(307, `${clientUrl(process.env.TIER)}/`);
-  }
-
+app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, res) => {
   const username = req.params.username;
 
   // Use the same logic as /:username route
@@ -329,14 +323,7 @@ app.post('/link/verify-password', extractInfo, async (req, res) => {
 // Subdomain route handler: dpkrn.allin1url.in/github
 // This route handles subdomain-based source access
 // Note: API routes (defined with app.use above) will match first, so this won't interfere
-app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
-  if (req.isApiSubdomain) {
-    return res.status(404).json({ success: false, message: 'Not found' });
-  }
-  if (req.isMainDomain || !req.params.username) {
-    return res.redirect(307, `${clientUrl(process.env.TIER)}/`);
-  }
-
+app.get('/:source', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, res) => {
   const username = req.params.username;
   const source = req.params.source;
   // Generate linkHub in subdomain format for subdomain requests
@@ -404,8 +391,15 @@ app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
   return res.redirect(307, destination);
 });
 
-// Main domain route handler: allin1url.in/username/source
-app.get('/:username/:source', extractInfo, async (req, res) => {
+// Legacy path handler (dev localhost): localhost:8080/username/source
+app.get('/:username/:source', resolveUsername, extractInfo, async (req, res) => {
+  if (req.isApiSubdomain) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+  if (!req.isMainDomain) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+
   const {username,source}=req.params;
   const linkHub=`Available link: ${req.protocol}://${req.get('host')}/${username}`
 
@@ -466,13 +460,19 @@ app.get('/:username/:source', extractInfo, async (req, res) => {
   return res.redirect(307,destination)
 })
 
-app.get('/:username', extractInfo, verifyTokenOptional, async (req, res) => {
+app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (req, res) => {
+  if (req.isApiSubdomain) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+  if (!req.isMainDomain) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+
   // Allow iframe embedding for preview (allow from frontend origins)
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  const frontendOrigins = "http://localhost:5173 https://allin1url.in https://*.allin1url.in 'self'";
+  const frontendOrigins = "http://localhost:5173 https://allin1url.in https://www.allin1url.in 'self'";
   res.setHeader('Content-Security-Policy', `frame-ancestors ${frontendOrigins}`);
-  
-  console.log("backend profile search start")
+
   const username=req.params.username
   // Only show public links in linkhub - unlisted and private links should not appear
   const tree=await Link.find({

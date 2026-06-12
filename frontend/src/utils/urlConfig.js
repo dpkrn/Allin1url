@@ -50,7 +50,7 @@ export const clientUrl=(tierOverride)=>{
     if(currentTier=='dev'){
       return "http://localhost:5173"
     }
-    return "https://allin1url.in/"
+    return "https://allin1url.in"
   }
 
 // Utility function to check if we're in development

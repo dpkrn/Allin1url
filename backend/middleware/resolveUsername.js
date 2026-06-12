@@ -1,34 +1,45 @@
 const resolveUsername = async (req, res, next) => {
-  const host = req.get('host');
-  if (!host) {
+  const hostHeader = req.get('host');
+  if (!hostHeader) {
     return res.status(400).json({ success: false, message: "Invalid host" });
   }
 
-  // Extract subdomain (first part before the first dot)
-  const hostParts = host.split('.');
-  const subdomain = hostParts[0].toLowerCase();
+  const hostname = hostHeader.split(':')[0].toLowerCase();
+  const hostParts = hostname.split('.');
+  const subdomain = hostParts[0];
 
-  // API subdomain hosts REST endpoints (api.allin1url.in/auth/...)
+  req.isApiSubdomain = false;
+  req.isMainDomain = false;
+  req.params.username = null;
+
+  // DNS: *.allin1url.in → backend. api.* = REST API only; other labels = link hub username.
   if (subdomain === 'api') {
     req.isApiSubdomain = true;
-    req.isMainDomain = false;
-    req.params.username = null;
     return next();
   }
 
-  // Handle main domain cases - redirect to frontend
-  if (subdomain === 'allin1url' || subdomain === 'www' || subdomain === '') {
+  // Fallback if apex/www ever hit backend (they should be A → frontend only)
+  if (
+    subdomain === 'allin1url' ||
+    subdomain === 'www' ||
+    hostname === 'allin1url.in' ||
+    hostname === 'www.allin1url.in'
+  ) {
     req.isMainDomain = true;
-    req.isApiSubdomain = false;
-    req.params.username = null;
     return next();
   }
 
-  // User subdomain - extract username
-  req.isMainDomain = false;
-  req.isApiSubdomain = false;
+  // Dev: plain localhost uses path-based /:username routes, not subdomain
+  if (
+    process.env.TIER === 'dev' &&
+    (hostname === 'localhost' || hostname === '127.0.0.1')
+  ) {
+    req.isMainDomain = true;
+    return next();
+  }
+
+  // User link hub subdomain (e.g. dpkrn.allin1url.in)
   req.params.username = subdomain;
-  console.log("Extracted username from subdomain:", subdomain);
   return next();
 };
 
