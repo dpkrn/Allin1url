@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { sendOtpVerification, sendWelcomeEmail, sendNewUserOnboardingEmail } = require("../lib/mail");
 const Profile=require('../model/userProfile')
 const Otp = require("../model/otpModel");
-const { clientUrl, isDevEnvironment, trimEnv, getOAuthRedirectUri } = require("../utils");
+const { clientUrl, isDevEnvironment, trimEnv, getGoogleOAuthRedirectUri } = require("../utils");
 const connectDB = require("../lib/db");
 
 const getAuthCookieOptions = () => {
@@ -277,14 +277,18 @@ const googleOAuthCheck = (req, res) => {
   const googleClientId = trimEnv(process.env.GOOGLE_CLIENT_ID) || "";
   const googleClientSecret = trimEnv(process.env.GOOGLE_CLIENT_SECRET) || "";
 
+  const redirectUri = getGoogleOAuthRedirectUri();
+
   return res.json({
     success: true,
     tier: process.env.TIER || "not set",
-    redirectUri: getOAuthRedirectUri(req),
+    redirectUri,
     clientIdConfigured: Boolean(googleClientId),
     secretConfigured: Boolean(googleClientSecret),
-    // Safe to expose — same value is already in the frontend bundle
+    secretPrefix: googleClientSecret ? `${googleClientSecret.slice(0, 10)}...` : null,
     clientId: googleClientId || null,
+    hint:
+      "redirectUri must exactly match an Authorized redirect URI in Google Cloud Console",
   });
 };
 
@@ -311,7 +315,8 @@ const handleAuthCallback=async (req, res) => {
       throw new Error("Google OAuth credentials are not configured");
     }
 
-    const redirectUri = getOAuthRedirectUri(req);
+    const oauthState = parseOAuthState(state);
+    const redirectUri = oauthState.redirectUri || getGoogleOAuthRedirectUri();
 
     console.log("Google OAuth callback:", {
       tier: process.env.TIER,
@@ -343,10 +348,16 @@ const handleAuthCallback=async (req, res) => {
         status: tokenRes.status,
         response: tokens,
       });
-      const tokenError =
+      let tokenError =
         tokens.error_description ||
         tokens.error ||
         "Failed to get ID token";
+
+      if (tokens.error === "unauthorized_client") {
+        tokenError =
+          "Google OAuth client misconfigured. Use a Web application client (not Desktop/Android), regenerate the client secret, and add https://api.allin1url.in/auth/google as an authorized redirect URI.";
+      }
+
       return res.redirect(`${frontendBase}/?error=${encodeURIComponent(tokenError)}`);
     }
 
@@ -363,7 +374,7 @@ const handleAuthCallback=async (req, res) => {
       return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Invalid audience")}`);
     }
 
-    const { username, usertype = "onboarded" } = parseOAuthState(state);
+    const { username, usertype = "onboarded" } = oauthState;
     const email = (payload.email || "").toLowerCase().trim();
     const picture = payload.picture;
 

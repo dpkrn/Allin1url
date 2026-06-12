@@ -69,14 +69,19 @@ export const buildGoogleOAuthUrl = (stateData) => {
     throw new Error('Google sign-in is not configured');
   }
 
+  const redirectUri = `${serverUrl()}/auth/google`;
+
   const params = new URLSearchParams({
     client_id: clientId,
-    redirect_uri: `${serverUrl()}/auth/google`,
+    redirect_uri: redirectUri,
     response_type: 'code',
     scope: 'openid email profile',
     access_type: 'offline',
     prompt: 'select_account',
-    state: encodeOAuthState(stateData),
+    state: encodeOAuthState({
+      ...stateData,
+      redirectUri,
+    }),
   });
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;

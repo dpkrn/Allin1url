@@ -64,17 +64,12 @@ const serverUrl = (tier) => {
   return `https://api.${appDomain}`;
 };
 
-/** Must match the redirect_uri used when sending the user to Google */
-const getOAuthRedirectUri = (req) => {
+/** OAuth redirect — must match Google Console Authorized redirect URIs exactly */
+const getGoogleOAuthRedirectUri = () => {
   if (isDevEnvironment()) {
     return `${serverUrl('dev')}/auth/google`;
   }
-
-  const protocol = (req.get('x-forwarded-proto') || req.protocol || 'https')
-    .split(',')[0]
-    .trim();
-  const host = req.get('host');
-  return `${protocol}://${host}/auth/google`;
+  return `${serverUrl('prod')}/auth/google`;
 };
 
 const getUserLinkUrl = (username, source = null) => {
@@ -248,5 +243,5 @@ module.exports = {
   domain,
   isDevEnvironment,
   trimEnv,
-  getOAuthRedirectUri,
+  getGoogleOAuthRedirectUri,
 };
