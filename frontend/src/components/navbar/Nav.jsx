@@ -316,7 +316,7 @@ const Nav = () => {
                     src={logo}
                     alt="All in1 url Logo"
                     onError={(e) => {
-                      e.target.src = 'https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500';
+                      e.target.src = '/favicon-96x96.png';
                     }}
                   />
                 </motion.div>
