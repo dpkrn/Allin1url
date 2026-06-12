@@ -7,6 +7,7 @@ import { TypewriterEffect } from '../../../ui/typewriter-effect';
 import { FlipWords } from '../../../ui/flip-words';
 import { FaArrowRight } from 'react-icons/fa';
 import api from '../../../../utils/api';
+import { serverUrl } from '../../../../utils/urlConfig';
 
 const HeroSection = ({
   words = [],
@@ -44,7 +45,7 @@ const HeroSection = ({
     }
     const params = new URLSearchParams({
       client_id: import.meta.env?.VITE_GOOGLE_CLIENT_ID,
-      redirect_uri: "https://allin1url.in/auth/google",
+      redirect_uri: `${serverUrl()}/auth/google`,
       response_type: "code",
       scope: "openid email profile",
       access_type: "offline",

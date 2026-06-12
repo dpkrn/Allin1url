@@ -7,10 +7,13 @@ const dotenv = require('dotenv')
 const helmet = require('helmet'); 
 const cloudinary = require('cloudinary')
 const crypto = require('crypto')
-  const { domain } = require('./utils')
+  const { domain, clientUrl } = require('./utils')
 const authRoute=require('./routes/AuthRoute')
 const linkRoute=require('./routes/LinkRoute')
 const analyticsRoute=require('./routes/AnalyticsRoute')
+const settingsRoute=require('./routes/SettingsRoute')
+const searchRoute=require('./routes/SearchRoute')
+const projectRoute=require('./routes/ProjectRoute')
 
 const Link = require('./model/linkModel')
 const Profile=require('./model/userProfile')
@@ -134,26 +137,32 @@ app.use(helmet.contentSecurityPolicy({
     imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],  // Add your image host if needed
     styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],  // Allow Google Fonts stylesheets
     fontSrc: ["'self'", "https://fonts.gstatic.com"],  // Allow Google Fonts actual font files
-    connectSrc: ["'self'", "https://allin1url.in","https://allin1url.in/*", "http://localhost:8080"],  // Add your API backend here
+    connectSrc: ["'self'", "https://allin1url.in", "https://api.allin1url.in", "http://localhost:8080"],
     frameAncestors: ["'self'", "http://localhost:5173", "https://allin1url.in", "https://linkbriger.vercel.app"],  // Allow iframes from these origins
     // Add more directives as needed
   }
 }));
 
+// API routes — mount once at startup before catch-all profile routes
+app.use('/auth', authRoute);
+app.use('/source', linkRoute);
+app.use('/profile', profileRoute);
+app.use('/settings', settingsRoute);
+app.use('/search', searchRoute);
+app.use('/analytics', analyticsRoute);
+app.use('/project', projectRoute);
 
-
-// Root route - handle main domain redirect and subdomain routing
+// Root route - user subdomain link hub (e.g. dpkrn.allin1url.in/)
 app.get('/', resolveUsername, extractInfo, async (req, res) => {
-
-  // If it's the main domain (allin1url.in or www.allin1url.in), redirect to frontend
+  if (req.isApiSubdomain) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
   if (req.isMainDomain || !req.params.username) {
-    console.log("Main domain detected, redirecting to frontend");
-    return res.redirect(307, "https://allin1url.in/app/");
+    return res.redirect(307, `${clientUrl(process.env.TIER)}/`);
   }
 
-  // If it's a subdomain, treat it as username route (show linkhub)
   const username = req.params.username;
-  
+
   // Use the same logic as /:username route
   const tree = await Link.find({
     username: username,
@@ -251,13 +260,7 @@ app.get('/', resolveUsername, extractInfo, async (req, res) => {
   return res.render('not_exists', { linkHub: '' });
 });
 
-app.use('/auth',authRoute)
-app.use('/source',linkRoute)
-app.use('/profile',profileRoute)
-app.use('/settings',require('./routes/SettingsRoute'))
-app.use('/search',require('./routes/SearchRoute'))
-app.use('/analytics',analyticsRoute)
-app.use('/project',require('./routes/ProjectRoute'))
+
 
 // Helper function to encode username and source (base64)
 const encodeData = (data) => {
@@ -327,13 +330,12 @@ app.post('/link/verify-password', extractInfo, async (req, res) => {
 // This route handles subdomain-based source access
 // Note: API routes (defined with app.use above) will match first, so this won't interfere
 app.get('/:source', resolveUsername, extractInfo, async (req, res) => {
-  // Only process if username was extracted from subdomain (not main domain)
-  
-  // if (req.isMainDomain || !req.params.username) {
-  //   // This is main domain, let it fall through to other routes
-  //   return res.redirect(307, "https://allin1url.in/app/");
-  // }
-
+  if (req.isApiSubdomain) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+  if (req.isMainDomain || !req.params.username) {
+    return res.redirect(307, `${clientUrl(process.env.TIER)}/`);
+  }
 
   const username = req.params.username;
   const source = req.params.source;

@@ -42,7 +42,7 @@ export const serverUrl=(tierOverride)=>{
     if(currentTier=='dev'){
         return "http://localhost:8080"
     }
-    return "https://allin1url.in"
+    return "https://api.allin1url.in"
 }
 
 export const clientUrl=(tierOverride)=>{
