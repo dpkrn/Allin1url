@@ -25,9 +25,9 @@
 ## 📋 Table of Contents
 
 - [About The Project](#-about-the-project)
-- [Why All in1 url?](#-why-All in1 url)
+- [Why All in1 url?](#-why-Allin1url)
 - [Key Benefits](#-key-benefits)
-- [All in1 url vs. Competitors](#-All in1 url-vs-competitors)
+- [All in1 url vs. Competitors](#-Allin1url-vs-competitors)
 - [Live Examples](#-live-examples)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -815,8 +815,8 @@ Visit this link to see a beautiful landing page with all social profiles!
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/DpkRn/All in1 url.git
-cd All in1 url
+git clone https://github.com/DpkRn/Allin1url.git
+cd Allin1url
 ```
 
 #### 2. Install Dependencies
@@ -840,9 +840,9 @@ Create a `.env` file in the `backend/` directory:
 JWT_KEY=your_super_secret_jwt_key_here_min_32_chars
 
 # MongoDB Connection String
-DB_URL=mongodb://localhost:27017/All in1 url
+DB_URL=mongodb://localhost:27017/Allin1url
 # Or use MongoDB Atlas:
-# DB_URL=mongodb+srv://username:password@cluster.mongodb.net/All in1 url
+# DB_URL=mongodb+srv://username:password@cluster.mongodb.net/Allin1url
 
 # Email Configuration (for notifications)
 EMAIL_USER=your_email@gmail.com
@@ -1039,7 +1039,7 @@ We **love** contributions! All in1 url is an open-source project, and we welcome
 
 ```bash
 # Click the "Fork" button on GitHub, or use:
-gh repo fork DpkRn/All in1 url
+gh repo fork DpkRn/Allin1url
 ```
 
 #### 2. Create a Feature Branch
@@ -1088,7 +1088,7 @@ git push origin feature/amazing-feature
 
 #### 7. Open a Pull Request
 
-- Go to the [GitHub repository](https://github.com/DpkRn/All in1 url)
+- Go to the [GitHub repository](https://github.com/DpkRn/Allin1url)
 - Click "New Pull Request"
 - Select your branch
 - Describe your changes clearly
@@ -1286,7 +1286,7 @@ To everyone who:
 
 **Made with ❤️ by [Dwizard](https://github.com/DpkRn)**
 
-[⬆ Back to Top](#-All in1 url)
+[⬆ Back to Top](#-Allin1url)
 
 ---
 
