@@ -248,11 +248,12 @@ const changePassword = async (req, res, next) => {
 
 const handleAuthCallback=async (req, res) => {
   try {
-    
+    console.log("handleAuthCallback",req)
     const { code, state } = req.query;
     // console.log("code and status=",code,state)
 
     if (!code) {
+      console.log("Authorization code missing")
       return res.redirect(`${clientUrl(process.env.TIER)}/?error=Authorization code missing`);
     }
 
@@ -274,6 +275,7 @@ const handleAuthCallback=async (req, res) => {
     const tokens = await tokenRes.json();
 
     if (!tokens.id_token) {
+      console.log("Failed to get ID token")
       return res.redirect(`${clientUrl(process.env.TIER)}/?error=Failed to get ID token`);
     }
 
@@ -290,6 +292,7 @@ const handleAuthCallback=async (req, res) => {
     // ✅ Verify audience
  
     if (payload.aud !== process.env.GOOGLE_CLIENT_ID) {
+      console.log("Invalid audience")
       return res.redirect(`${clientUrl(process.env.TIER)}/?error=Invalid audience`);
     }
 
@@ -332,6 +335,7 @@ const handleAuthCallback=async (req, res) => {
     }
     
     if (!user) {
+      console.log("Authentication failed")
       // Fallback: if user still doesn't exist for any reason, redirect with error
       return res.redirect(`${clientUrl(process.env.TIER)}/?error=Authentication failed`);
     }
