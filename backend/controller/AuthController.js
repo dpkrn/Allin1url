@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { sendOtpVerification, sendWelcomeEmail, sendNewUserOnboardingEmail } = require("../lib/mail");
 const Profile=require('../model/userProfile')
 const Otp = require("../model/otpModel");
-const { clientUrl, serverUrl } = require("../utils");
+const { clientUrl, isDevEnvironment, trimEnv, getOAuthRedirectUri } = require("../utils");
 const connectDB = require("../lib/db");
 
 const getAuthCookieOptions = () => {
@@ -15,7 +15,7 @@ const getAuthCookieOptions = () => {
     httpOnly: true,
   };
 
-  if (process.env.TIER !== "dev") {
+  if (!isDevEnvironment()) {
     const domain = process.env.DOMAIN || "allin1url.in";
     options.domain = `.${domain}`;
   }
@@ -273,8 +273,23 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const googleOAuthCheck = (req, res) => {
+  const googleClientId = trimEnv(process.env.GOOGLE_CLIENT_ID) || "";
+  const googleClientSecret = trimEnv(process.env.GOOGLE_CLIENT_SECRET) || "";
+
+  return res.json({
+    success: true,
+    tier: process.env.TIER || "not set",
+    redirectUri: getOAuthRedirectUri(req),
+    clientIdConfigured: Boolean(googleClientId),
+    secretConfigured: Boolean(googleClientSecret),
+    // Safe to expose — same value is already in the frontend bundle
+    clientId: googleClientId || null,
+  });
+};
+
 const handleAuthCallback=async (req, res) => {
-  const frontendBase = clientUrl(process.env.TIER);
+  const frontendBase = clientUrl(isDevEnvironment() ? "dev" : "prod");
 
   try {
     await connectDB();
@@ -289,7 +304,22 @@ const handleAuthCallback=async (req, res) => {
       throw new Error("JWT_KEY is not configured");
     }
 
-    const redirectUri = `${serverUrl(process.env.TIER)}/auth/google`;
+    const googleClientId = trimEnv(process.env.GOOGLE_CLIENT_ID);
+    const googleClientSecret = trimEnv(process.env.GOOGLE_CLIENT_SECRET);
+
+    if (!googleClientId || !googleClientSecret) {
+      throw new Error("Google OAuth credentials are not configured");
+    }
+
+    const redirectUri = getOAuthRedirectUri(req);
+
+    console.log("Google OAuth callback:", {
+      tier: process.env.TIER,
+      vercel: process.env.VERCEL,
+      redirectUri,
+      host: req.get("host"),
+      clientId: googleClientId,
+    });
 
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
@@ -298,8 +328,8 @@ const handleAuthCallback=async (req, res) => {
       },
       body: new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        client_id: googleClientId,
+        client_secret: googleClientSecret,
         redirect_uri: redirectUri,
         grant_type: "authorization_code",
       }),
@@ -308,8 +338,15 @@ const handleAuthCallback=async (req, res) => {
     const tokens = await tokenRes.json();
 
     if (!tokens.id_token) {
-      console.error("Google token exchange failed:", tokens);
-      const tokenError = tokens.error_description || tokens.error || "Failed to get ID token";
+      console.error("Google token exchange failed:", {
+        redirectUri,
+        status: tokenRes.status,
+        response: tokens,
+      });
+      const tokenError =
+        tokens.error_description ||
+        tokens.error ||
+        "Failed to get ID token";
       return res.redirect(`${frontendBase}/?error=${encodeURIComponent(tokenError)}`);
     }
 
@@ -322,7 +359,7 @@ const handleAuthCallback=async (req, res) => {
       Buffer.from(tokenParts[1], "base64").toString("utf8")
     );
 
-    if (payload.aud !== process.env.GOOGLE_CLIENT_ID) {
+    if (payload.aud !== googleClientId) {
       return res.redirect(`${frontendBase}/?error=${encodeURIComponent("Invalid audience")}`);
     }
 
@@ -386,5 +423,6 @@ module.exports = {
   checkAvailablity,
   sendOtp,
   changePassword,
-  handleAuthCallback
+  handleAuthCallback,
+  googleOAuthCheck,
 };

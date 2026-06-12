@@ -30,38 +30,59 @@ const unhashData = (hashedData) => {
   }
 };
 
-const clientUrl=(tier)=>{
-  if(tier==='dev'){
-    return "http://localhost:5173"
+const isDevEnvironment = () => {
+  return process.env.TIER === 'dev' && process.env.VERCEL !== '1';
+};
+
+const trimEnv = (value) => {
+  if (value == null || value === '') return value;
+  return String(value).trim().replace(/^['"]|['"]$/g, '');
+};
+
+const clientUrl = (tier) => {
+  if (tier === 'dev' && isDevEnvironment()) {
+    return "http://localhost:5173";
   }
   const domain = process.env.DOMAIN || "allin1url.in";
-  return `https://${domain}`
-}
+  return `https://${domain}`;
+};
 
-const tier=process.env.TIER || 'prod';
+const tier = isDevEnvironment() ? 'dev' : 'prod';
 
-const domain=(tier)=>{
-  if(tier==='dev'){
-    return "localhost:8080"
+const domain = (tier) => {
+  if (tier === 'dev' && isDevEnvironment()) {
+    return "localhost:8080";
   }
-  return "allin1url.in"
-}
+  return process.env.DOMAIN || "allin1url.in";
+};
 
-
-const serverUrl=(tier)=>{
-  if(tier==='dev'){
-      return "http://localhost:8080"
+const serverUrl = (tier) => {
+  if (tier === 'dev' && isDevEnvironment()) {
+    return "http://localhost:8080";
   }
-  const domain = process.env.DOMAIN || "allin1url.in";
-  return `https://api.${domain}`
-}
+  const appDomain = process.env.DOMAIN || "allin1url.in";
+  return `https://api.${appDomain}`;
+};
+
+/** Must match the redirect_uri used when sending the user to Google */
+const getOAuthRedirectUri = (req) => {
+  if (isDevEnvironment()) {
+    return `${serverUrl('dev')}/auth/google`;
+  }
+
+  const protocol = (req.get('x-forwarded-proto') || req.protocol || 'https')
+    .split(',')[0]
+    .trim();
+  const host = req.get('host');
+  return `${protocol}://${host}/auth/google`;
+};
 
 const getUserLinkUrl = (username, source = null) => {
   if (!username) return '';
 
   // Check if we're explicitly in development mode
   // Default to production if not explicitly dev (safer for production)
-  const isDev = process.env.TIER === 'dev';
+  const isDev = isDevEnvironment();
 
   if (isDev) {
     // Development: Use localhost subdomain format
@@ -216,4 +237,16 @@ const getFaviconScript = () => {
             });`;
 };
 
-module.exports = { hashData, unhashData, getUserLinkUrl, clientUrl, serverUrl, getTemplateScripts, getFaviconScript,domain };
+module.exports = {
+  hashData,
+  unhashData,
+  getUserLinkUrl,
+  clientUrl,
+  serverUrl,
+  getTemplateScripts,
+  getFaviconScript,
+  domain,
+  isDevEnvironment,
+  trimEnv,
+  getOAuthRedirectUri,
+};

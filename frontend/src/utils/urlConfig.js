@@ -1,21 +1,18 @@
 
 const detectTier = () => {
-  // Check Vite environment variable first (highest priority)
-  if (import.meta.env?.VITE_TIER) {
-    return import.meta.env.VITE_TIER;
-  }
-
-  // Check if running on localhost (development)
+  // Hostname wins over env — avoids VITE_TIER=dev breaking production OAuth
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname;
     if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('localhost')) {
       return 'dev';
     }
-
-    // Check if running on production domain
     if (hostname.includes('allin1url.in')) {
       return 'prod';
     }
+  }
+
+  if (import.meta.env?.VITE_TIER) {
+    return import.meta.env.VITE_TIER;
   }
 
   // Check import.meta.env.PROD (Vite's production flag)
