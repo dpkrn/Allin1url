@@ -41,7 +41,7 @@
 
 ## 🎯 About The Project
 
-**All in1 url** is a revolutionary, open-source social profile link management platform that empowers users to create personalized, memorable URLs for all their social media profiles. Unlike traditional link shorteners that generate random, forgettable codes, All in1 url uses your username and platform name to create links that are both human-readable and professional.
+**All in1 url** is a revolutionary, open-source social profile link management platform that gives every user their **own free personalized subdomain** — `yourname.allin1url.in` — to manage all their social links from one place. Unlike traditional link shorteners that generate random, forgettable codes, All in1 url uses your username and platform name to create links that are both human-readable and professional (e.g., `yourname.allin1url.in/linkedin`).
 
 ### 🎨 The Vision
 

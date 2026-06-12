@@ -8,11 +8,28 @@ pnpm-debug.log*
 lerna-debug.log*
 /frontend/dist
 /backend/node_modules
-# /frontend/dist
-/backend/.env
-/frontend/.env
 dist-ssr
 *.local
+
+# Environment & secrets (never commit)
+.env
+.env.*
+**/.env
+**/.env.*
+**/.env.local
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# Markdown docs (keep local; not pushed to GitHub)
+*.md
+!README.md
+
+# Postman collections & environments (local API testing)
+*.postman_collection.json
+*.postman_environment.json
+*postman*.json
 
 # Editor directories and files
 .vscode/*
