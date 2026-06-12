@@ -32,9 +32,9 @@ const unhashData = (hashedData) => {
 
 const clientUrl=(tier)=>{
   if(tier==='dev'){
-    return "http://localhost:5173/app"
+    return "http://localhost:5173/"
   }
-  return "https://allin1url.in/app"
+  return "https://allin1url.in/"
 }
 
 const tier=process.env.TIER || 'prod';
