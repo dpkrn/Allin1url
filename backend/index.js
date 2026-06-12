@@ -144,6 +144,17 @@ app.use(helmet.contentSecurityPolicy({
   }
 }));
 
+// Vercel serverless: mongoose uses bufferCommands=false, so every request must await connect
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('Database connection error:', err);
+    return res.status(503).json({ success: false, message: 'Database unavailable' });
+  }
+});
+
 // API routes — only on api.allin1url.in in production (before link-hub catch-alls)
 app.use('/auth', requireApiSubdomain, authRoute);
 app.use('/source', requireApiSubdomain, linkRoute);
