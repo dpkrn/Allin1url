@@ -1,7 +1,7 @@
 
 const UAParser = require('ua-parser-js');
 const geoip = require('geoip-lite');
-
+//enhance this
 const extractInfo = (req, res, next) => {
 
     const host = req.get('host') || '';
