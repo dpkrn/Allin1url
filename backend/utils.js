@@ -34,7 +34,7 @@ const clientUrl=(tier)=>{
   if(tier==='dev'){
     return "http://localhost:5173/"
   }
-  return "https://allin1url.in/"
+  return `https://${process.env.DOMAIN}/`||"https://allin1url.in/"
 }
 
 const tier=process.env.TIER || 'prod';
