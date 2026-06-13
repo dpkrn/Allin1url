@@ -1,611 +1,508 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { 
-  FaMousePointer, FaCalendarAlt, FaClock, FaMapMarkerAlt, FaDesktop, FaMobileAlt,
-  FaTabletAlt, FaGlobe, FaChrome, FaLink, FaSearch, FaTimes, FaFilter,
-  FaChevronDown, FaExternalLinkAlt, FaChartLine, FaEye, FaUsers
-} from 'react-icons/fa';
-import api from '../../utils/api';
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import {
+  FiMousePointer, FiCalendar, FiMapPin, FiMonitor, FiSmartphone,
+  FiTablet, FiGlobe, FiLink, FiSearch, FiX, FiFilter,
+  FiChevronDown, FiExternalLink, FiTrendingUp, FiEye, FiUsers,
+  FiClock, FiChevronRight, FiInfo
+} from "react-icons/fi";
+import api from "../../utils/api";
+
+const DetailRow = ({ label, value, mono }) => (
+  <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
+    <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
+    <span className={`text-xs font-medium text-slate-800 dark:text-slate-200 max-w-[60%] text-right ${mono ? "font-mono" : ""}`}>
+      {value || "—"}
+    </span>
+  </div>
+);
 
 const LinkClickDetailsV1 = () => {
   const { username } = useSelector((store) => store.admin.user);
-  const darkMode = useSelector((store) => store.page.darkMode);
+  const [searchParams] = useSearchParams();
+  const preFilterLinkId = searchParams.get("linkId");
 
   const [clicks, setClicks] = useState([]);
   const [filteredClicks, setFilteredClicks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLink, setSelectedLink] = useState('all');
-  const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLink, setSelectedLink] = useState(preFilterLinkId || "all");
+  const [showFilters, setShowFilters] = useState(!!preFilterLinkId);
   const [selectedClick, setSelectedClick] = useState(null);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  // Get unique links for filter
-  const uniqueLinks = [...new Set(clicks.map(c => c.linkId))].map(linkId => {
-    const click = clicks.find(c => c.linkId === linkId);
-    return {
-      id: linkId,
-      title: click.linkSource || 'Unknown Link',
-      shortUrl: `/${click.linkSource || 'unknown'}`
-    };
+  const uniqueLinks = [...new Set(clicks.map((c) => c.linkId))].map((linkId) => {
+    const click = clicks.find((c) => c.linkId === linkId);
+    return { id: linkId, title: click.linkSource || "Unknown Link" };
   });
 
-  // Stats
   const allClicksCount = clicks.length;
-  const uniqueVisitors = new Set(clicks.map(c => c.location?.ipAddress).filter(ip => ip)).size;
-  const topCountry = clicks.reduce((acc, click) => {
-    if (click.location?.country) {
-    acc[click.location.country] = (acc[click.location.country] || 0) + 1;
-    }
+  const uniqueVisitors = new Set(clicks.map((c) => c.location?.ipAddress).filter(Boolean)).size;
+  const topCountry = clicks.reduce((acc, c) => {
+    if (c.location?.country) acc[c.location.country] = (acc[c.location.country] || 0) + 1;
     return acc;
   }, {});
-  const topCountryName = Object.keys(topCountry).sort((a, b) => topCountry[b] - topCountry[a])[0] || 'N/A';
+  const topCountryName = Object.keys(topCountry).sort((a, b) => topCountry[b] - topCountry[a])[0] || "N/A";
 
-  // Fetch click details from API (v1 format)
   const fetchClickDetails = async () => {
     try {
       setLoading(true);
-      const response = await api.post('/analytics/click-details-v1', {
-        username: username,
-      });
-
-      if (response.data.success) {
-        const apiClicks = response.data.data;
-        setClicks(apiClicks);
-        setFilteredClicks(apiClicks);
+      const res = await api.post("/analytics/click-details-v1", { username });
+      if (res.data.success) {
+        setClicks(res.data.data);
+        setFilteredClicks(res.data.data);
+        if (preFilterLinkId) {
+          const exists = res.data.data.some((c) => c.linkId === preFilterLinkId);
+          if (exists) setSelectedLink(preFilterLinkId);
+        }
       }
-    } catch (error) {
-      console.error('Error fetching click details:', error);
+    } catch {
+      // silent
     } finally {
       setLoading(false);
     }
   };
 
-  // Mark notification as read
   const markAsRead = async (clickId) => {
     try {
-      await api.post('/analytics/mark-read', {
-        clickId: clickId,
-      });
-      // Update local state to reflect the change
-      setClicks(prevClicks =>
-        prevClicks.map(click =>
-          click._id === clickId ? { ...click, seen: true } : click
-        )
-      );
-      setFilteredClicks(prevClicks =>
-        prevClicks.map(click =>
-          click._id === clickId ? { ...click, seen: true } : click
-        )
-      );
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-    }
+      await api.post("/analytics/mark-read", { clickId });
+      const update = (prev) => prev.map((c) => c._id === clickId ? { ...c, seen: true } : c);
+      setClicks(update);
+      setFilteredClicks(update);
+    } catch { /* silent */ }
   };
 
   useEffect(() => {
-    if (username) {
-      fetchClickDetails();
-    }
-  }, [username]);
+    if (username) fetchClickDetails();
+  }, [username]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Client-side filtering and search
   useEffect(() => {
     let filtered = clicks;
-
-    if (selectedLink !== 'all') {
-      filtered = filtered.filter(c => c.linkId === selectedLink);
-    }
-
+    if (selectedLink !== "all") filtered = filtered.filter((c) => c.linkId === selectedLink);
     if (searchQuery) {
-      filtered = filtered.filter(c => 
-        c.linkSource.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.location.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.device.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.browser.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.os.name.toLowerCase().includes(searchQuery.toLowerCase())
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (c) =>
+          c.linkSource?.toLowerCase().includes(q) ||
+          c.location?.city?.toLowerCase().includes(q) ||
+          c.location?.country?.toLowerCase().includes(q) ||
+          c.device?.type?.toLowerCase().includes(q) ||
+          c.browser?.name?.toLowerCase().includes(q) ||
+          c.os?.name?.toLowerCase().includes(q)
       );
     }
-
-    // Date range filtering
     if (startDate || endDate) {
-      filtered = filtered.filter(c => {
-        const clickDate = new Date(c.clickDate);
-        const start = startDate ? new Date(startDate) : null;
-        const end = endDate ? new Date(endDate) : null;
-
-        // Set end date to end of day
-        if (end) {
+      filtered = filtered.filter((c) => {
+        const d = new Date(c.clickDate);
+        if (startDate && d < new Date(startDate)) return false;
+        if (endDate) {
+          const end = new Date(endDate);
           end.setHours(23, 59, 59, 999);
+          if (d > end) return false;
         }
-
-        if (start && clickDate < start) return false;
-        if (end && clickDate > end) return false;
-
         return true;
       });
     }
-
     setFilteredClicks(filtered);
   }, [selectedLink, searchQuery, startDate, endDate, clicks]);
 
   const getDeviceIcon = (type) => {
-    switch (type) {
-      case 'mobile': return <FaMobileAlt className="w-4 h-4" />;
-      case 'desktop': return <FaDesktop className="w-4 h-4" />;
-      case 'tablet': return <FaTabletAlt className="w-4 h-4" />;
-      default: return <FaDesktop className="w-4 h-4" />;
-    }
+    if (type === "mobile") return <FiSmartphone className="w-4 h-4" />;
+    if (type === "tablet") return <FiTablet className="w-4 h-4" />;
+    return <FiMonitor className="w-4 h-4" />;
   };
 
   const getRelativeTime = (date) => {
-    const now = new Date();
-    const dateObj = new Date(date); // Ensure it's a Date object
-    const diffMs = now - dateObj;
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
-
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
-    return dateObj.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+    const ms = Date.now() - new Date(date).getTime();
+    const m = Math.floor(ms / 60000);
+    const h = Math.floor(ms / 3600000);
+    const d = Math.floor(ms / 86400000);
+    if (m < 1) return "Just now";
+    if (m < 60) return `${m}m ago`;
+    if (h < 24) return `${h}h ago`;
+    if (d < 7) return `${d}d ago`;
+    return new Date(date).toLocaleDateString("en-IN", { month: "short", day: "numeric" });
   };
+
+  const getReferrerHost = (ref) => {
+    if (!ref || ref === "direct") return "Direct";
+    try { return new URL(ref).hostname; } catch { return ref; }
+  };
+
+  const clearFilters = () => {
+    setSelectedLink("all");
+    setSearchQuery("");
+    setStartDate("");
+    setEndDate("");
+  };
+
+  const hasFilters = selectedLink !== "all" || searchQuery || startDate || endDate;
 
   if (loading) {
     return (
-      <div className={`min-h-screen flex items-center justify-center p-8 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
-          <p className={`text-gray-400 ${darkMode ? '' : 'text-gray-600'}`}>Loading click details...</p>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-violet-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-500 dark:text-slate-400">Loading click details...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'}`}>
-      <div className="max-w-7xl mx-auto p-6">
-        <div className={`backdrop-blur-sm rounded-xl shadow-xl p-6 mb-6 border ${darkMode ? 'bg-gray-800/50 border-gray-700/50' : 'bg-white border-gray-200'}`}>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-500/30">
-                <FaMousePointer className="w-6 h-6 text-purple-400" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Click Analytics
-                </h1>
-                <p className="text-sm text-gray-400">
-                  Detailed view of all link clicks
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Click Details</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          Every click on your links — location, device, referrer and more
+        </p>
+      </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-            <div className={`p-2 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <FaChartLine className="w-4 h-4 text-purple-400" />
-                <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Total Clicks</span>
-              </div>
-              <p className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{allClicksCount}</p>
-            </div>
-            <div className={`p-2 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <FaUsers className="w-4 h-4 text-pink-400" />
-                <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Unique Visitors</span>
-              </div>
-              <p className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{uniqueVisitors}</p>
-            </div>
-            <div className={`p-2 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <FaGlobe className="w-4 h-4 text-cyan-400" />
-                <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Top Country</span>
-              </div>
-              <p className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>{topCountryName}</p>
-            </div>
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <FiTrendingUp className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+            <span className="text-xs text-slate-500 dark:text-slate-400">Total Clicks</span>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 relative">
-              <FaSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
-              <input
-                type="text"
-                placeholder="Search by link, location, device, browser..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-400 ${
-                  darkMode
-                    ? 'bg-gray-700/50 border-gray-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 hover:text-white ${
-                    darkMode ? 'text-gray-400' : 'text-gray-500'
-                  }`}
-                >
-                  <FaTimes className="w-5 h-5" />
-                </button>
-              )}
-            </div>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`px-4 py-2 border rounded-lg transition-colors flex items-center gap-2 ${
-                darkMode
-                  ? 'bg-gray-700/50 border-gray-600 hover:bg-gray-700 text-white'
-                  : 'bg-white border-gray-300 hover:bg-gray-100 text-gray-900'
-              }`}
-            >
-              <FaFilter className="w-4 h-4" />
-              Filter by Link
-              <FaChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-            </button>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white">{allClicksCount}</p>
+        </div>
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <FiUsers className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+            <span className="text-xs text-slate-500 dark:text-slate-400">Unique Visitors</span>
           </div>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white">{uniqueVisitors}</p>
+        </div>
+        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4">
+          <div className="flex items-center gap-2 mb-1">
+            <FiGlobe className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+            <span className="text-xs text-slate-500 dark:text-slate-400">Top Country</span>
+          </div>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white truncate">{topCountryName}</p>
+        </div>
+      </div>
 
-          {showFilters && (
-            <div className={`mt-4 p-4 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
+      {/* Search & Filter bar */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4 mb-4">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search by link, location, device, browser..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <FiX className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          <button
+            onClick={() => setShowFilters((s) => !s)}
+            className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg border transition-colors ${
+              showFilters || hasFilters
+                ? "bg-violet-50 dark:bg-violet-950/30 border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-400"
+                : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
+            }`}
+          >
+            <FiFilter className="w-4 h-4" />
+            Filters
+            {hasFilters && (
+              <span className="ml-0.5 w-1.5 h-1.5 rounded-full bg-violet-600 dark:bg-violet-400" />
+            )}
+            <FiChevronDown className={`w-3.5 h-3.5 transition-transform ${showFilters ? "rotate-180" : ""}`} />
+          </button>
+        </div>
+
+        {showFilters && (
+          <div className="mt-4 space-y-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+            {/* Link filter */}
+            {uniqueLinks.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => setSelectedLink('all')}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    selectedLink === 'all'
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50'
-                      : darkMode
-                      ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-700 border border-gray-600'
-                      : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-300'
+                  onClick={() => setSelectedLink("all")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                    selectedLink === "all"
+                      ? "bg-violet-600 text-white"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                   }`}
                 >
                   All Links ({clicks.length})
                 </button>
-                {uniqueLinks.map(link => (
+                {uniqueLinks.map((link) => (
                   <button
                     key={link.id}
                     onClick={() => setSelectedLink(link.id)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                       selectedLink === link.id
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/50'
-                        : darkMode
-                        ? 'bg-gray-700/50 text-gray-300 hover:bg-gray-700 border border-gray-600'
-                        : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-300'
+                        ? "bg-violet-600 text-white"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"
                     }`}
                   >
-                    {link.title} ({clicks.filter(c => c.linkId === link.id).length})
+                    {link.title} ({clicks.filter((c) => c.linkId === link.id).length})
                   </button>
                 ))}
               </div>
+            )}
 
-              {/* Date Range Filter */}
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className={`block text-sm mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Start Date</label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                      darkMode
-                        ? 'bg-gray-700/50 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                  />
-                </div>
-                <div>
-                  <label className={`block text-sm mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>End Date</label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${
-                      darkMode
-                        ? 'bg-gray-700/50 border-gray-600 text-white'
-                        : 'bg-white border-gray-300 text-gray-900'
-                    }`}
-                  />
-                </div>
+            {/* Date range */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">From</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                />
               </div>
-
-              {/* Clear Filters Button */}
-              {(selectedLink !== 'all' || searchQuery || startDate || endDate) && (
-                <div className="mt-4 flex justify-end">
-                  <button
-                    onClick={() => {
-                      setSelectedLink('all');
-                      setSearchQuery('');
-                      setStartDate('');
-                      setEndDate('');
-                    }}
-                    className={`px-4 py-2 rounded-lg transition-colors text-sm ${
-                      darkMode
-                        ? 'bg-gray-600 hover:bg-gray-500 text-white'
-                        : 'bg-gray-500 hover:bg-gray-600 text-white'
-                    }`}
-                  >
-                    Clear All Filters
-                  </button>
-                </div>
-              )}
+              <div>
+                <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">To</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                />
+              </div>
             </div>
+
+            {hasFilters && (
+              <div className="flex justify-end">
+                <button
+                  onClick={clearFilters}
+                  className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 flex items-center gap-1"
+                >
+                  <FiX className="w-3.5 h-3.5" /> Clear all filters
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Result count */}
+      <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
+        {filteredClicks.length === clicks.length
+          ? `${clicks.length} clicks`
+          : `${filteredClicks.length} of ${clicks.length} clicks`}
+      </p>
+
+      {/* Main grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
+        {/* Click list */}
+        <div className="lg:col-span-3 space-y-2">
+          {filteredClicks.length === 0 ? (
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-12 text-center">
+              <FiMousePointer className="w-10 h-10 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">No clicks found</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Try adjusting your filters</p>
+            </div>
+          ) : (
+            filteredClicks.map((click) => (
+              <button
+                key={click._id}
+                onClick={() => {
+                  setSelectedClick(click);
+                  if (!click.seen) markAsRead(click._id);
+                }}
+                className={`w-full text-left p-4 rounded-xl border transition-all ${
+                  selectedClick?._id === click._id
+                    ? "bg-violet-50 dark:bg-violet-950/20 border-violet-200 dark:border-violet-800 ring-1 ring-violet-500/20"
+                    : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm"
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${
+                    selectedClick?._id === click._id
+                      ? "bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400"
+                  }`}>
+                    {getDeviceIcon(click.device?.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-sm font-medium text-slate-900 dark:text-white truncate">
+                          {click.linkSource || "Link"}
+                        </span>
+                        {!click.seen && (
+                          <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-semibold rounded-full bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400">
+                            New
+                          </span>
+                        )}
+                      </div>
+                      <span className="flex-shrink-0 text-xs text-slate-400 dark:text-slate-500">
+                        {getRelativeTime(click.clickDate)}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                        <FiMapPin className="w-3 h-3" />
+                        {[click.location?.city, click.location?.country].filter(Boolean).join(", ") || "Unknown"}
+                      </span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                        <FiMonitor className="w-3 h-3" />
+                        {click.device?.type || "—"} · {click.os?.name || "—"}
+                      </span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                        <FiGlobe className="w-3 h-3" />
+                        {getReferrerHost(click.referrer)}
+                      </span>
+                    </div>
+                  </div>
+                  <FiChevronRight className={`flex-shrink-0 w-4 h-4 mt-2 transition-colors ${
+                    selectedClick?._id === click._id ? "text-violet-500" : "text-slate-300 dark:text-slate-600"
+                  }`} />
+                </div>
+              </button>
+            ))
           )}
         </div>
 
-        <div className="mb-4">
-          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-            Showing {filteredClicks.length} of {clicks.length} clicks
-          </p>
-        </div>
-
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <div className="max-h-[800px] overflow-y-auto space-y-3 pr-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
-            {              filteredClicks.length === 0 ? (
-              <div className={`backdrop-blur-sm rounded-xl shadow-xl p-12 text-center border ${darkMode ? 'bg-gray-800/50 border-gray-700/50' : 'bg-white border-gray-200'}`}>
-                <FaMousePointer className={`w-16 h-16 mx-auto mb-4 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`} />
-                <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>No clicks found</h3>
-                <p className={`text-gray-400 ${darkMode ? '' : 'text-gray-600'}`}>Try adjusting your filters or search query</p>
+        {/* Detail panel */}
+        <div className="lg:col-span-2">
+          {selectedClick ? (
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 sticky top-6 overflow-hidden">
+              {/* Panel header */}
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                <FiEye className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-white">Click Details</h2>
+                {!selectedClick.seen && (
+                  <span className="ml-auto text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400">
+                    New
+                  </span>
+                )}
               </div>
-            ) : (
-              filteredClicks.map((click) => (
-                <div
-                  key={click._id}
-                  onClick={() => {
-                    setSelectedClick(click);
-                    if (!click.seen) {
-                      markAsRead(click._id);
-                    }
-                  }}
-                  className={`p-4 rounded-xl cursor-pointer transition-all duration-200 ${
-                    selectedClick?._id === click._id
-                      ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-2 border-purple-500/50 shadow-lg shadow-purple-500/20'
-                      : darkMode
-                      ? 'bg-gray-800/50 hover:bg-gray-800/70 border border-gray-700/50'
-                      : 'bg-white hover:bg-gray-50 border border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
-                      {getDeviceIcon(click.device.type)}
-                    </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div>
-                          <h3 className={`font-semibold text-sm mb-1 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                            {click.linkSource || 'Unknown Link'}
-                            {!click.seen && (
-                              <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-xs border border-purple-400/30">
-                                New
-                              </span>
-                            )}
-                          </h3>
-                          <p className={`text-xs flex items-center gap-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            <FaLink className="w-3 h-3" />
-                            {click.linkDestination || 'linkhub'}
-                          </p>
-                        </div>
-                        <span className={`text-xs whitespace-nowrap ${darkMode ? 'text-gray-500' : 'text-gray-600'}`}>
-                          {getRelativeTime(click.clickDate)}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div className={`flex items-center gap-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          <FaMapMarkerAlt className="w-3 h-3" />
-                          <span>{click.location.city}, {click.location.country}</span>
-                        </div>
-                        <div className={`flex items-center gap-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          <FaDesktop className="w-3 h-3" />
-                          <span>{click.device.type} • {click.os.name}</span>
-                        </div>
-                        <div className={`flex items-center gap-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          <FaChrome className="w-3 h-3" />
-                          <span>{click.browser.name}</span>
-                        </div>
-                        <div className={`flex items-center gap-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                          <FaGlobe className="w-3 h-3" />
-                          <span className="truncate">
-                            {click.referrer && click.referrer !== 'direct' ? (() => {
-                              try {
-                                return new URL(click.referrer).hostname;
-                              } catch (e) {
-                                return click.referrer; // If it's not a valid URL, just show the referrer as-is
-                              }
-                            })() : 'Direct'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            {selectedClick ? (
-              <div className={`backdrop-blur-sm rounded-xl shadow-xl p-6 border sticky top-6 ${darkMode ? 'bg-gray-800/50 border-gray-700/50' : 'bg-white border-gray-200'}`}>
-                <h2 className={`text-lg font-bold mb-4 flex items-center gap-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  <FaEye className="w-5 h-5 text-purple-400" />
-                  Click Details
-                </h2>
-
-                <div className={`mb-6 p-4 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
-                  <h3 className={`text-sm font-semibold mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Link</h3>
-                  <p className={`font-medium mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.linkSource || 'Unknown Link'}</p>
-                  <p className={`text-xs mb-2 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{selectedClick.linkDestination || 'linkhub'}</p>
-                  <a 
-                    href={selectedClick.linkDestination || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1"
-                  >
-                    View destination
-                    <FaExternalLinkAlt className="w-3 h-3" />
-                  </a>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className={`text-sm font-semibold mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Timestamp</h3>
-                  <div className="space-y-2">
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Date</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.clickedTime.date}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Time</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.clickedTime.time}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Timezone</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.clickedTime.timezone}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    <FaMapMarkerAlt className="w-4 h-4 text-purple-400" />
-                    Location
-                  </h3>
-                  <div className="space-y-2">
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Country</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.location.country}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>City</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.location.city}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Region</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.location.region}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>IP Address</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.location.ipAddress}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    {getDeviceIcon(selectedClick.device.type)}
-                    <span className="text-purple-400">Device</span>
-                  </h3>
-                  <div className="space-y-2">
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Type</span>
-                      <span className={`text-xs font-medium capitalize ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.device.type}</span>
-                    </div>
-                    {selectedClick.device.brand && (
-                      <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                        <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Brand</span>
-                        <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.device.brand}</span>
-                      </div>
-                    )}
-                    {selectedClick.device.model && (
-                      <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                        <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Model</span>
-                        <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.device.model}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    <FaDesktop className="w-4 h-4 text-purple-400" />
-                    Operating System
-                  </h3>
-                  <div className="space-y-2">
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Name</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.os.name}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Version</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.os.version}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    <FaChrome className="w-4 h-4 text-purple-400" />
-                    Browser
-                  </h3>
-                  <div className="space-y-2">
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Name</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.browser.name}</span>
-                    </div>
-                    <div className={`flex items-center justify-between p-2 rounded-lg ${darkMode ? 'bg-gray-700/30' : 'bg-gray-100'}`}>
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Version</span>
-                      <span className={`text-xs font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{selectedClick.browser.version}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className={`text-sm font-semibold mb-3 flex items-center gap-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                    <FaGlobe className="w-4 h-4 text-purple-400" />
-                    Referrer
-                  </h3>
-                  <div className={`p-3 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
-                    {selectedClick.referrer && selectedClick.referrer !== 'direct' ? (() => {
-                      try {
-                        new URL(selectedClick.referrer); // Validate URL
-                        return (
-                      <a 
-                        href={selectedClick.referrer}
+              <div className="p-4 space-y-5 max-h-[calc(100vh-12rem)] overflow-y-auto">
+                {/* Link info */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FiLink className="w-3 h-3" /> Link
+                  </p>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 rounded-lg p-3">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">{selectedClick.linkSource || "Unknown"}</p>
+                    {selectedClick.linkDestination && (
+                      <a
+                        href={selectedClick.linkDestination}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-purple-400 hover:text-purple-300 break-all flex items-center gap-1"
+                        className="mt-1 text-xs text-violet-600 dark:text-violet-400 hover:underline flex items-center gap-1 truncate"
                       >
-                        {selectedClick.referrer}
-                            <FaExternalLinkAlt className="w-3 h-3 flex-shrink-0" />
-                          </a>
-                        );
-                      } catch (e) {
-                        return <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>{selectedClick.referrer}</span>;
-                      }
-                    })() : (
-                      <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Direct Traffic</span>
+                        {selectedClick.linkDestination}
+                        <FiExternalLink className="w-3 h-3 flex-shrink-0" />
+                      </a>
                     )}
                   </div>
                 </div>
 
+                {/* Timestamp */}
                 <div>
-                  <h3 className={`text-sm font-semibold mb-3 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>User Agent</h3>
-                  <div className={`p-3 rounded-lg border ${darkMode ? 'bg-gray-700/30 border-gray-600/50' : 'bg-gray-100 border-gray-300'}`}>
-                    <p className={`text-xs break-all font-mono ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                      {selectedClick.userAgent}
-                    </p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FiClock className="w-3 h-3" /> Time
+                  </p>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 rounded-lg divide-y divide-slate-100 dark:divide-slate-700/50">
+                    <DetailRow label="Date" value={selectedClick.clickedTime?.date} />
+                    <DetailRow label="Time" value={selectedClick.clickedTime?.time} />
+                    <DetailRow label="Timezone" value={selectedClick.clickedTime?.timezone} />
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className={`backdrop-blur-sm rounded-xl shadow-xl p-12 text-center border sticky top-6 ${darkMode ? 'bg-gray-800/50 border-gray-700/50' : 'bg-white border-gray-200'}`}>
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
-                  <FaMousePointer className="w-8 h-8 text-purple-400" />
+
+                {/* Location */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FiMapPin className="w-3 h-3" /> Location
+                  </p>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 rounded-lg divide-y divide-slate-100 dark:divide-slate-700/50">
+                    <DetailRow label="Country" value={selectedClick.location?.country} />
+                    <DetailRow label="City" value={selectedClick.location?.city} />
+                    <DetailRow label="Region" value={selectedClick.location?.region} />
+                    <DetailRow label="IP Address" value={selectedClick.location?.ipAddress} mono />
+                  </div>
                 </div>
-                <h3 className={`text-lg font-semibold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-                  Select a click
-                </h3>
-                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                  Choose a click from the list to view its complete details
-                </p>
+
+                {/* Device */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FiMonitor className="w-3 h-3" /> Device
+                  </p>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 rounded-lg divide-y divide-slate-100 dark:divide-slate-700/50">
+                    <DetailRow label="Type" value={selectedClick.device?.type} />
+                    {selectedClick.device?.brand && <DetailRow label="Brand" value={selectedClick.device.brand} />}
+                    {selectedClick.device?.model && <DetailRow label="Model" value={selectedClick.device.model} />}
+                    <DetailRow label="OS" value={`${selectedClick.os?.name || "—"} ${selectedClick.os?.version || ""}`.trim()} />
+                    <DetailRow label="Browser" value={`${selectedClick.browser?.name || "—"} ${selectedClick.browser?.version || ""}`.trim()} />
+                  </div>
+                </div>
+
+                {/* Referrer */}
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FiGlobe className="w-3 h-3" /> Referrer
+                  </p>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 rounded-lg p-3">
+                    {selectedClick.referrer && selectedClick.referrer !== "direct" ? (
+                      (() => {
+                        try {
+                          new URL(selectedClick.referrer);
+                          return (
+                            <a
+                              href={selectedClick.referrer}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-violet-600 dark:text-violet-400 hover:underline break-all flex items-start gap-1"
+                            >
+                              {selectedClick.referrer}
+                              <FiExternalLink className="w-3 h-3 flex-shrink-0 mt-0.5" />
+                            </a>
+                          );
+                        } catch {
+                          return <span className="text-xs text-slate-600 dark:text-slate-400 break-all">{selectedClick.referrer}</span>;
+                        }
+                      })()
+                    ) : (
+                      <span className="text-xs text-slate-500 dark:text-slate-400">Direct Traffic</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* User Agent */}
+                {selectedClick.userAgent && (
+                  <div>
+                    <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <FiInfo className="w-3 h-3" /> User Agent
+                    </p>
+                    <div className="bg-slate-50 dark:bg-slate-800/60 rounded-lg p-3">
+                      <p className="text-xs font-mono text-slate-500 dark:text-slate-400 break-all leading-relaxed">
+                        {selectedClick.userAgent}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-12 text-center sticky top-6">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                <FiMousePointer className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+              </div>
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Select a click</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                Pick any click from the list to see full details
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

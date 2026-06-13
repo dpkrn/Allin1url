@@ -1,385 +1,156 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "framer-motion";
 import Linkcard from "../linkcard/Linkcard";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MdContentCopy, MdAddCircle } from "react-icons/md";
-import { FaRocket, FaLink, FaChartLine, FaHome, FaEye } from "react-icons/fa";
+import { MdContentCopy } from "react-icons/md";
+import { FiLink, FiBarChart2, FiPlus, FiEye, FiExternalLink } from "react-icons/fi";
 import { setLinks } from "../../redux/userSlice";
 import toast from "react-hot-toast";
 import api from "../../utils/api";
 import { getUserLinkUrl } from "../../lib/utils";
 
-const LinkPage = ({ children }) => {
+const LinkPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const linkRef = useRef(null);
   const location = useLocation();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef(null);
-  
+  const isStandalone = location.pathname === "/links";
+
   const links = useSelector((store) => store.admin.links);
   const username = useSelector((store) => store.admin.user.username);
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  // Mouse tracking for interactive background
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  const handleCreateNewBridge = () => {
-    navigate("/home");
-  };
-
-  const handlePreviewLinkHub = () => {
-    navigate("/preview");
-  };
+  const totalClicks = links.reduce((sum, l) => sum + (l.clicked || 0), 0);
 
   useEffect(() => {
     const getAllLinks = async () => {
       try {
-        const res = await api.post(
-          "/source/getallsource",
-          { username },
-          { withCredentials: true }
-        );
-        if (res.status === 200 && res.data.success) {
-          dispatch(setLinks(res.data.sources));
-          // Trigger preview refresh when links are updated
-          setRefreshKey(prev => prev + 1);
-        }
+        const res = await api.post("/source/getallsource", { username }, { withCredentials: true });
+        if (res.status === 200 && res.data.success) dispatch(setLinks(res.data.sources));
       } catch (err) {
-        console.log(err);
-        const message = err.response?.data?.message || "Server Internal Error";
-        toast.error(message);
+        toast.error(err.response?.data?.message || "Failed to load links");
       }
     };
     getAllLinks();
   }, []);
 
-  // Watch for link changes and refresh preview
-  useEffect(() => {
-    if (links.length > 0) {
-      setRefreshKey(prev => prev + 1);
-    }
-  }, [links]);
-
   const copyToClipboard = () => {
-    const linkText = linkRef.current.innerText;
-    navigator.clipboard
-      .writeText(linkText)
-      .then(() => {
-        toast.success("Link copied to clipboard!");
-      })
-      .catch((err) => {
-        toast.error("Failed to copy!");
-      });
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5 },
-    },
+    navigator.clipboard.writeText(linkRef.current.innerText)
+      .then(() => toast.success("Hub link copied!"))
+      .catch(() => toast.error("Failed to copy"));
   };
 
   return (
-    <div className="w-full overflow-hidden relative">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient Orbs */}
-        <motion.div
-          className="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * 0.5 - 200,
-            y: mousePosition.y * 0.5 - 200,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        />
-        <motion.div
-          className="absolute w-96 h-96 bg-pink-500/20 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * 0.3 - 200,
-            y: mousePosition.y * 0.3 - 200,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        />
-        <motion.div
-          className="absolute w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * 0.7 - 200,
-            y: mousePosition.y * 0.7 - 200,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        />
+    <div className={isStandalone ? "p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto" : ""}>
+      {/* Page header — only when standalone */}
+      {isStandalone && (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">My Links</h1>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage all your personalized links</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/preview")}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-violet-300 dark:hover:border-violet-600 transition-colors"
+            >
+              <FiEye className="w-4 h-4" />
+              Preview Hub
+            </button>
+            <button
+              onClick={() => navigate("/home")}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors"
+            >
+              <FiPlus className="w-4 h-4" />
+              New Link
+            </button>
+          </div>
+        </div>
+      )}
 
-        {/* Animated Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        {[
+          { label: "Total Links", value: links.length, icon: FiLink, color: "text-violet-600 dark:text-violet-400", bg: "bg-violet-50 dark:bg-violet-950/30" },
+          { label: "Total Clicks", value: totalClicks, icon: FiBarChart2, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/30" },
+          { label: "Hub Status", value: "Live", icon: FiExternalLink, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/30" },
+        ].map(({ label, value, icon: Icon, color, bg }) => (
+          <div key={label} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-3 sm:p-4">
+            <div className={`inline-flex p-2 rounded-lg ${bg} mb-2`}>
+              <Icon className={`w-4 h-4 ${color}`} />
+            </div>
+            <div className={`text-lg font-bold ${color}`}>{value}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{label}</div>
+          </div>
+        ))}
       </div>
 
-      <div className="relative z-10 py-8 md:py-12 px-4 sm:px-6 md:px-10 lg:px-12">
-        <motion.div
-          ref={containerRef}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-7xl mx-auto"
-        >
-          {/* Header Section */}
-          <motion.div variants={itemVariants} className="mb-8 md:mb-12">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex-1"
-              >
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-                  Your Links
-                </h1>
-                <p className="text-gray-700 dark:text-gray-400 text-lg md:text-xl">
-                  Manage and track all your personalized social media links
-                </p>
-              </motion.div>
+      {/* Hub link card */}
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-4 mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Your Hub Link</p>
+          <a
+            href={`https://${username}.allin1url.in`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs text-violet-600 dark:text-violet-400 hover:underline"
+          >
+            Open <FiExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+        <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 rounded-lg px-3 py-2.5 border border-slate-200 dark:border-slate-700">
+          <span ref={linkRef} className="flex-1 text-sm font-mono text-slate-700 dark:text-slate-300 truncate">
+            {getUserLinkUrl(username)}
+          </span>
+          <button
+            onClick={copyToClipboard}
+            className="flex-shrink-0 p-1.5 rounded-md text-slate-400 hover:text-violet-600 hover:bg-white dark:hover:bg-slate-700 transition-colors"
+            title="Copy hub link"
+          >
+            <MdContentCopy className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
 
-              {location.pathname === "/links" && (
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handlePreviewLinkHub}
-                    className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 hover:from-pink-700 hover:via-purple-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center gap-3 text-base sm:text-lg"
-                  >
-                    <FaEye className="text-xl sm:text-2xl" />
-                    <span className="hidden sm:inline">Preview LinkHub</span>
-                    <span className="sm:hidden">Preview</span>
-                  </motion.button>
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleCreateNewBridge}
-                    className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center gap-3 text-base sm:text-lg"
-                  >
-                    <MdAddCircle className="text-xl sm:text-2xl" />
-                    <span className="hidden sm:inline">Create New Bridge</span>
-                    <span className="sm:hidden">Create</span>
-                  </motion.button>
-                </div>
-              )}
+      {/* Links list */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            {links.length > 0 ? `${links.length} link${links.length !== 1 ? 's' : ''}` : "Links"}
+          </h2>
+        </div>
+
+        {links.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 p-10 text-center">
+            <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-3">
+              <FiLink className="w-5 h-5 text-slate-400" />
             </div>
-
-            {/* Hub Link Card */}
-            <motion.div
-              variants={itemVariants}
-              className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-6 md:p-8 overflow-hidden relative group"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">No links yet</h3>
+            <p className="text-sm text-slate-400 dark:text-slate-500 mb-4">Create your first link to get started</p>
+            <button
+              onClick={() => navigate("/home")}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-violet-600 hover:bg-violet-700 transition-colors"
             >
-              <motion.div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 via-pink-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="relative z-10">
-                <div className="flex items-center gap-4 mb-4">
-                  <motion.div
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 rounded-xl"
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                  >
-                    <FaHome className="text-3xl text-white" />
-                  </motion.div>
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                      Your Linktree Hub
-                    </h3>
-                    <p className="text-gray-700 dark:text-gray-400 text-sm md:text-base">
-                      Share this link to let visitors see all your profiles in
-                      one place
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 bg-gray-800/40 dark:bg-gray-800/30 rounded-2xl border border-gray-700/30 dark:border-white/10">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-300 dark:text-gray-500 mb-2 font-semibold">
-                      Hub Link:
-                    </p>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <span
-                        ref={linkRef}
-                        className="break-all font-mono text-base md:text-lg text-white dark:text-gray-200"
-                      >
-                        {getUserLinkUrl(username)}
-                      </span>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={copyToClipboard}
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 p-2 rounded-lg transition-all duration-300 flex-shrink-0"
-                        title="Copy link"
-                      >
-                        <MdContentCopy className="text-xl text-white" />
-                      </motion.button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Main Content: Links and Preview */}
-          <div className={`grid grid-cols-1 ${children ? 'lg:grid-cols-[2fr_1fr]' : ''} gap-6 lg:gap-8`}>
-            {/* Left Side: Links Section - Scrollable - Height matches template preview */}
-            <motion.div 
-              variants={itemVariants} 
-              className={`space-y-3 scroll-smooth custom-scrollbar ${children && location.pathname !== '/links' ? 'lg:h-[680px] lg:overflow-y-auto lg:pr-4' : ''}`}
-            >
-              {links.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-12 md:p-16 text-center"
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                    className="mb-6"
-                  >
-                    <FaLink className="text-6xl md:text-8xl text-gray-400 dark:text-gray-600 mx-auto" />
-                  </motion.div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                    No Links Yet
-                  </h2>
-                  <p className="text-gray-700 dark:text-gray-400 text-lg mb-8 max-w-md mx-auto">
-                    Get started by creating your first personalized link. Click
-                    the button above to create a new bridge!
-                  </p>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleCreateNewBridge}
-                    className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center gap-3 mx-auto"
-                  >
-                    <FaRocket className="text-xl" />
-                    Create Your First Link
-                  </motion.button>
-                </motion.div>
-              ) : (
-                <AnimatePresence>
-                  {links.map((link, index) => (
-                    <motion.div
-                      key={link._id}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -30 }}
-                      transition={{ delay: index * 0.1, duration: 0.5 }}
-                    >
-                      <Linkcard sources={link} />
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              )}
-            </motion.div>
-
-            {/* Right Side: Template Preview - Fixed/Sticky */}
-            {children && location.pathname !== '/links' && (
-              <motion.div 
-                variants={itemVariants} 
-                className="lg:sticky lg:top-8 lg:self-start"
-              >
-                <div key={refreshKey} className="w-full">
-                  {React.cloneElement(children, { refreshTrigger: refreshKey, height: "h-[600px] md:h-[650px]" })}
-                </div>
-              </motion.div>
-            )}
+              <FiPlus className="w-4 h-4" />
+              Create Link
+            </button>
           </div>
-
-          {/* Stats Summary */}
-          {links.length > 0 && (
-            <motion.div
-              variants={itemVariants}
-              className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 p-6 text-center"
-              >
+        ) : (
+          <div className="space-y-2">
+            <AnimatePresence>
+              {links.map((link, i) => (
                 <motion.div
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 rounded-xl w-fit mx-auto mb-4"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  key={link._id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ delay: i * 0.04, duration: 0.3 }}
                 >
-                  <FaLink className="text-3xl text-white" />
+                  <Linkcard sources={link} />
                 </motion.div>
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                  {links.length}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-400">Total Links</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 p-6 text-center"
-              >
-                <motion.div
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-xl w-fit mx-auto mb-4"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <FaChartLine className="text-3xl text-white" />
-                </motion.div>
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                  {links.reduce((sum, link) => sum + (link.clicked || 0), 0)}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-400">Total Clicks</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/50 p-6 text-center"
-              >
-                <motion.div
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-xl w-fit mx-auto mb-4"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <FaHome className="text-3xl text-white" />
-                </motion.div>
-                <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                  Live
-                </h3>
-                <p className="text-gray-700 dark:text-gray-400">Hub Page</p>
-              </motion.div>
-            </motion.div>
-          )}
-        </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
     </div>
   );

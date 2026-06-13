@@ -1,13 +1,12 @@
 import React, { useRef } from 'react';
-import toast from 'react-hot-toast';
-
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { TypewriterEffect } from '../../../ui/typewriter-effect';
 import { FlipWords } from '../../../ui/flip-words';
-import { FaArrowRight } from 'react-icons/fa';
+import { FiArrowRight, FiCheck, FiX } from 'react-icons/fi';
 import api from '../../../../utils/api';
 import { buildGoogleOAuthUrl } from '../../../../utils/urlConfig';
+import toast from 'react-hot-toast';
 
 const HeroSection = ({
   words = [],
@@ -16,80 +15,26 @@ const HeroSection = ({
   highlightText = "",
   ctaText = "Start with your username",
   ctaAction = null,
-  // Removed secondaryCtaText and secondaryCtaAction
   platforms = [],
   showScrollIndicator = true,
   className = "",
-  mousePosition = { x: 0, y: 0 },
-  isAuthenticated = false
+  isAuthenticated = false,
 }) => {
   const navigate = useNavigate();
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
-
-  // Google signup logic (copied from AuthPageV1)
-  const handleSignUp = async (usr) => {
-    let uname = usr;
-    if (typeof usr === 'object' && usr !== null) {
-      uname = username;
-    }
-    if (!uname || uname.length < 5) {
-      toast.error("Please enter a valid username (min 5 characters)");
-      return;
-    }
-    if (!isAvailable) {
-      toast.error("Username is not available. Please choose another one.");
-      return;
-    }
-    try {
-      window.location.href = buildGoogleOAuthUrl({
-        username: uname.toLowerCase(),
-        usertype: "onboarding",
-      });
-    } catch (err) {
-      toast.error(err.message || "Google sign-up is unavailable");
-    }
-  };
-
-  const handleCtaClick = (usernameValue) => {
-    if (ctaAction) {
-      ctaAction();
-    } else {
-      handleSignUp(usernameValue || username);
-    }
-  };
-
-  const handleSecondaryCtaClick = () => {
-    if (secondaryCtaAction) {
-      secondaryCtaAction();
-    } else {
-      navigate('/doc');
-    }
-  };
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
 
   const [username, setUsername] = React.useState("");
   const [isAvailable, setAvailable] = React.useState(false);
   const [checking, setChecking] = React.useState(false);
-  const [showTooltip, setShowTooltip] = React.useState(false);
-  const tooltipTimeoutRef = React.useRef(null);
 
-  // Username availability check (copied logic from AuthPageV1)
   const checkAvailablity = async (usrnm) => {
-    if (usrnm.length < 5) {
-      setAvailable(false);
-      return;
-    }
+    if (usrnm.length < 5) { setAvailable(false); return; }
     setChecking(true);
     try {
       const res = await api.post("/auth/checkavailablity", { username: usrnm });
-      if (res.status === 209 && res.data.success) {
-        setAvailable(false);
-      }
-      if (res.status === 200 && res.data.success) {
-        setAvailable(true);
-      }
+      setAvailable(res.status === 200 && res.data.success);
     } catch (err) {
       setAvailable(false);
     } finally {
@@ -97,54 +42,47 @@ const HeroSection = ({
     }
   };
 
+  const handleCtaClick = () => {
+    if (ctaAction) { ctaAction(); return; }
+    if (!username || username.length < 5) { toast.error("Please enter a valid username (min 5 characters)"); return; }
+    if (!isAvailable) { toast.error("Username is not available. Please choose another one."); return; }
+    try {
+      window.location.href = buildGoogleOAuthUrl({ username: username.toLowerCase(), usertype: "onboarding" });
+    } catch (err) {
+      toast.error(err.message || "Google sign-up is unavailable");
+    }
+  };
+
   return (
     <motion.section
       ref={heroRef}
-      style={{ opacity, scale }}
+      style={{ opacity }}
       className={`relative min-h-screen flex items-center justify-center overflow-hidden ${!isAuthenticated ? 'pt-16' : ''} ${className}`}
     >
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/60 via-pink-50/60 to-blue-50/60 dark:from-purple-500/20 dark:via-pink-500/20 dark:to-blue-500/20" />
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            backgroundPosition: [
-              `${mousePosition.x}% ${mousePosition.y}%`,
-              `${Math.min(mousePosition.x * 1.1, 100)}% ${Math.min(mousePosition.y * 1.1, 100)}%`,
-            ],
-          }}
-          transition={{ duration: 0.5 }}
-          style={{
-            backgroundImage: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(147, 51, 234, 0.08), transparent 50%)`,
-          }}
-        />
-      </div>
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-50 via-white to-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(139,92,246,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(139,92,246,0.08),transparent)]" />
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
-        <div className="text-center space-y-6 sm:space-y-7 md:space-y-8">
-          {/* Main Heading with Typewriter */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
+        <div className="text-center space-y-6 sm:space-y-8">
+          {/* Main heading */}
           {words.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <TypewriterEffect words={words} className="mb-6" />
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+              <TypewriterEffect words={words} className="mb-4" />
             </motion.div>
           )}
 
-          {/* Subheading with Flip Words */}
+          {/* Flip words subheading */}
           {flipWords.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.1, delay: 0.1 }}
-              className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-semibold text-gray-800 dark:text-gray-300 mb-3 sm:mb-4 px-4"
+              transition={{ duration: 0.7, delay: 0.15 }}
+              className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-slate-700 dark:text-slate-300"
             >
               Create personalized links for your{' '}
               <span className="inline-block">
-                <FlipWords words={flipWords} duration={100} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold" />
+                <FlipWords words={flipWords} duration={100} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-violet-600 dark:text-violet-400" />
               </span>
             </motion.div>
           )}
@@ -152,118 +90,102 @@ const HeroSection = ({
           {/* Description */}
           {description && (
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed px-4"
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed"
             >
               {description}
               {highlightText && (
                 <>
                   <br />
-                  <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-purple-600 dark:text-purple-400">
-                    {highlightText}
-                  </span>
+                  <span className="font-semibold text-violet-600 dark:text-violet-400 mt-1 block">{highlightText}</span>
                 </>
               )}
             </motion.p>
           )}
 
-          {/* Username Input and CTA */}
+          {/* Username CTA */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-col gap-4 justify-center items-center mt-10 group relative"
-            tabIndex={0}
-            onMouseEnter={() => {
-              if (username.length === 0) {
-                setShowTooltip(true);
-                if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
-                tooltipTimeoutRef.current = setTimeout(() => setShowTooltip(false), 2000);
-              }
-            }}
-            onMouseLeave={() => {
-              setShowTooltip(false);
-              if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
-            }}
+            transition={{ duration: 0.7, delay: 0.45 }}
+            className="flex flex-col items-center gap-4 mt-8"
           >
-            {/* Tooltip as toast-like message */}
-            {showTooltip && username.length === 0 && (
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 transition-opacity duration-200">
-                <div className="bg-purple-600 text-white text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg shadow-lg font-semibold whitespace-nowrap animate-fade-in">
-                  Always choose easy and memorable username
-                </div>
-              </div>
-            )}
-            <div className="flex flex-row flex-nowrap gap-1 sm:gap-2 items-center w-full max-w-full px-4 sm:px-0 justify-center">
-              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">https://</span>
-              <div className="relative flex-shrink-0 min-w-[80px] sm:min-w-[100px] md:min-w-[120px] w-auto sm:w-36 md:w-44 max-w-[120px] sm:max-w-none">
+            {/* URL input row */}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              <span className="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">https://</span>
+              <div className="relative">
                 <input
                   type="text"
                   value={username}
                   onChange={e => {
                     const val = e.target.value.replace(/[^a-zA-Z0-9-_]/g, '');
                     setUsername(val);
-                    if (val.length >= 5) {
-                      checkAvailablity(val.toLowerCase());
-                    } else {
-                      setAvailable(false);
-                    }
+                    if (val.length >= 5) checkAvailablity(val.toLowerCase());
+                    else setAvailable(false);
                   }}
                   placeholder="username"
-                  className="w-full px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl border border-gray-300 dark:border-gray-700 bg-transparent text-gray-900 dark:text-gray-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-xs sm:text-sm md:text-base lg:text-lg font-semibold placeholder-gray-400 dark:placeholder-gray-500 hover:border-purple-400 dark:hover:border-purple-400"
+                  className="w-32 sm:w-40 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm sm:text-base font-semibold placeholder:text-slate-400 focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 transition-colors"
                   autoComplete="off"
                   spellCheck="false"
                 />
+                {username.length >= 5 && (
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                    {checking ? (
+                      <div className="w-3.5 h-3.5 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+                    ) : isAvailable ? (
+                      <FiCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    ) : (
+                      <FiX className="w-3.5 h-3.5 text-red-500" />
+                    )}
+                  </span>
+                )}
               </div>
-              <span className="text-xs sm:text-sm md:text-base lg:text-lg font-medium text-gray-700 dark:text-gray-200 whitespace-nowrap flex-shrink-0">.allin1url.in/</span>
+              <span className="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">.allin1url.in/</span>
             </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleCtaClick(username)}
-              disabled={username.length < 5 || !isAvailable || checking}
-              className="group relative px-4 py-2.5 sm:px-6 sm:py-3 md:px-8 md:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold text-sm sm:text-base md:text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 overflow-hidden w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <span className="relative z-10 flex items-center justify-center gap-2">
-                Start with your username
-                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600"
-                initial={{ x: '-100%' }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.3 }}
-              />
-            </motion.button>
+
+            {/* Availability hint */}
             {username.length >= 5 && (
-              <p className={`mt-2 text-xs sm:text-sm ml-1 transition-all duration-300 ${isAvailable ? "text-green-400" : "text-red-400"}`}>
-                {isAvailable ? "✓ Username is available" : "✗ Username is not available"}
+              <p className={`text-xs sm:text-sm ${isAvailable ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
+                {isAvailable ? '✓ Username available' : '✗ Username not available'}
               </p>
             )}
-            <p className="text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200 mt-2 px-4 text-center">Get your own domain <strong>FREE</strong> to manage your links</p>
-            <p className="text-xs sm:text-sm text-purple-600 dark:text-purple-400 mt-1 font-semibold px-4 text-center">That will reflect your brand identity ✨</p>
+
+            {/* CTA button */}
+            <button
+              onClick={handleCtaClick}
+              disabled={username.length < 5 || !isAvailable || checking}
+              className="flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-violet-500/25 transition-all disabled:cursor-not-allowed disabled:shadow-none"
+            >
+              Get your free domain
+              <FiArrowRight className="w-4 h-4" />
+            </button>
+
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Get your own domain <strong className="text-slate-700 dark:text-slate-300">FREE</strong> · No credit card required
+            </p>
           </motion.div>
 
-          {/* Platform Icons */}
+          {/* Platforms */}
           {platforms.length > 0 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="mt-16"
+              transition={{ duration: 0.7, delay: 0.65 }}
+              className="mt-14"
             >
-              <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 px-4">Works with all platforms</p>
-              <div className="flex flex-wrap justify-center gap-4 sm:gap-5 md:gap-6 px-4">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">Works with all your platforms</p>
+              <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
                 {platforms.map((platform, index) => (
                   <motion.div
                     key={platform.name || index}
-                    initial={{ opacity: 0, scale: 0 }}
+                    initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1 + index * 0.1, type: "spring", stiffness: 200 }}
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl ${platform.color || 'text-gray-600'} cursor-pointer hover:drop-shadow-lg transition-all`}
+                    transition={{ delay: 0.7 + index * 0.08, type: "spring", stiffness: 200 }}
+                    whileHover={{ scale: 1.15 }}
+                    className={`text-2xl sm:text-3xl ${platform.color || 'text-slate-600'} cursor-pointer transition-transform`}
+                    title={platform.name}
                   >
                     {platform.icon}
                   </motion.div>
@@ -274,23 +196,23 @@ const HeroSection = ({
         </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll indicator */}
       {showScrollIndicator && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.2, repeat: Infinity, repeatType: "reverse", duration: 2 }}
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
           <motion.div
-            animate={{ y: [0, 10, 0] }}
+            animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-purple-600 dark:border-purple-400 rounded-full flex justify-center"
+            className="w-5 h-9 border-2 border-slate-400 dark:border-slate-600 rounded-full flex justify-center"
           >
             <motion.div
-              animate={{ y: [0, 12, 0] }}
+              animate={{ y: [0, 10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-3 bg-purple-600 dark:bg-purple-400 rounded-full mt-2"
+              className="w-1 h-2.5 bg-slate-400 dark:bg-slate-600 rounded-full mt-1.5"
             />
           </motion.div>
         </motion.div>
@@ -300,4 +222,3 @@ const HeroSection = ({
 };
 
 export default HeroSection;
-

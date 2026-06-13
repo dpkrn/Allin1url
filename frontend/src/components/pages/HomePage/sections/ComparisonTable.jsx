@@ -231,7 +231,7 @@ const ComparisonTable = () => {
       case 'warning':
         return 'bg-amber-50 dark:bg-amber-900/20';
       default:
-        return 'bg-gray-50 dark:bg-gray-800';
+        return 'bg-slate-50 dark:bg-slate-800';
     }
   };
 
@@ -272,30 +272,30 @@ const ComparisonTable = () => {
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
   return (
-    <div className="w-full bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-4 px-3 sm:py-6 md:py-8 sm:px-4 md:px-6 lg:px-8">
+    <div className="w-full bg-slate-50 dark:bg-slate-900 py-4 px-3 sm:py-6 md:py-8 sm:px-4 md:px-6 lg:px-8">
       <div className="w-full mx-auto">
         {/* Header */}
         <div className="text-center mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 sm:mb-3 px-2">
-            🆚 All in1 url vs. Competitors
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-2 sm:mb-3 px-2">
+            All in1 url vs. Competitors
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 px-2">
+          <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 px-2">
             Complete feature comparison at a glance
           </p>
           {!isMobile && (
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500 mt-2">
-              💡 Drag column edges to resize
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-500 mt-2">
+              Drag column edges to resize
             </p>
           )}
         </div>
 
         {/* Table Container */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-xl sm:shadow-2xl overflow-x-auto">
+        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-x-auto">
           <div className="inline-block min-w-full">
             {/* Table Header */}
-            <div className="flex border-b-2 border-gray-200 dark:border-gray-700">
-              <div 
-                className={`bg-gray-50 dark:bg-gray-900 font-bold text-gray-700 dark:text-gray-300 flex-shrink-0 relative flex items-center ${
+            <div className="flex border-b-2 border-slate-200 dark:border-slate-700">
+              <div
+                className={`bg-slate-50 dark:bg-slate-900 font-bold text-slate-700 dark:text-slate-300 flex-shrink-0 relative flex items-center ${
                   isMobile 
                     ? 'p-1.5 sm:p-2 text-[10px] sm:text-[11px]' 
                     : 'p-4 text-sm'
@@ -323,8 +323,8 @@ const ComparisonTable = () => {
                   key={idx}
                   className={`text-center font-bold transition-all duration-300 flex-shrink-0 relative flex items-center justify-center ${
                     product.highlight
-                      ? 'bg-gradient-to-br from-blue-500 to-purple-500 text-white'
-                      : 'bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300'
+                      ? 'bg-violet-600 text-white'
+                      : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300'
                   } ${
                     isMobile 
                       ? 'p-1.5 sm:p-2 text-[10px] sm:text-[11px]' 
@@ -352,21 +352,19 @@ const ComparisonTable = () => {
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-gray-200 dark:divide-gray-700">
+            <div className="divide-y divide-slate-200 dark:divide-slate-700">
               {features.map((feature, rowIdx) => (
                 <div
                   key={rowIdx}
                   onMouseEnter={() => !isMobile && setHoveredRow(rowIdx)}
                   onMouseLeave={() => !isMobile && setHoveredRow(null)}
-                  className={`flex transition-all duration-300 ${
-                    hoveredRow === rowIdx && !isMobile
-                      ? 'bg-blue-50 dark:bg-blue-900/10 shadow-lg scale-[1.01]'
-                      : ''
+                  className={`flex transition-colors ${
+                    hoveredRow === rowIdx && !isMobile ? 'bg-violet-50/60 dark:bg-violet-950/20' : ''
                   }`}
                 >
                   {/* Feature Name */}
-                  <div 
-                    className={`font-semibold text-gray-800 dark:text-gray-200 flex items-start border-r border-gray-200 dark:border-gray-700 flex-shrink-0 ${
+                  <div
+                    className={`font-semibold text-slate-800 dark:text-slate-200 flex items-start border-r border-slate-200 dark:border-slate-700 flex-shrink-0 ${
                       isMobile 
                         ? 'p-1.5 sm:p-2 text-[10px] sm:text-[11px] leading-tight' 
                         : 'p-4 text-sm'
@@ -388,7 +386,7 @@ const ComparisonTable = () => {
                       key={colIdx}
                       className={`transition-all duration-300 flex-shrink-0 flex items-start ${
                         products[colIdx].highlight
-                          ? 'bg-blue-50/50 dark:bg-blue-900/20 border-r-2 border-l-2 border-blue-200 dark:border-blue-700'
+                          ? 'bg-violet-50/50 dark:bg-violet-900/20 border-r-2 border-l-2 border-violet-200 dark:border-violet-700'
                           : ''
                       } ${getStatusBg(feature.statuses[colIdx])} ${
                         isMobile 
@@ -407,7 +405,7 @@ const ComparisonTable = () => {
                         <div className={`flex-shrink-0 ${isMobile ? 'mt-0' : 'mt-0.5'}`}>
                           {getIcon(feature.statuses[colIdx], isMobile)}
                         </div>
-                        <span className={`text-gray-700 dark:text-gray-300 break-words whitespace-normal word-break break-all flex-1 ${
+                        <span className={`text-slate-700 dark:text-slate-300 break-words whitespace-normal word-break break-all flex-1 ${
                           isMobile 
                             ? 'text-[10px] sm:text-[11px] leading-tight' 
                             : 'text-sm leading-relaxed'
@@ -424,14 +422,10 @@ const ComparisonTable = () => {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-3 sm:mt-4 md:mt-6 lg:mt-8 text-center p-4 sm:p-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg sm:rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] sm:hover:scale-[1.02]">
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-            Ready to get started?
-          </h3>
-          <p className="text-sm sm:text-base text-blue-100 mb-3 sm:mb-4 px-2">
-            Join thousands using All in1 url for their professional links
-          </p>
-          <button className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-all duration-200 hover:scale-105 shadow-lg text-sm sm:text-base">
+        <div className="mt-6 sm:mt-8 text-center p-6 sm:p-8 bg-violet-600 rounded-xl">
+          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Ready to get started?</h3>
+          <p className="text-sm sm:text-base text-violet-100 mb-4">Join thousands using All in1 url for their professional links</p>
+          <button className="px-6 sm:px-8 py-2.5 sm:py-3 bg-white text-violet-700 font-bold rounded-lg hover:bg-violet-50 transition-colors text-sm sm:text-base">
             Get Started Free
           </button>
         </div>

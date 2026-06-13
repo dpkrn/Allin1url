@@ -294,7 +294,7 @@ const googleOAuthCheck = (req, res) => {
 
 const handleAuthCallback=async (req, res) => {
   const frontendBase = clientUrl(isDevEnvironment() ? "dev" : "prod");
-
+  console.log('auth callback',frontendBase);
   try {
     await connectDB();
 

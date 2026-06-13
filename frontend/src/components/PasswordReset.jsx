@@ -1,197 +1,125 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { CSSTransition } from "react-transition-group";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { FiMail, FiLock, FiKey, FiArrowRight, FiArrowLeft } from "react-icons/fi";
 
 const PasswordReset = () => {
-  const [step, setStep] = useState(1); // Step 1: Email, Step 2: OTP, Step 3: Password
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const navigate=useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    // Logic to send OTP to the email
+    setLoading(true);
     try {
-      const res = await api.post(
-        "/auth/password_reset",
-        { email },
-        { withCredentials: true }
-      );
+      const res = await api.post("/auth/password_reset", { email }, { withCredentials: true });
       if (res.status === 201 && res.data.success) {
-        toast.success(res.data.message);
-        setOtpSent(true);
-        setMessage(`OTP has been sent to your ${email}. Please check your inbox.`);
-        setStep(2); // Move to OTP step
+        toast.success(res.data.message || "OTP sent to your email");
+        setStep(2);
       }
     } catch (err) {
-      console.log(err);
-      const message = err.response?.data?.message || "something went wrong";
-      toast.error(message);
+      toast.error(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) { toast.error("Passwords do not match"); return; }
+    if (password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
+    setLoading(true);
     try {
-      const res = await api.post(
-        "/auth/validate_otp",
-        { email,otp,password },
-        { withCredentials: true }
-      );
+      const res = await api.post("/auth/validate_otp", { email, otp, password }, { withCredentials: true });
       if (res.status === 201 && res.data.success) {
-          // Dummy OTP for testing
-          // setMessage("Email verified! You can now reset your password.");
-          toast.success(res.data.message);
-          navigate('/login',{replace:true})
-          
-        }
-         
-        
-      
+        toast.success(res.data.message || "Password changed successfully");
+        navigate('/login', { replace: true });
+      }
     } catch (err) {
-      console.log(err);
-      setMessage("Invalid OTP. Please try again.");
-      const message = err.response?.data?.message || "something went wrong";
-      toast.error(message);
+      toast.error(err.response?.data?.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
     }
   };
-    
+
+  const inputClass = "w-full pl-10 pr-3 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors";
 
   return (
-    <div className="w-screen h-screen  flex items-center justify-center">
-      <div className="w-full max-w-md shadow-lg rounded-lg p-8 transition-all duration-500 ease-in-out transform">
-        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">
-          Forgot Password
-        </h2>
-        {message && (
-          <div className="mb-4 text-center text-green-500">{message}</div>
-        )}
-
-        {/* Email Form */}
-        <CSSTransition
-          in={step === 1}
-          timeout={300}
-          classNames="fade"
-          unmountOnExit
-        >
-          <form onSubmit={handleEmailSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-8 shadow-sm">
+          {/* Icon */}
+          <div className="flex justify-center mb-6">
+            <div className="w-14 h-14 bg-violet-50 dark:bg-violet-950/30 rounded-2xl flex items-center justify-center">
+              {step === 1 ? <FiMail className="w-7 h-7 text-violet-600 dark:text-violet-400" /> : <FiKey className="w-7 h-7 text-violet-600 dark:text-violet-400" />}
             </div>
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              Send OTP
+          </div>
+
+          {/* Steps indicator */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            {[1, 2].map((s) => (
+              <div key={s} className={`h-1.5 rounded-full transition-all duration-300 ${s === step ? 'w-8 bg-violet-600' : s < step ? 'w-4 bg-violet-300' : 'w-4 bg-slate-200 dark:bg-slate-700'}`} />
+            ))}
+          </div>
+
+          {step === 1 ? (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-xl font-semibold text-slate-900 dark:text-white mb-1">Forgot your password?</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Enter your email to receive a reset code</p>
+              </div>
+              <form onSubmit={handleEmailSubmit} className="space-y-4">
+                <div className="relative">
+                  <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className={inputClass} />
+                </div>
+                <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">
+                  {loading ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <>Send OTP <FiArrowRight className="w-4 h-4" /></>}
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <div className="text-center mb-6">
+                <h1 className="text-xl font-semibold text-slate-900 dark:text-white mb-1">Reset your password</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Enter the code sent to <span className="font-medium text-slate-700 dark:text-slate-300">{email}</span> and your new password
+                </p>
+              </div>
+              <form onSubmit={handleOtpSubmit} className="space-y-4">
+                <div className="relative">
+                  <FiKey className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input type="text" placeholder="Enter OTP code" value={otp} onChange={(e) => setOtp(e.target.value)} required className={inputClass} />
+                </div>
+                <div className="relative">
+                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input type="password" placeholder="New password" value={password} onChange={(e) => setPassword(e.target.value)} required className={inputClass} />
+                </div>
+                <div className="relative">
+                  <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input type="password" placeholder="Confirm new password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className={inputClass} />
+                </div>
+                <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50">
+                  {loading ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <>Change Password <FiArrowRight className="w-4 h-4" /></>}
+                </button>
+                <button type="button" onClick={() => setStep(1)} className="w-full flex items-center justify-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
+                  <FiArrowLeft className="w-3.5 h-3.5" /> Back
+                </button>
+              </form>
+            </>
+          )}
+
+          <div className="mt-6 text-center">
+            <button onClick={() => navigate('/login')} className="text-sm text-violet-600 dark:text-violet-400 hover:underline">
+              Back to login
             </button>
-          </form>
-        </CSSTransition>
-
-        {/* OTP Form */}
-        <CSSTransition
-          in={step === 2}
-          timeout={300}
-          classNames="fade"
-          unmountOnExit
-        >
-          <form onSubmit={handleOtpSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="otp"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Enter OTP
-              </label>
-              <input
-                type="text"
-                name="otp"
-                id="otp"
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                New Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirm New Password
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-            {/* <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              Reset Password
-            </button> */}
-         
-            <button
-              type="submit"
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
-              Change Password
-            </button>
-          </form>
-        </CSSTransition>
-
-        {/* Password Reset Form */}
-        {/* <CSSTransition
-          in={step === 3}
-          timeout={300}
-          classNames="fade"
-          unmountOnExit
-        >
-         
-        </CSSTransition> */}
+          </div>
+        </div>
       </div>
     </div>
   );

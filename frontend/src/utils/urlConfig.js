@@ -36,6 +36,7 @@ if (typeof window !== 'undefined') {
 
 export const serverUrl=(tierOverride)=>{
     const currentTier = tierOverride || tier;
+    console.log('currentTier',currentTier);
     if(currentTier=='dev'){
         return "http://localhost:8080"
     }
@@ -70,7 +71,7 @@ export const buildGoogleOAuthUrl = (stateData) => {
   }
 
   const redirectUri = `${serverUrl()}/auth/google`;
-
+console.log('redirectUri',redirectUri);
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUri,

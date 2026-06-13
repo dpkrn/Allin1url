@@ -1,262 +1,167 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaLightbulb, FaCheck, FaTimes, FaStar, FaDollarSign, FaLock, FaCode, FaUsers } from 'react-icons/fa';
-import Footer from '../../footer/Footer';
+import { FiCheck, FiX, FiMinus, FiArrowRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import DocLayout from "./DocLayout";
+
+const comparisonRows = [
+  { feature: "Human-readable URLs", allin1: true, bitly: false, linktree: false, biolink: false },
+  { feature: "Custom subdomain (free)", allin1: true, bitly: false, linktree: false, biolink: false },
+  { feature: "Links never expire", allin1: true, bitly: "paid", linktree: true, biolink: true },
+  { feature: "Per-click analytics (free)", allin1: true, bitly: "paid", linktree: "paid", biolink: "paid" },
+  { feature: "Password-protected links", allin1: true, bitly: false, linktree: "paid", biolink: "paid" },
+  { feature: "Link visibility controls", allin1: true, bitly: false, linktree: "limited", biolink: "limited" },
+  { feature: "Update destination without resharing", allin1: true, bitly: true, linktree: true, biolink: true },
+  { feature: "Hub landing page", allin1: true, bitly: false, linktree: true, biolink: true },
+  { feature: "User search / discovery", allin1: true, bitly: false, linktree: false, biolink: false },
+  { feature: "Granular profile privacy", allin1: true, bitly: false, linktree: "limited", biolink: "limited" },
+  { feature: "Open source & self-hostable", allin1: true, bitly: false, linktree: false, biolink: false },
+  { feature: "No third-party tracking", allin1: true, bitly: false, linktree: false, biolink: false },
+  { feature: "Free forever (no paid tier)", allin1: true, bitly: false, linktree: false, biolink: false },
+];
+
+const cols = [
+  { key: "allin1", label: "All in1 url", highlight: true },
+  { key: "bitly", label: "Bit.ly / TinyURL" },
+  { key: "linktree", label: "Linktree" },
+  { key: "biolink", label: "Bio.link" },
+];
+
+const CellIcon = ({ value }) => {
+  if (value === true) return <FiCheck className="w-4 h-4 text-emerald-500 mx-auto" />;
+  if (value === false) return <FiX className="w-4 h-4 text-red-400 mx-auto" />;
+  return (
+    <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400 whitespace-nowrap">
+      {value === "paid" ? "Paid only" : value}
+    </span>
+  );
+};
+
+const differentiators = [
+  {
+    title: "Links that mean something",
+    body: "Most link shorteners produce codes like bit.ly/3xZ9k. With All in1 url, every link follows the pattern username.allin1url.in/platform. Someone who sees your LinkedIn link can correctly guess what your GitHub link looks like — that's memorable by design.",
+  },
+  {
+    title: "Everything free, no upgrade wall",
+    body: "Linktree charges $6–24/month for analytics and password protection. Bio.link charges $3–9/month for similar features. All in1 url provides all features — including per-click analytics and password-protected links — at no cost and with no paid tier.",
+  },
+  {
+    title: "Open source — audit and self-host",
+    body: "The entire codebase is on GitHub. You can read exactly how your data is handled, check the security implementation, contribute improvements, or self-host the service entirely if you want full control. No black boxes.",
+  },
+  {
+    title: "Privacy-first by architecture",
+    body: "No Google Analytics. No tracking pixels. No third-party scripts watching your visitors. The click analytics system is built in-house and the data exists only for your own dashboard — never aggregated for advertising.",
+  },
+  {
+    title: "No vendor lock-in",
+    body: "Because All in1 url is open source, you're never stuck. If the service ever goes down, the codebase exists to recreate it. Your links are readable enough that manually migrating them is practical.",
+  },
+  {
+    title: "SEO and accessibility",
+    body: "Screen readers, email clients, and search engines all handle descriptive URLs better than opaque codes. username.allin1url.in/linkedin conveys intent before the click happens — random codes convey nothing.",
+  },
+];
 
 const Different = () => {
-  const comparisons = [
-    {
-      platform: "All in1 url",
-      features: [
-        "Human-readable, memorable links",
-        "Never expires",
-        "Centralized management",
-        "Built-in analytics",
-        "Free and open source",
-        "Link privacy controls",
-        "Password protection",
-        "User search",
-        "Granular privacy settings",
-        "Customizable email notifications"
-      ],
-      color: "from-purple-500 to-pink-500",
-      icon: FaStar
-    },
-    {
-      platform: "Link Shorteners (bit.ly, tinyurl)",
-      features: [
-        "Random codes",
-        "Often expires",
-        "Must update each link",
-        "Limited or premium analytics",
-        "Often requires paid plans",
-        "No privacy controls",
-        "No password protection",
-        "No user search",
-        "No privacy settings",
-        "No notifications"
-      ],
-      color: "from-gray-400 to-gray-600",
-      icon: FaTimes
-    },
-    {
-      platform: "Linktree",
-      features: [
-        "Platform-dependent branding",
-        "Usually permanent",
-        "Centralized management",
-        "Premium analytics",
-        "Premium features locked",
-        "Limited privacy controls",
-        "Premium password protection",
-        "Limited search",
-        "Limited privacy settings",
-        "Premium notifications"
-      ],
-      color: "from-green-400 to-green-600",
-      icon: FaCheck
-    },
-    {
-      platform: "Bio.link",
-      features: [
-        "Platform-dependent branding",
-        "Usually permanent",
-        "Centralized management",
-        "Premium analytics",
-        "Premium features locked",
-        "Limited privacy controls",
-        "Premium password protection",
-        "Limited search",
-        "Limited privacy settings",
-        "Premium notifications"
-      ],
-      color: "from-blue-400 to-blue-600",
-      icon: FaCheck
-    }
-  ];
-
-  const advantages = [
-    {
-      icon: FaStar,
-      title: "Brand Identity",
-      description: "Your links become part of your brand identity, not generic shortened URLs. When someone sees 'yourname.allin1url.in/linkedin', they immediately know it's your link and can easily remember the pattern for other platforms.",
-      gradient: "from-purple-500 to-pink-500"
-    },
-    {
-      icon: FaUsers,
-      title: "User Trust",
-      description: "Transparent, readable URLs build more trust than mysterious short codes. Users can see where the link will take them before clicking, reducing phishing concerns.",
-      gradient: "from-blue-500 to-cyan-500"
-    },
-    {
-      icon: FaCode,
-      title: "SEO Friendly",
-      description: "Descriptive URLs are better for search engines (better indexing), social media previews (richer link previews), email clients (clear link text), and screen readers (better accessibility).",
-      gradient: "from-green-500 to-emerald-500"
-    },
-    {
-      icon: FaLock,
-      title: "No Vendor Lock-in",
-      description: "Open source means you can self-host if needed, you're not dependent on a single service, you can customize to your needs, and the community can improve and maintain it.",
-      gradient: "from-orange-500 to-red-500"
-    },
-    {
-      icon: FaUsers,
-      title: "Community Driven",
-      description: "Built by developers, for developers: active community support, regular updates and improvements, open to contributions, and transparent development process.",
-      gradient: "from-pink-500 to-rose-500"
-    },
-    {
-      icon: FaDollarSign,
-      title: "Cost Effective",
-      description: "All in1 url is free forever and open source. Compare to Linktree Pro ($6-24/month), Bio.link Pro ($3-9/month), or Custom Domain Services ($10-50+/month + setup fees).",
-      gradient: "from-indigo-500 to-purple-500"
-    },
-    {
-      icon: FaLock,
-      title: "Privacy First",
-      description: "No tracking scripts, no third-party analytics, no data selling, open source (auditable), and user-controlled data.",
-      gradient: "from-cyan-500 to-blue-500"
-    },
-    {
-      icon: FaCode,
-      title: "Flexibility",
-      description: "Add any platform (not limited to predefined list), custom platform names, full control over link structure, and no restrictions on number of links.",
-      gradient: "from-yellow-500 to-orange-500"
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-lime-100 to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-28 pb-12 md:pb-20">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            How It's Different
-          </motion.h1>
-          <motion.p
-            className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            See how All in1 url compares to other platforms and why it's superior
-          </motion.p>
-        </motion.div>
-
-        {/* Comparison Table */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 overflow-x-auto"
-        >
-          <div className="min-w-full inline-block">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
-              {comparisons.map((platform, idx) => {
-                const IconComponent = platform.icon;
-                return (
-                  <motion.div
-                    key={platform.platform}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: idx * 0.1 }}
-                    className={`relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 p-4 md:p-6 overflow-hidden ${
-                      idx === 0 ? "ring-2 ring-purple-500" : ""
-                    }`}
+    <DocLayout
+      badge="Comparison"
+      title="How it's Different"
+      subtitle="All in1 url compared to link shorteners and bio link tools — feature by feature."
+    >
+      {/* Comparison table */}
+      <section className="mb-10">
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Feature comparison</h2>
+        <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-700">
+                  <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 w-48 bg-slate-50 dark:bg-slate-900">
+                    Feature
+                  </th>
+                  {cols.map((col) => (
+                    <th
+                      key={col.key}
+                      className={`px-4 py-3 text-center text-xs font-semibold ${
+                        col.highlight
+                          ? "bg-violet-50 dark:bg-violet-950/30 text-violet-700 dark:text-violet-400"
+                          : "bg-slate-50 dark:bg-slate-900 text-slate-500 dark:text-slate-400"
+                      }`}
+                    >
+                      {col.highlight && (
+                        <span className="block text-[9px] font-bold uppercase tracking-wider text-violet-500 mb-0.5">
+                          This app
+                        </span>
+                      )}
+                      {col.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {comparisonRows.map((row, idx) => (
+                  <tr
+                    key={row.feature}
+                    className={idx % 2 === 0 ? "bg-white dark:bg-slate-950" : "bg-slate-50/50 dark:bg-slate-900/30"}
                   >
-                    {/* Platform Header */}
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className={`inline-flex p-2 rounded-lg bg-gradient-to-r ${platform.color} text-white`}>
-                        <IconComponent className="w-4 h-4" />
-                      </div>
-                      <h3 className="text-sm md:text-base font-bold text-gray-900 dark:text-white">
-                        {platform.platform}
-                      </h3>
-                    </div>
+                    <td className="px-4 py-2.5 text-xs text-slate-700 dark:text-slate-300 font-medium">{row.feature}</td>
+                    {cols.map((col) => (
+                      <td
+                        key={col.key}
+                        className={`px-4 py-2.5 text-center ${
+                          col.highlight ? "bg-violet-50/50 dark:bg-violet-950/10" : ""
+                        }`}
+                      >
+                        <CellIcon value={row[col.key]} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 flex items-center gap-4 text-xs text-slate-400 dark:text-slate-500">
+            <span className="flex items-center gap-1"><FiCheck className="w-3 h-3 text-emerald-500" /> Available free</span>
+            <span className="flex items-center gap-1"><span className="text-[9px] font-bold text-amber-500">Paid</span> Paid plan required</span>
+            <span className="flex items-center gap-1"><FiX className="w-3 h-3 text-red-400" /> Not available</span>
+          </div>
+        </div>
+      </section>
 
-                    {/* Features List */}
-                    <ul className="space-y-2">
-                      {platform.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs md:text-sm text-gray-600 dark:text-gray-400">
-                          {idx === 0 ? (
-                            <FaCheck className="w-3 h-3 mt-0.5 text-green-500 flex-shrink-0" />
-                          ) : (
-                            <span className="w-3 h-3 mt-0.5 flex-shrink-0">•</span>
-                          )}
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                );
-              })}
+      {/* Why different */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Why All in1 url stands apart</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {differentiators.map((d, idx) => (
+            <div key={d.title} className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-5 h-5 rounded-full bg-violet-100 dark:bg-violet-950/50 text-violet-600 dark:text-violet-400 text-xs font-bold flex items-center justify-center flex-shrink-0">
+                  {idx + 1}
+                </span>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">{d.title}</h3>
+              </div>
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{d.body}</p>
             </div>
-          </div>
-        </motion.div>
+          ))}
+        </div>
+      </section>
 
-        {/* Why All in1 url is Superior */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+      {/* CTA */}
+      <div className="mt-10 bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">See for yourself</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Signup takes under a minute. No payment info needed.</p>
+        </div>
+        <Link
+          to="/login"
+          className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 md:mb-12 text-gray-900 dark:text-white">
-            Why All in1 url is Superior
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {advantages.map((advantage, idx) => {
-              const IconComponent = advantage.icon;
-              return (
-                <motion.div
-                  key={advantage.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 p-6 md:p-8 overflow-hidden group"
-                >
-                  {/* Gradient Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${advantage.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                  
-                  {/* Icon */}
-                  <div className="relative z-10 mb-4">
-                    <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${advantage.gradient} text-white`}>
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10">
-                    <h3 className="text-xl md:text-2xl font-bold mb-3 text-gray-900 dark:text-white">
-                      {advantage.title}
-                    </h3>
-                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-                      {advantage.description}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
+          Get started <FiArrowRight className="w-4 h-4" />
+        </Link>
       </div>
-      <Footer />
-    </div>
+    </DocLayout>
   );
 };
 
 export default Different;
-
-
-
