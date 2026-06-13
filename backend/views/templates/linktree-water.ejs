@@ -381,7 +381,7 @@
                 <img src="<%=dp.image%>" alt="<%=username.toUpperCase()%>'s Profile" class="profile-pic" onerror="handleImageError(this, '<%=username.charAt(0).toUpperCase()%>')">
             </div>
             <h1 class="username"><%= username.toUpperCase() %></h1>
-            <p class="bio"><%=dp.bio||"Welcome to my link hub! Explore all my profiles below."%></p>
+            <%- include('../partials/profile-info') %>
         </div>
         
         <div class="links">
