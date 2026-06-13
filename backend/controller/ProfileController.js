@@ -223,6 +223,7 @@ const getPublicProfile = async (req, res) => {
             profile: {
                 username: profile.username,
                 name: profile.name || user.name,
+                email: settings.profile.showEmail ? user.email : null,
                 location: settings.profile.showLocation ? profile.location : null,
                 passion: settings.profile.showPassion ? profile.passion : null,
                 bio: settings.profile.showBio ? profile.bio : null,

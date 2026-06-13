@@ -74,7 +74,7 @@ const signUpController = async (req, res, next) => {
       // password: hashedPassword,
       username:username.toLowerCase(),
     });
-    const userinfo=await Profile.create({username,image:"/images/panda.png"});
+    const userinfo=await Profile.create({username:username.toLowerCase(),image:"/images/panda.png"});
     if (user&&userinfo) {
       console.log("user created");
       // Use name from request body or fallback to username
@@ -112,6 +112,13 @@ const signInController = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "Email does not exist !" });
+
+    if (!user.password) {
+      return res
+        .status(401)
+        .json({ success: false, message: "This account was created with Google Sign-In. Please sign in with Google." });
+    }
+
     const auth = await bcryptjs.compare(password, user.password);
     if (!auth) {
       return res

@@ -75,7 +75,8 @@ const allowedOrigins = [
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, Postman, etc.)
-    if (!origin) {
+    // Also allow null origin — browsers send this for localhost subdomain form POSTs
+    if (!origin || origin === 'null') {
       return callback(null, true);
     }
     
@@ -289,46 +290,64 @@ const decodeData = (encodedData) => {
 app.post('/link/verify-password', extractInfo, async (req, res) => {
   const { hashedUsername, hashedSource, password } = req.body;
 
-  const username = decodeData(hashedUsername);
-  const source = decodeData(hashedSource);
-  console.log(password)
-
-  const doc = await Link.findOne({
-    username,
-    source,
-    deletedAt: null
+  const renderError = (msg) => res.render('password_prompt', {
+    hashedUsername,
+    hashedSource,
+    error: msg,
   });
 
-  if (!doc) {
-    return res.status(404).json({ success: false });
-  }
+  try {
+    const username = decodeData(hashedUsername);
+    const source   = decodeData(hashedSource);
 
-  //  const bcryptjs = require('bcryptjs');
-    if (!doc.password || !(await bcryptjs.compare(password, doc.password))) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid password"
-    });
-  }
-  //   // Password correct, redirect directly to destination
-    const {destination,clicked,notSeen}=doc
-    await Link.updateOne({username,source},{$set:{clicked:clicked+1,notSeen:notSeen+1}})
-    
-    const info=await User.findOne({username},{email:1,name:1})
-    if(info) {
-      const {email,name}=info
-      const deviceDetails=req.details || {}
-      // Send email asynchronously, don't wait for it
-      sendVisitEmail(email,username,name,deviceDetails,source).catch(err => {
-        console.error(`Failed to send visit to ${username}:`, err);
-      });
+    if (!username || !source) {
+      return renderError('Invalid link. Please go back and try again.');
     }
 
+    const doc = await Link.findOne({ username, source, deletedAt: null });
 
-  return res.json({
-    success: true,
-    destination: destination
-  });
+    if (!doc) {
+      return renderError('Link not found.');
+    }
+
+    if (!doc.password || !(await bcryptjs.compare(password, doc.password))) {
+      return renderError('Incorrect password. Please try again.');
+    }
+
+    const { clicked, notSeen } = doc;
+    let destination = doc.destination;
+
+    console.log(`[verify-password] Redirecting ${username}/${source} → ${destination}`);
+
+    if (!destination) {
+      return renderError('Link destination is missing. Please contact the link owner.');
+    }
+
+    // Ensure destination has a protocol so Express doesn't treat it as a relative path
+    if (!/^https?:\/\//i.test(destination)) {
+      destination = 'https://' + destination;
+    }
+
+    // Fire-and-forget: update click count + send notification
+    Link.updateOne({ username, source }, { $set: { clicked: clicked + 1, notSeen: notSeen + 1 } })
+      .catch(err => console.error('Click update error:', err));
+
+    UserSettings.getUserSettings(username).then(settings => {
+      if (settings && settings.shouldEmailOnClick()) {
+        User.findOne({ username }, { email: 1, name: 1 }).then(info => {
+          if (info) {
+            sendVisitEmail(info.email, username, info.name, req.details || {}, source)
+              .catch(err => console.error(`Failed to send visit email to ${username}:`, err));
+          }
+        }).catch(() => {});
+      }
+    }).catch(() => {});
+
+    return res.redirect(302, destination);
+  } catch (err) {
+    console.error('verify-password error:', err);
+    return renderError('Something went wrong. Please try again.');
+  }
 });
 
 // Subdomain route handler: dpkrn.allin1url.in/github

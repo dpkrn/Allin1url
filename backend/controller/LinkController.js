@@ -220,6 +220,12 @@ const updateVisibility = async (req, res) => {
                     message: "Password is required for private links"
                 });
             }
+            if (password.length < 4) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Password must be at least 4 characters"
+                });
+            }
             // Hash password using bcryptjs (consistent with AuthController)
             const bcryptjs = require('bcryptjs');
             const hashedPassword = await bcryptjs.hash(password, 10);
