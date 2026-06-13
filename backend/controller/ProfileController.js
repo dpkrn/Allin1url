@@ -6,21 +6,21 @@ const geoip = require('geoip-lite');
 const useragent = require('useragent');
 
 const updateProfile = async (req, res) => {
-    let { username, name, location, bio, passion } = req.body;
-    console.log(name, location, bio, passion);
-  
-    // Ensure fields are set to empty strings if undefined
+    let { username, name, location, bio, passion, headline, website, skills } = req.body;
+
     if (!name) name = "";
-    if (!bio) bio = ""; 
-    if (!passion) passion = ""; 
-    if (!location) location = ""; 
-  
+    if (!bio) bio = "";
+    if (!passion) passion = "";
+    if (!location) location = "";
+    if (!headline) headline = "";
+    if (!website) website = "";
+    if (!Array.isArray(skills)) skills = [];
+
     try {
-      // Update the profile and fetch the updated document
       const updatedProfile = await Profile.findOneAndUpdate(
-        { username }, // Filter by username
-        { $set: { name, bio, passion, location } }, // Fields to update
-        { new: true } // Return the updated document
+        { username },
+        { $set: { name, bio, passion, location, headline, website, skills } },
+        { new: true }
       );
   
       if (updatedProfile) {
@@ -224,6 +224,9 @@ const getPublicProfile = async (req, res) => {
                 username: profile.username,
                 name: profile.name || user.name,
                 email: settings.profile.showEmail ? user.email : null,
+                headline: settings.profile.showHeadline ? profile.headline : null,
+                website: settings.profile.showWebsite ? profile.website : null,
+                skills: settings.profile.showSkills ? (profile.skills || []) : [],
                 location: settings.profile.showLocation ? profile.location : null,
                 passion: settings.profile.showPassion ? profile.passion : null,
                 bio: settings.profile.showBio ? profile.bio : null,

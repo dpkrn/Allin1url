@@ -175,7 +175,7 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
     visibility: 'public',
     deletedAt: null
   });
-  const dp = await Profile.findOne({ username }, { image: 1, bio: 1 });
+  const dp = await Profile.findOne({ username });
   const info = await User.findOne({ username }, { email: 1, name: 1, _id:1, username:1 });
 
   if (!info) {
@@ -200,20 +200,15 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
     }
   }
 
-  // Check if email notification is enabled for LinkHub views
+  let profileSettings = null;
   try {
     const settings = await UserSettings.getUserSettings(username);
-    if (settings && settings.shouldEmailOnLinkHubView()) {
-      sendProfileVisitEmail(
-        email,
-        username,
-        name,
-        deviceDetails,
-        visitorUsername,
-        visitorName
-      ).catch(err => {
-        console.error(`Failed to send LinkHub visit email to ${username}:`, err);
-      });
+    if (settings) {
+      profileSettings = settings.profile;
+      if (settings.shouldEmailOnLinkHubView()) {
+        sendProfileVisitEmail(email, username, name, deviceDetails, visitorUsername, visitorName)
+          .catch(err => console.error(`Failed to send LinkHub visit email to ${username}:`, err));
+      }
     }
   } catch (err) {
     console.error(`Error checking notification settings for ${username}:`, err);
@@ -229,17 +224,16 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
   });
 
   if (tree && dp){
-    // Get user settings to determine template
     let template = 'default';
     const previewTemplate = req.query.template;
     if (previewTemplate) {
       template = previewTemplate;
+    } else if (profileSettings && profileSettings.template) {
+      template = profileSettings.template;
     } else {
       try {
         const settings = await UserSettings.getUserSettings(username);
-        if (settings && settings.template) {
-          template = settings.template;
-        }
+        if (settings && settings.template) template = settings.template;
       } catch (err) {
         console.log('Error fetching template settings, using default:', err.message);
       }
@@ -248,18 +242,10 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
     const templateName = `templates/linktree-${template}`;
     console.log("templateName", templateName);
     try {
-      return res.render(templateName, {
-        username: username,
-        tree: tree,
-        dp: dp
-      });
+      return res.render(templateName, { username, tree, dp, profileSettings });
     } catch (renderErr) {
       console.log(`Template ${templateName} not found, using default:`, renderErr.message);
-      return res.render('templates/linktree-default', {
-        username: username,
-        tree: tree,
-        dp: dp
-      });
+      return res.render('templates/linktree-default', { username, tree, dp, profileSettings });
     }
   }
 
@@ -510,7 +496,7 @@ app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (
     visibility: 'public',
     deletedAt: null
   })
-  const dp=await Profile.findOne({username},{image:1,bio:1});
+  const dp=await Profile.findOne({username});
 
   const info=await User.findOne({username},{email:1,name:1})
   if(!info){
@@ -518,15 +504,13 @@ app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (
   }
   const {email,name}=info
   const deviceDetails=req.details
-  
-  // Get visitor information if they're logged in
+
   let visitorUsername = null;
   let visitorName = null;
   if (req.userId) {
     try {
       const visitor = await User.findById(req.userId, { username: 1, name: 1 });
       if (visitor && visitor.username !== username) {
-        // Only track if visitor is different from profile owner
         visitorUsername = visitor.username;
         visitorName = visitor.name;
       }
@@ -534,68 +518,45 @@ app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (
       console.error(`Error fetching visitor info:`, err);
     }
   }
-  
-  // Check if email notification is enabled for LinkHub views
+
+  let profileSettings = null;
   try {
     const settings = await UserSettings.getUserSettings(username);
-    if (settings && settings.shouldEmailOnLinkHubView()) {
-      sendProfileVisitEmail(
-        email,
-        username,
-        name,
-        deviceDetails,
-        visitorUsername,
-        visitorName
-      ).catch(err => {
-        console.error(`Failed to send LinkHub visit email to ${username}:`, err);
-      });
+    if (settings) {
+      profileSettings = settings.profile;
+      if (settings.shouldEmailOnLinkHubView()) {
+        sendProfileVisitEmail(email, username, name, deviceDetails, visitorUsername, visitorName)
+          .catch(err => console.error(`Failed to send LinkHub visit email to ${username}:`, err));
+      }
     }
   } catch (err) {
     console.error(`Error checking notification settings for ${username}:`, err);
-    // Don't send email if there's an error checking settings
   }
 
   if(tree&&dp){
-    // Get user settings to determine template
-    let template = 'default'; // Default template
-    
-    // Check if template query parameter is provided (for preview)
+    let template = 'default';
     const previewTemplate = req.query.template;
     if (previewTemplate) {
       template = previewTemplate;
     } else {
-      // Otherwise, use user's saved template from settings
       try {
         const settings = await UserSettings.getUserSettings(username);
-        if (settings && settings.template) {
-          template = settings.template;
-        }
+        if (settings && settings.template) template = settings.template;
       } catch (err) {
         console.log('Error fetching template settings, using default:', err.message);
       }
     }
-    
-    // Construct template name (templates/linktree-{template})
+
     const templateName = `templates/linktree-${template}`;
     console.log("templateName",templateName)
-    // Render template, fallback to default if template doesn't exist
     try {
-      return res.render(templateName,{ 
-        username:username,
-        tree:tree,
-        dp:dp 
-      });
+      return res.render(templateName, { username, tree, dp, profileSettings });
     } catch (renderErr) {
-      // If template doesn't exist, fallback to default
       console.log(`Template ${templateName} not found, using default:`, renderErr.message);
-      return res.render('templates/linktree-default',{ 
-        username:username,
-        tree:tree,
-        dp:dp 
-      });
+      return res.render('templates/linktree-default', { username, tree, dp, profileSettings });
     }
   }
-  
+
   return res.render('not_exists', { linkHub: '' })
 })
 

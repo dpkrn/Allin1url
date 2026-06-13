@@ -46,7 +46,8 @@ const Settings = () => {
 
   const [profileSettings, setProfileSettings] = useState({
     isPublic: false, showInSearch: false, allowProfileView: false,
-    showEmail: false, showLocation: true, showBio: true, showPassion: true, showProfileImage: true
+    showEmail: false, showHeadline: true, showWebsite: true, showSkills: true,
+    showLocation: true, showBio: true, showPassion: true, showProfileImage: true
   });
   const [linkSettings, setLinkSettings] = useState({ showLinkCount: true, showClickStats: false });
   const [searchSettings, setSearchSettings] = useState({ allowSearch: false, showInFeatured: false, searchKeywords: [] });
@@ -283,10 +284,13 @@ const Settings = () => {
             { label: "Show in Search Results", desc: "Appear in user search results", key: 'showInSearch', state: profileSettings, setter: setProfileSettings, field: 'showInSearch', category: 'profile', disabled: !profileSettings.isPublic },
             { label: "Allow Profile View", desc: "Let others see your full profile page", key: 'allowProfileView', state: profileSettings, setter: setProfileSettings, field: 'allowProfileView', category: 'profile', disabled: !profileSettings.isPublic },
             { label: "Show Email", desc: "Display email on public profile", key: 'showEmail', state: profileSettings, setter: setProfileSettings, field: 'showEmail', category: 'profile', disabled: !profileSettings.isPublic },
-            { label: "Show Location", desc: "Display location on public profile", key: 'showLocation', state: profileSettings, setter: setProfileSettings, field: 'showLocation', category: 'profile' },
-            { label: "Show Bio", desc: "Display bio on public profile", key: 'showBio', state: profileSettings, setter: setProfileSettings, field: 'showBio', category: 'profile' },
+            { label: "Show Headline", desc: "Display your tagline on public profile and LinkHub", key: 'showHeadline', state: profileSettings, setter: setProfileSettings, field: 'showHeadline', category: 'profile' },
+            { label: "Show Website", desc: "Display website link on public profile and LinkHub", key: 'showWebsite', state: profileSettings, setter: setProfileSettings, field: 'showWebsite', category: 'profile' },
+            { label: "Show Skills", desc: "Display skill tags on public profile and LinkHub", key: 'showSkills', state: profileSettings, setter: setProfileSettings, field: 'showSkills', category: 'profile' },
+            { label: "Show Location", desc: "Display location on public profile and LinkHub", key: 'showLocation', state: profileSettings, setter: setProfileSettings, field: 'showLocation', category: 'profile' },
+            { label: "Show Bio", desc: "Display bio on public profile and LinkHub", key: 'showBio', state: profileSettings, setter: setProfileSettings, field: 'showBio', category: 'profile' },
             { label: "Show Passion", desc: "Display passion on public profile", key: 'showPassion', state: profileSettings, setter: setProfileSettings, field: 'showPassion', category: 'profile' },
-            { label: "Show Profile Image", desc: "Display profile picture on public profile", key: 'showProfileImage', state: profileSettings, setter: setProfileSettings, field: 'showProfileImage', category: 'profile' },
+            { label: "Show Profile Image", desc: "Display profile picture on public profile and LinkHub", key: 'showProfileImage', state: profileSettings, setter: setProfileSettings, field: 'showProfileImage', category: 'profile' },
           ].map(({ label, desc, key, state, setter, field, category, disabled }) => (
             <ToggleSetting
               key={key}

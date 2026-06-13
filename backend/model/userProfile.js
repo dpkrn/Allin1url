@@ -26,6 +26,18 @@ const userProfileSchema=new mongoose.Schema({
         type:String,
         default:"profile.jpg"
     },
+    headline:{
+        type:String,
+        default:""
+    },
+    website:{
+        type:String,
+        default:""
+    },
+    skills:{
+        type:[String],
+        default:[]
+    },
     deletedAt: {
         type: Date,
         default: null

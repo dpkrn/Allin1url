@@ -240,13 +240,70 @@
             }
         }
 
+        /* Headline */
+        .headline {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 6px;
+            padding: 0 10px;
+            flex-shrink: 0;
+            letter-spacing: 0.3px;
+        }
+
+        /* Meta row (location + website) */
+        .meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .meta-item a {
+            color: rgba(167, 139, 250, 0.9);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .meta-item a:hover { color: #a78bfa; }
+
+        /* Skills */
+        .skills-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+            padding: 0 4px;
+        }
+        .skill-tag {
+            padding: 3px 10px;
+            background: rgba(139, 92, 246, 0.18);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            font-size: 11px;
+            color: rgba(196, 181, 253, 0.95);
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
         /* Bio */
         .bio {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.6;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             padding: 0 10px;
             flex-shrink: 0;
         }
@@ -569,8 +626,35 @@
                 <h1 class="username"><%= username.toUpperCase() %></h1>
                 <div class="username-underline"></div>
             </div>
-            
-            <p class="bio"><%=dp.bio||"Welcome to my link hub! Explore all my profiles below."%></p>
+
+            <% if (dp.headline && (!profileSettings || profileSettings.showHeadline !== false)) { %>
+            <p class="headline"><%= dp.headline %></p>
+            <% } %>
+
+            <% const showLocation = dp.location && (!profileSettings || profileSettings.showLocation !== false); %>
+            <% const showWebsite = dp.website && (!profileSettings || profileSettings.showWebsite !== false); %>
+            <% if (showLocation || showWebsite) { %>
+            <div class="meta-row">
+                <% if (showLocation) { %>
+                <span class="meta-item">📍 <%= dp.location %></span>
+                <% } %>
+                <% if (showWebsite) { %>
+                <span class="meta-item">🔗 <a href="<%= dp.website.startsWith('http') ? dp.website : 'https://' + dp.website %>" target="_blank" rel="noopener noreferrer"><%= dp.website.replace(/^https?:\/\//, '') %></a></span>
+                <% } %>
+            </div>
+            <% } %>
+
+            <% if (dp.skills && dp.skills.length > 0 && (!profileSettings || profileSettings.showSkills !== false)) { %>
+            <div class="skills-row">
+                <% dp.skills.forEach(skill => { %>
+                <span class="skill-tag"><%= skill %></span>
+                <% }); %>
+            </div>
+            <% } %>
+
+            <% if (dp.bio && (!profileSettings || profileSettings.showBio !== false)) { %>
+            <p class="bio"><%=dp.bio%></p>
+            <% } %>
            
             <div class="links">
                 <% if (tree && tree.length > 0) { %>

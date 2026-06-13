@@ -40,7 +40,19 @@ const userSettingsSchema = new mongoose.Schema({
         },
         showEmail: {
             type: Boolean,
-            default: false // Don't show email in public profile
+            default: false
+        },
+        showHeadline: {
+            type: Boolean,
+            default: true
+        },
+        showWebsite: {
+            type: Boolean,
+            default: true
+        },
+        showSkills: {
+            type: Boolean,
+            default: true
         },
         showLocation: {
             type: Boolean,
