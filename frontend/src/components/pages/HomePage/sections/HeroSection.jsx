@@ -1,30 +1,30 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { TypewriterEffect } from '../../../ui/typewriter-effect';
-import { FlipWords } from '../../../ui/flip-words';
-import { FiArrowRight, FiCheck, FiX } from 'react-icons/fi';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FiArrowRight, FiCheck, FiX, FiLink, FiExternalLink } from 'react-icons/fi';
 import api from '../../../../utils/api';
 import { buildGoogleOAuthUrl } from '../../../../utils/urlConfig';
 import toast from 'react-hot-toast';
+
+const PREVIEW_PLATFORMS = [
+  { name: "linkedin", label: "LinkedIn", color: "text-blue-400" },
+  { name: "github", label: "GitHub", color: "text-slate-300" },
+  { name: "instagram", label: "Instagram", color: "text-pink-400" },
+  { name: "portfolio", label: "Portfolio", color: "text-violet-400" },
+  { name: "leetcode", label: "LeetCode", color: "text-orange-400" },
+];
 
 const HeroSection = ({
   words = [],
   flipWords = [],
   description = "",
   highlightText = "",
-  ctaText = "Start with your username",
+  ctaText = "Claim your free domain",
   ctaAction = null,
   platforms = [],
   showScrollIndicator = true,
   className = "",
   isAuthenticated = false,
 }) => {
-  const navigate = useNavigate();
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-
   const [username, setUsername] = React.useState("");
   const [isAvailable, setAvailable] = React.useState(false);
   const [checking, setChecking] = React.useState(false);
@@ -35,7 +35,7 @@ const HeroSection = ({
     try {
       const res = await api.post("/auth/checkavailablity", { username: usrnm });
       setAvailable(res.status === 200 && res.data.success);
-    } catch (err) {
+    } catch {
       setAvailable(false);
     } finally {
       setChecking(false);
@@ -53,69 +53,64 @@ const HeroSection = ({
     }
   };
 
+  const displayName = username.length >= 1 ? username : "yourname";
+
   return (
-    <motion.section
-      ref={heroRef}
-      style={{ opacity }}
-      className={`relative min-h-screen flex items-center justify-center overflow-hidden ${!isAuthenticated ? 'pt-16' : ''} ${className}`}
-    >
+    <section className={`relative min-h-screen flex flex-col justify-center overflow-hidden ${!isAuthenticated ? 'pt-16 -mt-10' : ''} ${className}`}>
+
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-violet-50 via-white to-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-950" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(139,92,246,0.12),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(139,92,246,0.08),transparent)]" />
+      <div className="absolute inset-0 bg-white dark:bg-slate-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(139,92,246,0.1),transparent)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(139,92,246,0.07),transparent)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(139,92,246,0.04)_1px,transparent_1px)] [background-size:28px_28px]" />
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24">
-        <div className="text-center space-y-6 sm:space-y-8">
-          {/* Main heading */}
-          {words.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-              <TypewriterEffect words={words} className="mb-4" />
-            </motion.div>
-          )}
+      {/* Main content — same container as the rest of the page */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 xl:px-20 py-4 sm:py-6 lg:py-8">
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 xl:gap-20">
 
-          {/* Flip words subheading */}
-          {flipWords.length > 0 && (
+          {/* ── Left: copy + CTA ── */}
+          <div className="flex-1 w-full text-center lg:text-left">
+
+            {/* Badge */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-slate-700 dark:text-slate-300"
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 rounded-full text-xs font-semibold border border-violet-100 dark:border-violet-900/50 mb-7"
             >
-              Create personalized links for your{' '}
-              <span className="inline-block">
-                <FlipWords words={flipWords} duration={100} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-violet-600 dark:text-violet-400" />
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+              Free forever · No credit card required
             </motion.div>
-          )}
 
-          {/* Description */}
-          {description && (
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] mb-5"
+            >
+              All your links,
+              <br />
+              <span className="text-violet-600 dark:text-violet-400">one free domain.</span>
+            </motion.h1>
+
+            {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
             >
-              {description}
-              {highlightText && (
-                <>
-                  <br />
-                  <span className="font-semibold text-violet-600 dark:text-violet-400 mt-1 block">{highlightText}</span>
-                </>
-              )}
+              Claim your free subdomain and share one memorable URL for every platform — LinkedIn, GitHub, Instagram, and more.
             </motion.p>
-          )}
 
-          {/* Username CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="flex flex-col items-center gap-4 mt-8"
-          >
-            {/* URL input row */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-              <span className="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">https://</span>
-              <div className="relative">
+            {/* Username input */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mb-4"
+            >
+              <div className="flex items-center max-w-sm mx-auto lg:mx-0 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm focus-within:border-violet-500 dark:focus-within:border-violet-500 transition-colors">
                 <input
                   type="text"
                   value={username}
@@ -125,99 +120,168 @@ const HeroSection = ({
                     if (val.length >= 5) checkAvailablity(val.toLowerCase());
                     else setAvailable(false);
                   }}
-                  placeholder="username"
-                  className="w-32 sm:w-40 px-3 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm sm:text-base font-semibold placeholder:text-slate-400 focus:outline-none focus:border-violet-500 dark:focus:border-violet-400 transition-colors"
+                  placeholder="yourname"
+                  className="flex-1 pl-5 py-4 bg-transparent text-slate-900 dark:text-white text-base sm:text-lg font-bold placeholder:text-slate-400 placeholder:font-normal focus:outline-none min-w-0"
                   autoComplete="off"
                   spellCheck="false"
                 />
-                {username.length >= 5 && (
-                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2">
-                    {checking ? (
-                      <div className="w-3.5 h-3.5 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
-                    ) : isAvailable ? (
-                      <FiCheck className="w-3.5 h-3.5 text-emerald-500" />
-                    ) : (
-                      <FiX className="w-3.5 h-3.5 text-red-500" />
+                <div className="flex items-center gap-2 px-4 flex-shrink-0">
+                  <span className="text-sm font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap">.allin1url.in</span>
+                  <div className="w-5 h-5 flex items-center justify-center">
+                    {username.length >= 5 && (
+                      checking ? (
+                        <div className="w-4 h-4 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
+                      ) : isAvailable ? (
+                        <FiCheck className="w-4 h-4 text-emerald-500" />
+                      ) : (
+                        <FiX className="w-4 h-4 text-red-500" />
+                      )
                     )}
-                  </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-5 mt-2">
+                {username.length >= 5 && !checking && (
+                  <p className={`text-xs ${isAvailable ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
+                    {isAvailable
+                      ? `✓ ${username}.allin1url.in is available`
+                      : `✗ ${username}.allin1url.in is already taken`}
+                  </p>
                 )}
               </div>
-              <span className="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap">.allin1url.in/</span>
-            </div>
+            </motion.div>
 
-            {/* Availability hint */}
-            {username.length >= 5 && (
-              <p className={`text-xs sm:text-sm ${isAvailable ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
-                {isAvailable ? '✓ Username available' : '✗ Username not available'}
-              </p>
-            )}
-
-            {/* CTA button */}
-            <button
-              onClick={handleCtaClick}
-              disabled={username.length < 5 || !isAvailable || checking}
-              className="flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-violet-500/25 transition-all disabled:cursor-not-allowed disabled:shadow-none"
-            >
-              Get your free domain
-              <FiArrowRight className="w-4 h-4" />
-            </button>
-
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              Get your own domain <strong className="text-slate-700 dark:text-slate-300">FREE</strong> · No credit card required
-            </p>
-          </motion.div>
-
-          {/* Platforms */}
-          {platforms.length > 0 && (
+            {/* CTA */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.65 }}
-              className="mt-14"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mb-10"
             >
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">Works with all your platforms</p>
-              <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-                {platforms.map((platform, index) => (
+              <button
+                onClick={handleCtaClick}
+                disabled={username.length < 5 || !isAvailable || checking}
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-violet-600 hover:bg-violet-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 text-white disabled:text-slate-400 dark:disabled:text-slate-500 text-sm sm:text-base font-semibold rounded-xl shadow-lg hover:shadow-xl hover:shadow-violet-500/20 transition-all disabled:cursor-not-allowed disabled:shadow-none"
+              >
+                Claim your free domain
+                <FiArrowRight className="w-4 h-4" />
+              </button>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-2.5">
+                Continues with Google · No password to create
+              </p>
+            </motion.div>
+
+            {/* Platform icons */}
+            {platforms.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.55 }}
+              >
+                <p className="text-xs text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold mb-3">
+                  Works with every platform
+                </p>
+                <div className="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-5">
+                  {platforms.map((platform, index) => (
+                    <motion.div
+                      key={platform.name || index}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.6 + index * 0.06, type: "spring", stiffness: 200 }}
+                      whileHover={{ scale: 1.15, y: -2 }}
+                      className={`text-2xl ${platform.color || 'text-slate-600'} cursor-pointer transition-transform`}
+                      title={platform.name}
+                    >
+                      {platform.icon}
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* ── Right: live URL preview ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="w-full lg:w-[440px] xl:w-[480px] flex-shrink-0"
+          >
+            <div className="bg-slate-900 dark:bg-slate-800/70 rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-slate-900/20 dark:shadow-black/40">
+
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 px-4 py-3 bg-slate-800 dark:bg-slate-900/70 border-b border-slate-700/50">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500/60" />
+                  <div className="w-3 h-3 rounded-full bg-amber-400/60" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/60" />
+                </div>
+                <div className="flex-1 mx-3">
+                  <div className="bg-slate-700/70 rounded-lg px-3 py-1.5 text-xs font-mono text-center">
+                    <span className="text-violet-400 font-bold">{displayName}</span>
+                    <span className="text-slate-400">.allin1url.in</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile header */}
+              <div className="px-5 py-5 border-b border-slate-700/40">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-sm font-bold text-violet-400">
+                    {displayName.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-200">{displayName}</p>
+                    <p className="text-xs text-slate-500">{displayName}.allin1url.in</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Link rows */}
+              <div className="p-4 space-y-2">
+                {PREVIEW_PLATFORMS.map((platform, i) => (
                   <motion.div
-                    key={platform.name || index}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.7 + index * 0.08, type: "spring", stiffness: 200 }}
-                    whileHover={{ scale: 1.15 }}
-                    className={`text-2xl sm:text-3xl ${platform.color || 'text-slate-600'} cursor-pointer transition-transform`}
-                    title={platform.name}
+                    key={platform.name}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.08 }}
+                    className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-slate-800/60 dark:bg-slate-900/40 hover:bg-slate-700/60 dark:hover:bg-slate-800/50 transition-colors group cursor-default"
                   >
-                    {platform.icon}
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <FiLink className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
+                      <span className="text-xs font-mono truncate">
+                        <span className="text-violet-400 font-bold">{displayName}</span>
+                        <span className="text-slate-500">.allin1url.in/</span>
+                        <span className={`font-semibold ${platform.color}`}>{platform.name}</span>
+                      </span>
+                    </div>
+                    <FiExternalLink className="w-3 h-3 text-slate-600 group-hover:text-slate-400 transition-colors flex-shrink-0" />
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
-          )}
+
+              {/* Footer note */}
+              <div className="px-5 py-3 border-t border-slate-700/40">
+                <p className="text-xs text-slate-500 text-center">
+                  Type your username — preview updates live ↑
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
       </div>
 
       {/* Scroll indicator */}
       {showScrollIndicator && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, repeat: Infinity, repeatType: "reverse", duration: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-5 h-9 border-2 border-slate-400 dark:border-slate-600 rounded-full flex justify-center"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-2.5 bg-slate-400 dark:bg-slate-600 rounded-full mt-1.5"
-            />
-          </motion.div>
-        </motion.div>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-slate-300 dark:text-slate-700">
+          <div className="w-5 h-8 border-2 border-current rounded-full flex justify-center pt-1.5">
+            <div className="w-1 h-2 bg-current rounded-full animate-bounce" />
+          </div>
+        </div>
       )}
-    </motion.section>
+    </section>
   );
 };
 

@@ -29,7 +29,7 @@ const ToggleSetting = ({ label, description, value, onChange, disabled = false, 
 );
 
 const SettingsSection = ({ icon: Icon, title, children }) => (
-  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+  <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800">
     <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-100 dark:border-slate-800">
       <Icon className="w-4 h-4 text-violet-600 dark:text-violet-400" />
       <h2 className="text-sm font-semibold text-slate-900 dark:text-white">{title}</h2>
