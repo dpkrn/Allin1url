@@ -21,14 +21,15 @@ const Footer = () => {
             <Link to="/" className="flex items-center gap-2 mb-3">
               <img
                 src="/web-app-manifest-192x192.png"
-                alt="All in1 url"
+                alt="AllIn1URL – Link in Bio Platform"
                 className="w-7 h-7 rounded-lg object-contain"
                 onError={(e) => { e.target.src = '/favicon-96x96.png'; }}
               />
-              <span className="font-bold text-slate-900 dark:text-white">All in1 url</span>
+              <span className="font-bold text-slate-900 dark:text-white">AllIn1URL</span>
             </Link>
+            <p className="text-xs font-semibold text-violet-600 dark:text-violet-400 mb-2">Link in Bio Platform</p>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
-              One free subdomain for every platform. Share, update, and track your links from one place.
+              AllIn1URL helps creators, developers, founders and professionals manage their online presence. Create your professional profile at allin1url.in.
             </p>
           </div>
 
@@ -103,7 +104,7 @@ const Footer = () => {
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            © {new Date().getFullYear()} All in1 url. Built by{' '}
+            © {new Date().getFullYear()} AllIn1URL – Link in Bio Platform. Built by{' '}
             <a
               href="https://deepak-aryan.vercel.app/"
               target="_blank"

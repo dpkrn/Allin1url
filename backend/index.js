@@ -167,6 +167,29 @@ app.use('/search', requireApiSubdomain, searchRoute);
 app.use('/analytics', requireApiSubdomain, analyticsRoute);
 app.use('/project', requireApiSubdomain, projectRoute);
 
+// robots.txt for each user subdomain
+app.get('/robots.txt', resolveUsername, requireLinkHubSubdomain, (req, res) => {
+  const username = req.params.username;
+  res.set('Content-Type', 'text/plain');
+  res.send(`User-agent: *\nAllow: /\nSitemap: https://${username}.allin1url.in/sitemap.xml\n`);
+});
+
+// sitemap.xml for each user subdomain
+app.get('/sitemap.xml', resolveUsername, requireLinkHubSubdomain, (req, res) => {
+  const username = req.params.username;
+  const today = new Date().toISOString().split('T')[0];
+  res.set('Content-Type', 'application/xml');
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://${username}.allin1url.in/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`);
+});
+
 // Root route - user subdomain link hub (e.g. dpkrn.allin1url.in/)
 app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, res) => {
   const username = req.params.username;

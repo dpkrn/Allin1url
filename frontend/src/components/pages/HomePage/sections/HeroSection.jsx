@@ -78,7 +78,7 @@ const HeroSection = ({
               className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 rounded-full text-xs font-semibold border border-violet-100 dark:border-violet-900/50 mb-7"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
-              Free forever · No credit card required
+              AllIn1URL – Link in Bio Platform · Free forever
             </motion.div>
 
             {/* Headline */}
@@ -100,7 +100,7 @@ const HeroSection = ({
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-md mx-auto lg:mx-0 mb-8 leading-relaxed"
             >
-              Claim your free subdomain and share one memorable URL for every platform — LinkedIn, GitHub, Instagram, and more.
+              AllIn1URL helps creators, developers, founders and professionals manage their online presence. Create your professional profile at allin1url.in — one free subdomain, every platform.
             </motion.p>
 
             {/* Username input */}

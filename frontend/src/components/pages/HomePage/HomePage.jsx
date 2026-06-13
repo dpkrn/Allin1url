@@ -196,7 +196,7 @@ const HomePage = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Perfect for Everyone</h2>
-            <p className="text-lg text-slate-600 dark:text-slate-400">Whether you're a professional, creator, or developer</p>
+            <p className="text-lg text-slate-600 dark:text-slate-400">AllIn1URL helps creators, developers, founders and professionals manage their online presence</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
@@ -256,7 +256,7 @@ const HomePage = () => {
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">How It Works</h2>
             <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-              The core idea behind <strong className="text-slate-900 dark:text-white">All in1 url</strong> is to simplify social media link management. Instead of sharing long, hard-to-remember URLs, you create a single personalized URL that automatically redirects users to the correct platform. Access all your links at one place by visiting{' '}
+              The core idea behind <strong className="text-slate-900 dark:text-white">AllIn1URL – Link in Bio Platform</strong> is to simplify social media link management. Instead of sharing long, hard-to-remember URLs, you create a single personalized URL that automatically redirects users to the correct platform. Create your professional profile at{' '}
               <strong className="text-slate-900 dark:text-white">https://<span className="text-violet-600 dark:text-violet-400">yourname</span>.allin1url.in</strong>.
             </p>
           </motion.div>

@@ -127,13 +127,14 @@ const AboutDeveloper = () => {
                 </span>
               </div>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                Full-stack developer · Built All in1 url end-to-end
+                Full-stack developer · Built AllIn1URL – Link in Bio Platform end-to-end
               </p>
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 max-w-xl">
-                I built All in1 url to solve a real problem — managing multiple social and professional links
-                scattered across platforms. The idea is simple: one free subdomain, clean memorable URLs, and full
-                control over who sees what. Every part of this project, from the API to the UI, was designed and
-                written by me.
+                I built AllIn1URL to solve a real problem — creators, developers, founders and professionals
+                managing multiple social and professional links scattered across platforms. AllIn1URL helps you
+                manage your online presence in one place: create your professional profile at allin1url.in, get a
+                free subdomain, and share one clean URL everywhere. Every part of this project — from the API to
+                the UI — was designed and written by me.
               </p>
 
               {/* Social links */}

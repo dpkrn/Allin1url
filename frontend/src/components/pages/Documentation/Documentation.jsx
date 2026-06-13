@@ -535,7 +535,7 @@ const Documentation = () => {
   const isAuthenticated = useSelector((store) => store.admin.isAuthenticated);
   const location = useLocation();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [openFAQ, setOpenFAQ] = useState([false, false, false]);
+  const [openFAQ, setOpenFAQ] = useState([false, false, false, false, false, false, false, false]);
   const [openFeature, setOpenFeature] = useState(null);
   const [hoveredFeature, setHoveredFeature] = useState(null);
 
@@ -2740,16 +2740,36 @@ const Documentation = () => {
             <div className="space-y-4">
               {[
                 {
+                  q: "What is AllIn1URL?",
+                  a: "AllIn1URL is a Link in Bio Platform that lets you create a professional profile at your own subdomain — username.allin1url.in. Think of it as your digital business card: one URL that points to all your links, bios, and contact info.",
+                },
+                {
+                  q: "Who is AllIn1URL for?",
+                  a: "AllIn1URL helps creators, developers, founders and professionals manage their online presence. Whether you're a job seeker, content creator, freelancer, startup founder, or developer — AllIn1URL gives you a clean, professional profile page for free.",
+                },
+                {
+                  q: "What is LinkHub by AllIn1URL?",
+                  a: "LinkHub is your personal public profile page hosted at username.allin1url.in. It shows your links, bio, skills, contact details, and social profiles — all in one place. You can choose from 20+ themes and control exactly what's visible using the Visibility settings.",
+                },
+                {
+                  q: "How is AllIn1URL different from Linktree?",
+                  a: "Unlike Linktree, AllIn1URL gives you a free custom subdomain (username.allin1url.in), a full professional profile with headline, skills, contact info, and social links, click analytics, 20+ themes, and no branding on your page — all completely free.",
+                },
+                {
                   q: "Can I change my username after creating an account?",
-                  a: "Unfortunately, usernames cannot be changed once they are set. Choose your username carefully!",
+                  a: "Unfortunately, usernames cannot be changed once they are set. Choose your username carefully — it becomes your permanent professional profile URL at allin1url.in.",
                 },
                 {
                   q: "How do I track my link clicks?",
-                  a: "Click tracking is available through your dashboard. You can view the number of clicks for each link, and advanced analytics will be added soon.",
+                  a: "Click tracking is built into every AllIn1URL profile. Visit your Analytics dashboard to see total clicks, per-link breakdown, and your top performing link.",
                 },
                 {
                   q: "Can I use custom platforms other than the popular ones (Instagram, LinkedIn, etc.)?",
-                  a: "Yes! You can add any platform as long as you provide the correct profile URL.",
+                  a: "Yes! You can add any platform as long as you provide the correct profile URL. AllIn1URL is designed to work with every platform.",
+                },
+                {
+                  q: "Is AllIn1URL free?",
+                  a: "Yes — AllIn1URL is completely free. You get a free subdomain at allin1url.in, all 20+ themes, click analytics, a professional profile page, and no ads or branding. No credit card required.",
                 },
               ].map((faq, idx) => (
                 <motion.div

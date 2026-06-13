@@ -1,0 +1,73 @@
+<%
+var _seoName     = dp && dp.name     ? dp.name     : username;
+var _seoHeadline = dp && dp.headline ? dp.headline : '';
+var _seoBio      = dp && dp.bio      ? dp.bio      : '';
+var _seoImage    = dp && dp.image    ? dp.image    : 'https://allin1url.in/web-app-manifest-512x512.png';
+var _seoUrl      = 'https://' + username + '.allin1url.in';
+
+var _seoTitle = _seoHeadline
+  ? _seoName + ' (@' + username + ') – ' + _seoHeadline + ' | LinkHub by AllIn1URL'
+  : _seoName + ' (@' + username + ') | LinkHub by AllIn1URL';
+
+var _seoRawDesc = '';
+if (_seoHeadline && _seoBio) {
+  _seoRawDesc = _seoHeadline + ' — ' + _seoBio;
+} else if (_seoHeadline) {
+  _seoRawDesc = _seoName + ' on AllIn1URL — ' + _seoHeadline + '. Create your professional profile at allin1url.in.';
+} else if (_seoBio) {
+  _seoRawDesc = _seoBio;
+} else {
+  _seoRawDesc = _seoName + ' (@' + username + ') — Professional profile on LinkHub by AllIn1URL. Link in Bio Platform at allin1url.in.';
+}
+var _seoDesc = _seoRawDesc.length > 160 ? _seoRawDesc.substring(0, 157) + '…' : _seoRawDesc;
+
+var _seoSkills = (dp && dp.skills && dp.skills.length) ? dp.skills.join(', ') : '';
+
+var _seoSameAs = [];
+if (dp && dp.twitter)   _seoSameAs.push('https://twitter.com/'   + dp.twitter.replace(/^@/, ''));
+if (dp && dp.linkedin)  _seoSameAs.push(dp.linkedin.startsWith('http') ? dp.linkedin : 'https://linkedin.com/in/' + dp.linkedin);
+if (dp && dp.github)    _seoSameAs.push('https://github.com/'    + dp.github.replace(/^@/, ''));
+if (dp && dp.instagram) _seoSameAs.push('https://instagram.com/' + dp.instagram.replace(/^@/, ''));
+if (dp && dp.youtube)   _seoSameAs.push(dp.youtube.startsWith('http') ? dp.youtube : 'https://youtube.com/@' + dp.youtube.replace(/^@/, ''));
+if (dp && dp.website)   _seoSameAs.push(dp.website.startsWith('http') ? dp.website : 'https://' + dp.website);
+
+var _ldJson = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": _seoName,
+  "url": _seoUrl,
+  "image": _seoImage,
+  "mainEntityOfPage": { "@type": "WebPage", "@id": _seoUrl },
+  "publisher": { "@type": "Organization", "name": "AllIn1URL", "url": "https://allin1url.in" }
+};
+if (_seoHeadline) _ldJson.jobTitle = _seoHeadline;
+if (_seoBio)      _ldJson.description = _seoBio.substring(0, 300);
+if (dp && dp.location) _ldJson.address = { "@type": "PostalAddress", "addressLocality": dp.location };
+if (_seoSameAs.length > 0) _ldJson.sameAs = _seoSameAs;
+%>
+<title><%= _seoTitle %></title>
+<meta name="description" content="<%= _seoDesc %>">
+<% if (_seoSkills) { %><meta name="keywords" content="<%= _seoSkills %>, link in bio, linkhub, allin1url, professional profile"><% } %>
+<meta name="robots" content="index, follow">
+<meta name="author" content="<%= _seoName %>">
+<link rel="canonical" href="<%= _seoUrl %>">
+
+<!-- Open Graph -->
+<meta property="og:url" content="<%= _seoUrl %>">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="<%= _seoTitle %>">
+<meta property="og:description" content="<%= _seoDesc %>">
+<meta property="og:image" content="<%= _seoImage %>">
+<meta property="og:image:alt" content="<%= _seoName %> – LinkHub by AllIn1URL">
+<meta property="og:site_name" content="AllIn1URL">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<%= _seoTitle %>">
+<meta name="twitter:description" content="<%= _seoDesc %>">
+<meta name="twitter:image" content="<%= _seoImage %>">
+<meta name="twitter:image:alt" content="<%= _seoName %> – LinkHub by AllIn1URL">
+
+<!-- JSON-LD: Person schema -->
+<script type="application/ld+json"><%- JSON.stringify(_ldJson, null, 2) %></script>
