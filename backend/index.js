@@ -193,73 +193,70 @@ const fetchStatsCardData = async () => {
   };
 };
 
+// Material Design icon paths (viewBox 0 0 24 24) — scaled 0.67x = ~16px
+const _ICON_USER = 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z';
+const _ICON_EYE  = 'M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z';
+const _ICON_LINK = 'M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1 0 1.71-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z';
+
 const buildSVG = ({ totalUsers, totalVisitors, totalLinks }) => {
-  const u = fmtNum(totalUsers);
-  const v = fmtNum(totalVisitors);
-  const l = fmtNum(totalLinks);
+  const u  = fmtNum(totalUsers);
+  const v  = fmtNum(totalVisitors);
+  const l  = fmtNum(totalLinks);
   const ts = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
 
-  return `<svg width="495" height="148" viewBox="0 0 495 148" fill="none" xmlns="http://www.w3.org/2000/svg">
+  // Each row: icon + label on left, bold value on right
+  const mkRow = (iconPath, label, val, color, textY) =>
+    `<g transform="translate(20,${textY - 14}) scale(0.67)"><path d="${iconPath}" fill="${color}"/></g>` +
+    `<text x="46" y="${textY}" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="14" fill="#8b949e">${label}</text>` +
+    `<text x="385" y="${textY}" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="14" font-weight="700" fill="${color}" text-anchor="end">${val}</text>`;
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="170" viewBox="0 0 400 170" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="495" y2="148" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#1e1b4b"/>
+    <linearGradient id="ac" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#7c3aed"/>
+      <stop offset="50%"  stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#34d399"/>
     </linearGradient>
-    <linearGradient id="gl" x1="0" y1="0" x2="495" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"   stop-color="#7c3aed" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
-    </linearGradient>
-    <clipPath id="clip"><rect width="495" height="148" rx="12"/></clipPath>
   </defs>
 
-  <!-- Background -->
-  <rect width="495" height="148" rx="12" fill="url(#bg)" stroke="#334155" stroke-width="1"/>
-  <rect width="495" height="148" rx="12" fill="url(#gl)" clip-path="url(#clip)"/>
+  <rect width="400" height="170" rx="6" fill="#161b22"/>
+  <rect width="400" height="170" rx="6" stroke="#30363d" stroke-width="0.5"/>
+  <rect width="400" height="4"   rx="3" fill="url(#ac)"/>
 
-  <!-- Brand header -->
-  <circle cx="24" cy="24" r="5" fill="#7c3aed"/>
-  <text x="36" y="29" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="14" font-weight="700" fill="#e2e8f0">AllIn1URL</text>
-  <text x="116" y="29" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#a78bfa">&#8211; Link in Bio Platform</text>
+  <text x="20" y="38" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="17" font-weight="700" fill="#e6edf3">AllIn1URL Platform Stats</text>
+  <line x1="20" y1="52" x2="380" y2="52" stroke="#21262d" stroke-width="1"/>
 
-  <!-- Divider -->
-  <line x1="16" y1="44" x2="479" y2="44" stroke="#1e293b" stroke-width="1"/>
+  ${mkRow(_ICON_USER, 'Registered Users:', u, '#a78bfa', 80)}
+  ${mkRow(_ICON_EYE,  'Total Visitors:',   v, '#38bdf8', 112)}
+  ${mkRow(_ICON_LINK, 'Links Created:',    l, '#34d399', 144)}
 
-  <!-- Stat: Users -->
-  <text x="82" y="90" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="30" font-weight="800" fill="#a78bfa" text-anchor="middle">${u}</text>
-  <text x="82" y="110" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Registered Users</text>
-
-  <!-- Column divider -->
-  <line x1="165" y1="56" x2="165" y2="120" stroke="#1e293b" stroke-width="1"/>
-
-  <!-- Stat: Visitors -->
-  <text x="247" y="90" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="30" font-weight="800" fill="#38bdf8" text-anchor="middle">${v}</text>
-  <text x="247" y="110" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Total Visitors</text>
-
-  <!-- Column divider -->
-  <line x1="330" y1="56" x2="330" y2="120" stroke="#1e293b" stroke-width="1"/>
-
-  <!-- Stat: Links -->
-  <text x="413" y="90" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="30" font-weight="800" fill="#34d399" text-anchor="middle">${l}</text>
-  <text x="413" y="110" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Links Created</text>
-
-  <!-- Footer -->
-  <line x1="16" y1="124" x2="479" y2="124" stroke="#1e293b" stroke-width="1"/>
-  <text x="247" y="140" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="10" fill="#475569" text-anchor="middle">allin1url.in &#183; updated ${ts}</text>
+  <text x="200" y="163" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="10" fill="#484f58" text-anchor="middle">allin1url.in &#183; ${ts}</text>
 </svg>`;
 };
 
-// SVG card — embed in GitHub README with ![Stats](https://api.allin1url.in/stats-card)
+const _SVG_ERROR = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="60" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="60" rx="6" fill="#161b22" stroke="#30363d" stroke-width="0.5"/>
+  <text x="200" y="36" font-family="Segoe UI,Arial,sans-serif" font-size="13" fill="#ef4444" text-anchor="middle">AllIn1URL Stats &#8212; temporarily unavailable</text>
+</svg>`;
+
+const _SVG_HEADERS = {
+  'Content-Type': 'image/svg+xml',
+  'Cache-Control': 'public, max-age=1800, stale-while-revalidate=3600',
+  'Access-Control-Allow-Origin': '*',
+};
+
+// SVG card — embed in GitHub README: ![AllIn1URL Stats](https://api.allin1url.in/stats-card)
 app.get('/stats-card', async (_req, res) => {
   try {
     const data = await fetchStatsCardData();
-    res.set({
-      'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=1800',
-    });
+    res.set(_SVG_HEADERS);
     return res.send(buildSVG(data));
   } catch (err) {
     console.error('[stats-card] error:', err);
-    return res.status(500).send('Server error.');
+    res.set(_SVG_HEADERS);
+    return res.status(200).send(_SVG_ERROR);
   }
 });
 
@@ -267,11 +264,10 @@ app.get('/stats-card', async (_req, res) => {
 app.get('/stats-card.html', async (_req, res) => {
   try {
     const data = await fetchStatsCardData();
+    res.set('Access-Control-Allow-Origin', '*');
     return res.render('stats-card', data);
   } catch (err) {
-    console.error('[stats-card.html] error:', err);
-    return res.status(500).send('Server error.');
-  }
+    console.error('[stats-card.html] error:', err);   return res.status(500).send('Server error.');}
 });
 
 app.get('/stats-card.json', async (_req, res) => {
