@@ -55,6 +55,11 @@ const Settings = () => {
   const [notificationSettings, setNotificationSettings] = useState({
     emailOnNewClick: false, emailOnProfileView: false, emailOnLinkHubView: false, weeklyReport: false
   });
+  const [linkhubSettings, setLinkhubSettings] = useState({
+    showHeadline: true, showBio: true, showLocation: true, showWebsite: true, showSkills: true,
+    showEmail: false, showPhone: false, showWhatsapp: false, showTwitter: true, showLinkedin: true,
+    showGithub: true, showInstagram: false, showYoutube: false
+  });
   const [selectedTemplate, setSelectedTemplate] = useState('default');
   const [availableTemplates, setAvailableTemplates] = useState([]);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
@@ -121,6 +126,7 @@ const Settings = () => {
         if (s.search) setSearchSettings(s.search);
         if (s.privacy) setPrivacySettings(s.privacy);
         if (s.notifications) setNotificationSettings(s.notifications);
+        if (s.linkhub) setLinkhubSettings(s.linkhub);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to load settings");
@@ -320,6 +326,37 @@ const Settings = () => {
                 setter(prev => ({ ...prev, [key]: val }));
                 const ok = await updateSingleSetting(category, field, val);
                 if (!ok) setter(prev => ({ ...prev, [key]: !val }));
+              }}
+            />
+          ))}
+        </SettingsSection>
+
+        {/* LinkHub Visibility */}
+        <SettingsSection icon={FiLayout} title="LinkHub Visibility">
+          <div className="py-2">
+            <p className="text-xs text-slate-500 dark:text-slate-400 py-2">Control what personal info appears on your public link hub page</p>
+          </div>
+          {[
+            { label: "Show Headline", desc: "Display your tagline on your link hub", key: 'showHeadline', field: 'showHeadline' },
+            { label: "Show Bio", desc: "Display bio on your link hub", key: 'showBio', field: 'showBio' },
+            { label: "Show Location", desc: "Display location on your link hub", key: 'showLocation', field: 'showLocation' },
+            { label: "Show Website", desc: "Display website link on your link hub", key: 'showWebsite', field: 'showWebsite' },
+            { label: "Show Skills", desc: "Display skill tags on your link hub", key: 'showSkills', field: 'showSkills' },
+            { label: "Show Email", desc: "Display email address on your link hub", key: 'showEmail', field: 'showEmail' },
+            { label: "Show Phone", desc: "Display phone number on your link hub", key: 'showPhone', field: 'showPhone' },
+            { label: "Show WhatsApp", desc: "Display WhatsApp link on your link hub", key: 'showWhatsapp', field: 'showWhatsapp' },
+            { label: "Show Twitter / X", desc: "Display Twitter/X link on your link hub", key: 'showTwitter', field: 'showTwitter' },
+            { label: "Show LinkedIn", desc: "Display LinkedIn link on your link hub", key: 'showLinkedin', field: 'showLinkedin' },
+            { label: "Show GitHub", desc: "Display GitHub link on your link hub", key: 'showGithub', field: 'showGithub' },
+            { label: "Show Instagram", desc: "Display Instagram link on your link hub", key: 'showInstagram', field: 'showInstagram' },
+            { label: "Show YouTube", desc: "Display YouTube link on your link hub", key: 'showYoutube', field: 'showYoutube' },
+          ].map(({ label, desc, key, field }) => (
+            <ToggleSetting key={key} label={label} description={desc} value={linkhubSettings[key]}
+              updating={updatingFields.has(`linkhub.${field}`)}
+              onChange={async (val) => {
+                setLinkhubSettings(prev => ({ ...prev, [key]: val }));
+                const ok = await updateSingleSetting('linkhub', field, val);
+                if (!ok) setLinkhubSettings(prev => ({ ...prev, [key]: !val }));
               }}
             />
           ))}

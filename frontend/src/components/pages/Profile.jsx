@@ -6,6 +6,7 @@ import {
   FiUser, FiMapPin, FiHeart, FiEdit2, FiSave, FiX, FiCamera,
   FiLink, FiBarChart2, FiEye, FiCopy, FiCheck, FiGlobe,
   FiMail, FiCalendar, FiTag, FiTrendingUp, FiAward,
+  FiPhone, FiMessageSquare, FiGithub, FiLinkedin, FiTwitter, FiInstagram, FiYoutube, FiLink2,
 } from "react-icons/fi";
 
 const ProfilePage = () => {
@@ -17,6 +18,13 @@ const ProfilePage = () => {
   const [website, setWebsite] = useState("");
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
+  const [phone, setPhone] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [linkedin, setLinkedin] = useState("");
+  const [github, setGithub] = useState("");
+  const [instagram, setInstagram] = useState("");
+  const [youtube, setYoutube] = useState("");
   const [image, setImage] = useState("profile.png");
   const [isEditable, setEditable] = useState(false);
   const [hover, setHover] = useState(false);
@@ -48,7 +56,7 @@ const ProfilePage = () => {
         setLoader(true);
         const res = await api.post(
           "/profile/update",
-          { username, name, passion, location, bio, headline, website, skills },
+          { username, name, passion, location, bio, headline, website, skills, phone, whatsapp, twitter, linkedin, github, instagram, youtube },
           { withCredentials: true }
         );
         if (res.status === 201 && res.data.success) {
@@ -78,6 +86,13 @@ const ProfilePage = () => {
         setWebsite(info.website || "");
         setSkills(Array.isArray(info.skills) ? info.skills : []);
         setImage(info.image || "profile.png");
+        setPhone(info.phone || "");
+        setWhatsapp(info.whatsapp || "");
+        setTwitter(info.twitter || "");
+        setLinkedin(info.linkedin || "");
+        setGithub(info.github || "");
+        setInstagram(info.instagram || "");
+        setYoutube(info.youtube || "");
       }
     } catch (error) {
       toast.error(error.response?.data?.msg || "Failed to load profile");
@@ -371,6 +386,52 @@ const ProfilePage = () => {
                 <p className="text-xs text-slate-400 italic">{isEditable ? "No skills added yet. Press Enter or comma to add." : "No skills added."}</p>
               )}
               {isEditable && <p className="mt-1.5 text-xs text-slate-400">{skills.length}/12 skills</p>}
+            </div>
+
+            {/* Contact & Social */}
+            <div className="border-t border-slate-100 dark:border-slate-800 pt-5">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Contact & Social</p>
+
+              {/* Contact subsection */}
+              <div className="space-y-4 mb-4">
+                <div>
+                  <label className={labelClass}><FiMail className="w-3.5 h-3.5" />Email (account)</label>
+                  <input type="text" value={user?.email || ""} disabled className={inputClass} />
+                  <p className="mt-1 text-xs text-slate-400">This is your login email — managed in account settings</p>
+                </div>
+                <div>
+                  <label className={labelClass}><FiPhone className="w-3.5 h-3.5" />Phone</label>
+                  <input type="text" placeholder="+1 555 000 0000" value={phone} disabled={!isEditable} onChange={(e) => setPhone(e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}><FiMessageSquare className="w-3.5 h-3.5" />WhatsApp</label>
+                  <input type="text" placeholder="+1 555 000 0000" value={whatsapp} disabled={!isEditable} onChange={(e) => setWhatsapp(e.target.value)} className={inputClass} />
+                </div>
+              </div>
+
+              {/* Social Links subsection */}
+              <div className="space-y-4">
+                <div>
+                  <label className={labelClass}><FiTwitter className="w-3.5 h-3.5" />Twitter / X</label>
+                  <input type="text" placeholder="@username or username" value={twitter} disabled={!isEditable} onChange={(e) => setTwitter(e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}><FiLinkedin className="w-3.5 h-3.5" />LinkedIn</label>
+                  <input type="text" placeholder="username or full URL" value={linkedin} disabled={!isEditable} onChange={(e) => setLinkedin(e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}><FiGithub className="w-3.5 h-3.5" />GitHub</label>
+                  <input type="text" placeholder="@username or username" value={github} disabled={!isEditable} onChange={(e) => setGithub(e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}><FiInstagram className="w-3.5 h-3.5" />Instagram</label>
+                  <input type="text" placeholder="@username or username" value={instagram} disabled={!isEditable} onChange={(e) => setInstagram(e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                  <label className={labelClass}><FiYoutube className="w-3.5 h-3.5" />YouTube</label>
+                  <input type="text" placeholder="@handle or full channel URL" value={youtube} disabled={!isEditable} onChange={(e) => setYoutube(e.target.value)} className={inputClass} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

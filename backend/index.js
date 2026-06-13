@@ -135,13 +135,15 @@ app.use(helmet({
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "'unsafe-inline'", "https://vercel.live", "https://*.vercel.app"],  // Allow inline scripts for EJS templates
-    imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],  // Add your image host if needed
-    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],  // Allow Google Fonts stylesheets
-    fontSrc: ["'self'", "https://fonts.gstatic.com"],  // Allow Google Fonts actual font files
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://vercel.live", "https://*.vercel.app"],
+    imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    fontSrc: ["'self'", "https://fonts.gstatic.com"],
     connectSrc: ["'self'", "https://allin1url.in", "https://api.allin1url.in", "http://localhost:8080"],
-    frameAncestors: ["'self'", "http://localhost:5173", "https://allin1url.in", "https://*.allin1url.in"],  // Allow iframes from these origins
-    // Add more directives as needed
+    frameAncestors: ["'self'", "http://localhost:5173", "https://allin1url.in", "https://*.allin1url.in"],
+    // Allow form submissions from any *.allin1url.in subdomain — needed for the password
+    // prompt page which is served on user subdomains (e.g. dpkaws.allin1url.in)
+    formAction: ["'self'", "https://allin1url.in", "https://*.allin1url.in", "http://localhost:8080"],
   }
 }));
 
@@ -204,7 +206,7 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
   try {
     const settings = await UserSettings.getUserSettings(username);
     if (settings) {
-      profileSettings = settings.profile;
+      profileSettings = settings.linkhub;
       if (settings.shouldEmailOnLinkHubView()) {
         sendProfileVisitEmail(email, username, name, deviceDetails, visitorUsername, visitorName)
           .catch(err => console.error(`Failed to send LinkHub visit email to ${username}:`, err));
@@ -228,8 +230,6 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
     const previewTemplate = req.query.template;
     if (previewTemplate) {
       template = previewTemplate;
-    } else if (profileSettings && profileSettings.template) {
-      template = profileSettings.template;
     } else {
       try {
         const settings = await UserSettings.getUserSettings(username);
@@ -241,11 +241,12 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
 
     const templateName = `templates/linktree-${template}`;
     console.log("templateName", templateName);
+    const ctx = { username, tree, dp, linkhubSettings: profileSettings, userEmail: info?.email || '' };
     try {
-      return res.render(templateName, { username, tree, dp, profileSettings });
+      return res.render(templateName, ctx);
     } catch (renderErr) {
       console.log(`Template ${templateName} not found, using default:`, renderErr.message);
-      return res.render('templates/linktree-default', { username, tree, dp, profileSettings });
+      return res.render('templates/linktree-default', ctx);
     }
   }
 
@@ -523,7 +524,7 @@ app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (
   try {
     const settings = await UserSettings.getUserSettings(username);
     if (settings) {
-      profileSettings = settings.profile;
+      profileSettings = settings.linkhub;
       if (settings.shouldEmailOnLinkHubView()) {
         sendProfileVisitEmail(email, username, name, deviceDetails, visitorUsername, visitorName)
           .catch(err => console.error(`Failed to send LinkHub visit email to ${username}:`, err));
@@ -549,11 +550,12 @@ app.get('/:username', resolveUsername, extractInfo, verifyTokenOptional, async (
 
     const templateName = `templates/linktree-${template}`;
     console.log("templateName",templateName)
+    const ctx = { username, tree, dp, linkhubSettings: profileSettings, userEmail: info?.email || '' };
     try {
-      return res.render(templateName, { username, tree, dp, profileSettings });
+      return res.render(templateName, ctx);
     } catch (renderErr) {
       console.log(`Template ${templateName} not found, using default:`, renderErr.message);
-      return res.render('templates/linktree-default', { username, tree, dp, profileSettings });
+      return res.render('templates/linktree-default', ctx);
     }
   }
 

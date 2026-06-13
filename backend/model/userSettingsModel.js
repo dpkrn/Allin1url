@@ -143,7 +143,24 @@ const userSettingsSchema = new mongoose.Schema({
             default: false
         }
     },
-    
+
+    // LinkHub Visibility Settings
+    linkhub: {
+        showHeadline:  { type: Boolean, default: true },
+        showBio:       { type: Boolean, default: true },
+        showLocation:  { type: Boolean, default: true },
+        showWebsite:   { type: Boolean, default: true },
+        showSkills:    { type: Boolean, default: true },
+        showEmail:     { type: Boolean, default: false },
+        showPhone:     { type: Boolean, default: false },
+        showWhatsapp:  { type: Boolean, default: false },
+        showTwitter:   { type: Boolean, default: true },
+        showLinkedin:  { type: Boolean, default: true },
+        showGithub:    { type: Boolean, default: true },
+        showInstagram: { type: Boolean, default: false },
+        showYoutube:   { type: Boolean, default: false },
+    },
+
     deletedAt: {
         type: Date,
         default: null

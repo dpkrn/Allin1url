@@ -91,7 +91,7 @@ const updateSettings = async (req, res) => {
 
         // Handle single field update (new format)
         if (category && field !== undefined && value !== undefined) {
-            const validCategories = ['profile', 'links', 'search', 'privacy', 'notifications', 'template'];
+            const validCategories = ['profile', 'links', 'search', 'privacy', 'notifications', 'template', 'linkhub'];
             
             if (!validCategories.includes(category)) {
                 return res.status(400).json({
@@ -225,12 +225,22 @@ const updateSettings = async (req, res) => {
                 }
                 // Convert value to boolean if needed
                 const boolValue = typeof value === 'string' ? value === 'true' : Boolean(value);
-                
+
                 // Use set() method with dot notation for nested fields (more reliable in Mongoose)
                 settings.set(`notifications.${field}`, boolValue);
                 settings.markModified('notifications');
-                
+
                 console.log(`Updating notifications.${field} to ${boolValue} (type: ${typeof boolValue}) for user ${userId}`);
+            } else if (category === 'linkhub') {
+                const validFields = ['showHeadline','showBio','showLocation','showWebsite','showSkills',
+                    'showEmail','showPhone','showWhatsapp','showTwitter','showLinkedin',
+                    'showGithub','showInstagram','showYoutube'];
+                if (!validFields.includes(field)) {
+                    return res.status(400).json({ success: false, message: `Invalid field for linkhub category.` });
+                }
+                const boolValue = typeof value === 'string' ? value === 'true' : Boolean(value);
+                settings.set(`linkhub.${field}`, boolValue);
+                settings.markModified('linkhub');
             }
 
             const savedSettings = await settings.save();

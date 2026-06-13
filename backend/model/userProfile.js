@@ -38,6 +38,13 @@ const userProfileSchema=new mongoose.Schema({
         type:[String],
         default:[]
     },
+    phone: { type: String, default: "" },
+    whatsapp: { type: String, default: "" },
+    twitter: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
+    github: { type: String, default: "" },
+    instagram: { type: String, default: "" },
+    youtube: { type: String, default: "" },
     deletedAt: {
         type: Date,
         default: null

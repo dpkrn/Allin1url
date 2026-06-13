@@ -1,27 +1,62 @@
 <style>
 .pi-headline{font-size:13px;font-weight:500;text-align:center;margin:0 auto 8px;padding:0 8px;opacity:.82;line-height:1.5}
 .pi-meta{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;font-size:12px;opacity:.62}
-.pi-meta a{color:inherit;text-decoration:none}
-.pi-meta a:hover{opacity:.9;text-decoration:underline}
+.pi-meta a{color:inherit;text-decoration:none}.pi-meta a:hover{opacity:.9;text-decoration:underline}
 .pi-skills{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-bottom:12px;padding:0 4px}
 .pi-skill{padding:3px 9px;background:rgba(128,128,128,.15);border:1px solid rgba(128,128,128,.3);border-radius:20px;font-size:11px;font-weight:500}
+.pi-contacts{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px}
+.pi-contact-item{display:flex;align-items:center;gap:4px;font-size:12px;opacity:.7}
+.pi-contact-item a{color:inherit;text-decoration:none}.pi-contact-item a:hover{opacity:.9;text-decoration:underline}
+.pi-socials{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-bottom:12px}
+.pi-social-link{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(128,128,128,.12);border:1px solid rgba(128,128,128,.25);border-radius:16px;font-size:11px;font-weight:500;text-decoration:none;color:inherit;opacity:.85;transition:opacity .2s}
+.pi-social-link:hover{opacity:1}
 </style>
-<% if (dp.headline && (!profileSettings || profileSettings.showHeadline !== false)) { %>
+<%
+var _lh = typeof linkhubSettings !== 'undefined' ? linkhubSettings : null;
+function _lhShow(key) { return !_lh || _lh[key] !== false; }
+%>
+<% if (dp.headline && _lhShow('showHeadline')) { %>
 <p class="pi-headline"><%= dp.headline %></p>
 <% } %>
-<% var _showLoc = dp.location && (!profileSettings || profileSettings.showLocation !== false); %>
-<% var _showWeb = dp.website && (!profileSettings || profileSettings.showWebsite !== false); %>
+<% var _showLoc = dp.location && _lhShow('showLocation'); %>
+<% var _showWeb = dp.website && _lhShow('showWebsite'); %>
 <% if (_showLoc || _showWeb) { %>
 <div class="pi-meta">
   <% if (_showLoc) { %><span>📍 <%= dp.location %></span><% } %>
   <% if (_showWeb) { %><span>🔗 <a href="<%= dp.website.startsWith('http') ? dp.website : 'https://' + dp.website %>" target="_blank" rel="noopener noreferrer"><%= dp.website.replace(/^https?:\/\//, '') %></a></span><% } %>
 </div>
 <% } %>
-<% if (dp.skills && dp.skills.length > 0 && (!profileSettings || profileSettings.showSkills !== false)) { %>
+<% if (dp.skills && dp.skills.length > 0 && _lhShow('showSkills')) { %>
 <div class="pi-skills">
-  <% dp.skills.forEach(function(skill){ %><span class="pi-skill"><%= skill %></span><% }); %>
+  <% dp.skills.forEach(function(s){ %><span class="pi-skill"><%= s %></span><% }); %>
 </div>
 <% } %>
-<% if (dp.bio && (!profileSettings || profileSettings.showBio !== false)) { %>
+<% if (dp.bio && _lhShow('showBio')) { %>
 <p class="bio"><%= dp.bio %></p>
+<% } %>
+<%
+var _ue          = typeof userEmail !== 'undefined' ? userEmail : '';
+var _hasEmail    = _ue             && _lhShow('showEmail');
+var _hasPhone    = dp.phone    && _lhShow('showPhone');
+var _hasWhatsapp = dp.whatsapp && _lhShow('showWhatsapp');
+%>
+<% if (_hasEmail || _hasPhone || _hasWhatsapp) { %>
+<div class="pi-contacts">
+  <% if (_hasEmail) { %><span class="pi-contact-item">✉️ <a href="mailto:<%= _ue %>"><%= _ue %></a></span><% } %>
+  <% if (_hasPhone) { %><span class="pi-contact-item">📞 <a href="tel:<%= dp.phone %>"><%= dp.phone %></a></span><% } %>
+  <% if (_hasWhatsapp) { %><span class="pi-contact-item">💬 <a href="https://wa.me/<%= dp.whatsapp.replace(/\D/g,'') %>" target="_blank" rel="noopener noreferrer"><%= dp.whatsapp %></a></span><% } %>
+</div>
+<% } %>
+<%
+var _socials = [];
+if (dp.twitter   && _lhShow('showTwitter'))   _socials.push({ label: '𝕏 Twitter',   href: 'https://twitter.com/'   + dp.twitter.replace(/^@/,'') });
+if (dp.linkedin  && _lhShow('showLinkedin'))  _socials.push({ label: 'in LinkedIn', href: dp.linkedin.startsWith('http') ? dp.linkedin : 'https://linkedin.com/in/' + dp.linkedin });
+if (dp.github    && _lhShow('showGithub'))    _socials.push({ label: '⌥ GitHub',    href: 'https://github.com/'    + dp.github.replace(/^@/,'') });
+if (dp.instagram && _lhShow('showInstagram')) _socials.push({ label: '◈ Instagram', href: 'https://instagram.com/' + dp.instagram.replace(/^@/,'') });
+if (dp.youtube   && _lhShow('showYoutube'))   _socials.push({ label: '▶ YouTube',   href: dp.youtube.startsWith('http') ? dp.youtube : 'https://youtube.com/@' + dp.youtube.replace(/^@/,'') });
+%>
+<% if (_socials.length > 0) { %>
+<div class="pi-socials">
+  <% _socials.forEach(function(s){ %><a href="<%= s.href %>" class="pi-social-link" target="_blank" rel="noopener noreferrer"><%= s.label %></a><% }); %>
+</div>
 <% } %>

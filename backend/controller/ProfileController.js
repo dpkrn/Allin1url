@@ -6,7 +6,7 @@ const geoip = require('geoip-lite');
 const useragent = require('useragent');
 
 const updateProfile = async (req, res) => {
-    let { username, name, location, bio, passion, headline, website, skills } = req.body;
+    let { username, name, location, bio, passion, headline, website, skills, phone, whatsapp, twitter, linkedin, github, instagram, youtube } = req.body;
 
     if (!name) name = "";
     if (!bio) bio = "";
@@ -15,11 +15,18 @@ const updateProfile = async (req, res) => {
     if (!headline) headline = "";
     if (!website) website = "";
     if (!Array.isArray(skills)) skills = [];
+    if (!phone) phone = "";
+    if (!whatsapp) whatsapp = "";
+    if (!twitter) twitter = "";
+    if (!linkedin) linkedin = "";
+    if (!github) github = "";
+    if (!instagram) instagram = "";
+    if (!youtube) youtube = "";
 
     try {
       const updatedProfile = await Profile.findOneAndUpdate(
         { username },
-        { $set: { name, bio, passion, location, headline, website, skills } },
+        { $set: { name, bio, passion, location, headline, website, skills, phone, whatsapp, twitter, linkedin, github, instagram, youtube } },
         { new: true }
       );
   
