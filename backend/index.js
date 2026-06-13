@@ -29,6 +29,10 @@ const { getUserLinkUrl, getTemplateScripts, getFaviconScript } = require('./util
 const bcryptjs = require('bcryptjs')
 const { time } = require('console')
 const { saveAnalytics } = require('./controller/AnalyticsController')
+const { logAdminVisit } = require('./controller/AdminController')
+const adminRoute = require('./routes/AdminRoute')
+const AdminVisit = require('./model/AdminVisit')
+const LinkAnalytics = require('./model/linkAnalyticsModel')
 const connectDB = require('./lib/db')
 
 
@@ -166,6 +170,50 @@ app.use('/settings', requireApiSubdomain, settingsRoute);
 app.use('/search', requireApiSubdomain, searchRoute);
 app.use('/analytics', requireApiSubdomain, analyticsRoute);
 app.use('/project', requireApiSubdomain, projectRoute);
+app.use('/admin',   requireApiSubdomain, adminRoute);
+
+// Public stats card — server-side rendered HTML widget
+// GET api.allin1url.in/stats-card   (browser embed)
+// GET api.allin1url.in/stats-card.json (raw numbers)
+app.get('/stats-card', requireApiSubdomain, async (_req, res) => {
+  try {
+    const [totalUsers, totalLinkhubVisits, totalLinkClicks, totalLinks] = await Promise.all([
+      User.countDocuments({ deletedAt: null }),
+      AdminVisit.countDocuments(),
+      LinkAnalytics.countDocuments({ deletedAt: null, linkId: { $ne: null } }),
+      Link.countDocuments({ deletedAt: null }),
+    ]);
+    return res.render('stats-card', {
+      totalUsers,
+      totalVisitors: totalLinkhubVisits + totalLinkClicks,
+      totalLinks,
+    });
+  } catch (err) {
+    console.error('[stats-card] error:', err);
+    return res.status(500).send('Server error.');
+  }
+});
+
+app.get('/stats-card.json', requireApiSubdomain, async (_req, res) => {
+  try {
+    const [totalUsers, totalLinkhubVisits, totalLinkClicks, totalLinks] = await Promise.all([
+      User.countDocuments({ deletedAt: null }),
+      AdminVisit.countDocuments(),
+      LinkAnalytics.countDocuments({ deletedAt: null, linkId: { $ne: null } }),
+      Link.countDocuments({ deletedAt: null }),
+    ]);
+    return res.json({
+      success: true,
+      totalUsers,
+      totalVisitors: totalLinkhubVisits + totalLinkClicks,
+      totalLinks,
+      updatedAt: new Date().toISOString(),
+    });
+  } catch (err) {
+    console.error('[stats-card.json] error:', err);
+    return res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
 
 // robots.txt for each user subdomain
 app.get('/robots.txt', resolveUsername, requireLinkHubSubdomain, (req, res) => {
@@ -247,6 +295,8 @@ app.get('/', resolveUsername, requireLinkHubSubdomain, extractInfo, async (req, 
   }).catch(err => {
     console.error('Analytics error:', err);
   });
+
+  logAdminVisit({ username: info.username, req });
 
   if (tree && dp){
     let template = 'default';
