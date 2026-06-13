@@ -9,9 +9,9 @@ const requireApiSubdomain = (req, res, next) => {
   }
 
   const host = (req.get('host') || '').split(':')[0].toLowerCase();
-  const subdomain = host.split('.')[0];
 
-  if (subdomain === 'api') {
+  // Accept api.allin1url.in (exact) or any host whose first label is 'api'
+  if (host === 'api.allin1url.in' || host.split('.')[0] === 'api') {
     return next();
   }
 

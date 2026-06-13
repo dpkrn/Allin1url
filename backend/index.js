@@ -172,29 +172,109 @@ app.use('/analytics', requireApiSubdomain, analyticsRoute);
 app.use('/project', requireApiSubdomain, projectRoute);
 app.use('/admin',   requireApiSubdomain, adminRoute);
 
-// Public stats card — server-side rendered HTML widget
-// GET api.allin1url.in/stats-card   (browser embed)
-// GET api.allin1url.in/stats-card.json (raw numbers)
-app.get('/stats-card', requireApiSubdomain, async (_req, res) => {
+// ─── Stats card helpers ───────────────────────────────────────────────────────
+const fmtNum = (n) => {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1_000)     return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+  return String(n);
+};
+
+const fetchStatsCardData = async () => {
+  const [totalUsers, totalLinkhubVisits, totalLinkClicks, totalLinks] = await Promise.all([
+    User.countDocuments({ deletedAt: null }),
+    AdminVisit.countDocuments(),
+    LinkAnalytics.countDocuments({ deletedAt: null, linkId: { $ne: null } }),
+    Link.countDocuments({ deletedAt: null }),
+  ]);
+  return {
+    totalUsers,
+    totalVisitors: totalLinkhubVisits + totalLinkClicks,
+    totalLinks,
+  };
+};
+
+const buildSVG = ({ totalUsers, totalVisitors, totalLinks }) => {
+  const u = fmtNum(totalUsers);
+  const v = fmtNum(totalVisitors);
+  const l = fmtNum(totalLinks);
+  const ts = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  return `<svg width="495" height="148" viewBox="0 0 495 148" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="495" y2="148" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="gl" x1="0" y1="0" x2="495" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#7c3aed" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="clip"><rect width="495" height="148" rx="12"/></clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="495" height="148" rx="12" fill="url(#bg)" stroke="#334155" stroke-width="1"/>
+  <rect width="495" height="148" rx="12" fill="url(#gl)" clip-path="url(#clip)"/>
+
+  <!-- Brand header -->
+  <circle cx="24" cy="24" r="5" fill="#7c3aed"/>
+  <text x="36" y="29" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="14" font-weight="700" fill="#e2e8f0">AllIn1URL</text>
+  <text x="116" y="29" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#a78bfa">&#8211; Link in Bio Platform</text>
+
+  <!-- Divider -->
+  <line x1="16" y1="44" x2="479" y2="44" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Stat: Users -->
+  <text x="82" y="90" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="30" font-weight="800" fill="#a78bfa" text-anchor="middle">${u}</text>
+  <text x="82" y="110" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Registered Users</text>
+
+  <!-- Column divider -->
+  <line x1="165" y1="56" x2="165" y2="120" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Stat: Visitors -->
+  <text x="247" y="90" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="30" font-weight="800" fill="#38bdf8" text-anchor="middle">${v}</text>
+  <text x="247" y="110" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Total Visitors</text>
+
+  <!-- Column divider -->
+  <line x1="330" y1="56" x2="330" y2="120" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Stat: Links -->
+  <text x="413" y="90" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="30" font-weight="800" fill="#34d399" text-anchor="middle">${l}</text>
+  <text x="413" y="110" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="11" fill="#94a3b8" text-anchor="middle">Links Created</text>
+
+  <!-- Footer -->
+  <line x1="16" y1="124" x2="479" y2="124" stroke="#1e293b" stroke-width="1"/>
+  <text x="247" y="140" font-family="Segoe UI,Ubuntu,Arial,sans-serif" font-size="10" fill="#475569" text-anchor="middle">allin1url.in &#183; updated ${ts}</text>
+</svg>`;
+};
+
+// SVG card — embed in GitHub README with ![Stats](https://api.allin1url.in/stats-card)
+app.get('/stats-card', async (_req, res) => {
   try {
-    const [totalUsers, totalLinkhubVisits, totalLinkClicks, totalLinks] = await Promise.all([
-      User.countDocuments({ deletedAt: null }),
-      AdminVisit.countDocuments(),
-      LinkAnalytics.countDocuments({ deletedAt: null, linkId: { $ne: null } }),
-      Link.countDocuments({ deletedAt: null }),
-    ]);
-    return res.render('stats-card', {
-      totalUsers,
-      totalVisitors: totalLinkhubVisits + totalLinkClicks,
-      totalLinks,
+    const data = await fetchStatsCardData();
+    res.set({
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=1800',
     });
+    return res.send(buildSVG(data));
   } catch (err) {
     console.error('[stats-card] error:', err);
     return res.status(500).send('Server error.');
   }
 });
 
-app.get('/stats-card.json', requireApiSubdomain, async (_req, res) => {
+// Interactive HTML widget (iframe embed or direct view)
+app.get('/stats-card.html', async (_req, res) => {
+  try {
+    const data = await fetchStatsCardData();
+    return res.render('stats-card', data);
+  } catch (err) {
+    console.error('[stats-card.html] error:', err);
+    return res.status(500).send('Server error.');
+  }
+});
+
+app.get('/stats-card.json', async (_req, res) => {
   try {
     const [totalUsers, totalLinkhubVisits, totalLinkClicks, totalLinks] = await Promise.all([
       User.countDocuments({ deletedAt: null }),
