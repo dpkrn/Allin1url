@@ -54,7 +54,7 @@ const getAllSource=async(req,res)=>{
              return res.status(400).json({success:false,message:"looks like you entered link directely ! please login first"})
          }
      
-         const sources=await Link.find({username,userId,deletedAt:null},{source:1,destination:1,clicked:1,notSeen:1,visibility:1,linkId:1});
+         const sources=await Link.find({username,userId,deletedAt:null},{source:1,destination:1,clicked:1,notSeen:1,visibility:1,linkId:1,updatedAt:1});
          if(!sources)
          return res.status(404).json({success:false,message:'sources not found !'})
          return res.status(200).json({success:true,message:'sources fetched successfully',sources})

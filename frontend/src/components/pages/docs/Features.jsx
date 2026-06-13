@@ -1,160 +1,147 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaLink, FaCog, FaChartLine, FaSyncAlt, FaPalette, FaRocket, FaShieldAlt, FaUsers, FaLock, FaEye, FaServer } from 'react-icons/fa';
-import Footer from '../../footer/Footer';
+import {
+  FiLink, FiSettings, FiBarChart2, FiRefreshCw, FiLayout,
+  FiShield, FiUsers, FiLock, FiEye, FiGlobe, FiTrendingUp
+} from "react-icons/fi";
+import DocLayout from "./DocLayout";
+
+const features = [
+  {
+    icon: FiGlobe,
+    color: "text-violet-600 dark:text-violet-400",
+    bg: "bg-violet-50 dark:bg-violet-950/30",
+    title: "Your Own Subdomain — Free",
+    description:
+      "Every account gets a personalized subdomain at no cost. Once you register, your hub lives at username.allin1url.in — a clean, branded URL you own as long as your account is active.",
+  },
+  {
+    icon: FiLink,
+    color: "text-blue-600 dark:text-blue-400",
+    bg: "bg-blue-50 dark:bg-blue-950/30",
+    title: "Smart Personalized Links",
+    description:
+      "Links follow a clear, human-readable pattern: username.allin1url.in/platform. Instead of bit.ly/x4z9, you get johndoe.allin1url.in/linkedin — instantly recognizable, easy to say aloud, and memorable.",
+  },
+  {
+    icon: FiSettings,
+    color: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-50 dark:bg-emerald-950/30",
+    title: "Add Any Platform",
+    description:
+      "Not limited to a predefined list. Add GitHub, LinkedIn, Portfolio, Instagram, LeetCode, Codeforces, Behance, or any custom platform with a URL. The platform name becomes the path segment.",
+  },
+  {
+    icon: FiLayout,
+    color: "text-pink-600 dark:text-pink-400",
+    bg: "bg-pink-50 dark:bg-pink-950/30",
+    title: "Link Hub Page",
+    description:
+      "Visiting username.allin1url.in shows a beautiful landing page listing all your public links. Share a single URL on your resume, bio, or business card — visitors pick where to go from there.",
+  },
+  {
+    icon: FiRefreshCw,
+    color: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-50 dark:bg-amber-950/30",
+    title: "Update Once, Propagates Everywhere",
+    description:
+      "Change the destination URL of any link from your dashboard. All existing places you've shared that link automatically redirect to the new URL — no need to update resumes, bios, or cards.",
+  },
+  {
+    icon: FiShield,
+    color: "text-red-600 dark:text-red-400",
+    bg: "bg-red-50 dark:bg-red-950/30",
+    title: "Three-Tier Link Visibility",
+    description:
+      "Public links appear everywhere (hub, profile, search). Unlisted links are visible in your profile but hidden from the hub — useful for 100+ links. Private links are password-protected and not listed anywhere.",
+  },
+  {
+    icon: FiLock,
+    color: "text-orange-600 dark:text-orange-400",
+    bg: "bg-orange-50 dark:bg-orange-950/30",
+    title: "Password-Protected Links",
+    description:
+      "Set a password on any private link. Visitors are shown a password prompt before being redirected. Passwords are stored as bcrypt hashes — never in plaintext. Click tracking still records the visit.",
+  },
+  {
+    icon: FiEye,
+    color: "text-cyan-600 dark:text-cyan-400",
+    bg: "bg-cyan-50 dark:bg-cyan-950/30",
+    title: "Granular Profile Privacy",
+    description:
+      "Toggle what's visible on your public profile independently: email, location, bio, profile image, link count, click stats, and more. You control each field individually.",
+  },
+  {
+    icon: FiUsers,
+    color: "text-indigo-600 dark:text-indigo-400",
+    bg: "bg-indigo-50 dark:bg-indigo-950/30",
+    title: "User Search & Discovery",
+    description:
+      "Search for other users by username in real-time. View their public profiles and links. Control your own discoverability — disable search visibility from privacy settings to opt out.",
+  },
+  {
+    icon: FiBarChart2,
+    color: "text-teal-600 dark:text-teal-400",
+    bg: "bg-teal-50 dark:bg-teal-950/30",
+    title: "Click Analytics Dashboard",
+    description:
+      "See click trends over time for any link. Filter by date range, compare platforms, and understand which of your links drives the most engagement. Data visualized with charts.",
+  },
+  {
+    icon: FiTrendingUp,
+    color: "text-violet-600 dark:text-violet-400",
+    bg: "bg-violet-50 dark:bg-violet-950/30",
+    title: "Per-Click Detail Records",
+    description:
+      "Every click is stored with full context: timestamp, geographic location (country, city, region), device type, OS, browser version, referrer URL, and user agent string. Browse the full history in Click Details.",
+  },
+];
 
 const Features = () => {
-  const features = [
-    {
-      icon: FaLink,
-      title: "Personalized Smart Links",
-      description: "Create memorable, branded links using your username and platform name. Instead of random codes like 'bit.ly/xyz123', get clean URLs like 'yourname.allin1url.in/linkedin' that reflect your brand identity. Get your own domain FREE to manage all your links professionally.",
-      gradient: "from-purple-500 to-pink-500",
-      color: "from-blue-500 to-cyan-500"
-    },
-    {
-      icon: FaCog,
-      title: "Link Customization",
-      description: "Fully customize your links with any platform name. Add GitHub, LinkedIn, Portfolio, Instagram, Facebook, LeetCode, Codeforces, or any custom platform. Your links follow a clear, memorable pattern.",
-      gradient: "from-blue-500 to-cyan-500",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      icon: FaChartLine,
-      title: "Click Analytics & Tracking",
-      description: "Track clicks on all your links with detailed analytics. See which platforms get the most engagement, understand your audience, and optimize your networking strategy with real-time statistics.",
-      gradient: "from-green-500 to-emerald-500",
-      color: "from-yellow-500 to-orange-500"
-    },
-    {
-      icon: FaSyncAlt,
-      title: "Centralized Link Management",
-      description: "Update destination URLs once, and all your shared links automatically redirect to the new URL. No more hunting down old links across resumes, business cards, and email signatures.",
-      gradient: "from-orange-500 to-red-500",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      icon: FaPalette,
-      title: "Single Hub Link",
-      description: "Share one link (allin1url.in/yourname) that acts as a beautiful landing page for all your social profiles. Visitors can browse and choose which platform to visit, creating a professional digital business card.",
-      gradient: "from-pink-500 to-rose-500",
-      color: "from-blue-500 to-cyan-500"
-    },
-    {
-      icon: FaShieldAlt,
-      title: "Link Privacy Controls",
-      description: "Three-tier visibility system: Public (visible everywhere), Unlisted (visible in profile only), and Private (password-protected). Control who can access your links with granular privacy settings.",
-      gradient: "from-indigo-500 to-purple-500",
-      color: "from-green-500 to-emerald-500"
-    },
-    {
-      icon: FaUsers,
-      title: "User Search & Discovery",
-      description: "Search for other users in real-time and view their public profiles. Discover professionals, creators, and developers. Control your own discoverability with search visibility settings.",
-      gradient: "from-cyan-500 to-blue-500",
-      color: "from-pink-500 to-rose-500"
-    },
-    {
-      icon: FaLock,
-      title: "Password Protection",
-      description: "Secure your private links with password protection. Set passwords for sensitive links, and users will be prompted to enter the password before accessing the destination URL.",
-      gradient: "from-red-500 to-orange-500",
-      color: "from-indigo-500 to-purple-500"
-    },
-    {
-      icon: FaEye,
-      title: "Profile Privacy Settings",
-      description: "Granular control over what information is visible in your public profile. Toggle visibility of email, location, bio, passion, profile image, link count, and click statistics independently.",
-      gradient: "from-yellow-500 to-orange-500",
-      color: "from-cyan-500 to-blue-500"
-    },
-    {
-      icon: FaServer,
-      title: "Your Own Domain",
-      description: "After registering, you'll get your own personalized domain to manage all your links. Your domain will reflect your brand identity and make your links more professional and memorable. Perfect for building your online presence!",
-      gradient: "from-teal-500 to-cyan-500",
-      color: "from-teal-500 to-cyan-500"
-    },
-    {
-      icon: FaChartLine,
-      title: "Advanced Analytics",
-      description: "Get comprehensive insights into every click with detailed analytics. Track where clicks originated from, the exact time of each click, geographic location, device type (mobile, tablet, desktop), browser type, referrer information, and much more. Understand your audience better with granular data about every interaction.",
-      gradient: "from-blue-500 to-cyan-500",
-      color: "from-blue-500 to-cyan-500"
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-lime-100 to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 md:pt-28 pb-12 md:pb-20">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
-        >
-          <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Features
-          </motion.h1>
-          <motion.p
-            className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            Discover what All in1 url can do for you. Powerful features designed to transform your social media presence.
-          </motion.p>
-        </motion.div>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {features.map((feature, idx) => {
-            const IconComponent = feature.icon;
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 p-6 md:p-8 overflow-hidden group"
-              >
-                {/* Gradient Background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                
-                {/* Icon */}
-                <div className="relative z-10 mb-4">
-                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-r ${feature.color} text-white`}>
-                    <IconComponent className="w-6 h-6" />
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="relative z-10">
-                  <h3 className="text-xl md:text-2xl font-bold mb-3 text-gray-900 dark:text-white">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+    <DocLayout
+      badge="All Features"
+      title="Features"
+      subtitle="Everything All in1 url provides — from smart links and privacy controls to per-click analytics."
+    >
+      {/* Feature count */}
+      <div className="flex items-center gap-3 mb-8">
+        <span className="text-sm text-slate-500 dark:text-slate-400">{features.length} features available</span>
+        <div className="flex-1 h-px bg-slate-100 dark:bg-slate-800" />
       </div>
-      <Footer />
-    </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {features.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div
+              key={f.title}
+              className="group bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-5 hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm transition-all"
+            >
+              <div className={`w-9 h-9 rounded-lg ${f.bg} flex items-center justify-center mb-3`}>
+                <Icon className={`w-4.5 h-4.5 ${f.color}`} />
+              </div>
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1.5">{f.title}</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{f.description}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Bottom CTA */}
+      <div className="mt-10 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">All features, completely free</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">No paid tiers. No feature gates. No expiring links.</p>
+        </div>
+        <a
+          href="/login"
+          className="flex-shrink-0 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors"
+        >
+          Get Started Free
+        </a>
+      </div>
+    </DocLayout>
   );
 };
 
 export default Features;
-
-
-

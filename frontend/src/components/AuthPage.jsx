@@ -1,15 +1,14 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../utils/api";
 import { useDispatch } from "react-redux";
 import { setAuthenticated, setUser } from "../redux/userSlice";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { GiSkullCrossedBones } from "react-icons/gi";
-import { FaCheck, FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi2";
+import { FiCheck, FiMail, FiLock, FiUser, FiEye, FiEyeOff, FiArrowLeft, FiX } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { buildGoogleOAuthUrl } from "../utils/urlConfig";
+import logo from "../assets/logo.png";
 
 const AuthPage = () => {
   const dispatch = useDispatch();
@@ -18,24 +17,19 @@ const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [isAvailable, setAvailable] = useState(false);
-  const [isShow, setShow] = useState(false);
-  const [isShowSignup, setShowSignup] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
   const isMountedRef = useRef(true);
 
-  const [loginemail, setLoginEmail] = useState("");
-  const [loginpassword, setLoginPassword] = useState("");
-  const [signinemail, setSigninEmail] = useState("");
-  const [signinpassword, setSigninPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
   const [username, setUsername] = useState("");
 
-  // Track component mount status
   useEffect(() => {
     isMountedRef.current = true;
-    return () => {
-      isMountedRef.current = false;
-    };
+    return () => { isMountedRef.current = false; };
   }, []);
 
   useEffect(() => {
@@ -47,56 +41,20 @@ const AuthPage = () => {
     }
   }, [searchParams, setSearchParams]);
 
-  // Mouse tracking for interactive background
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await api.post(
-        "/auth/signup",
-        { username: username, email: signinemail, password: signinpassword },
-        { withCredentials: true }
-      );
+      const res = await api.post("/auth/signup", { username, email: signupEmail, password: signupPassword }, { withCredentials: true });
       if (res.status === 201 && res.data.success) {
         toast.success(res.data.message);
-        if (isMountedRef.current) {
-          setLoading(false);
-        }
-        navigate("/verify", {
-          state: {
-            username: username,
-            email: signinemail,
-            password: signinpassword,
-          },
-        });
-        return;
+        navigate("/verify", { state: { username, email: signupEmail, password: signupPassword } });
       }
     } catch (err) {
-      console.log(err);
-      const message = err.response?.data?.message || "Network Slow ! Try again";
-      toast.error(message);
-      if (err.response?.status === 409) {
-        if (isMountedRef.current) {
-          setLoading(false);
-        }
-        navigate("/login");
-        return;
-      }
+      toast.error(err.response?.data?.message || "Network error, try again");
+      if (err.response?.status === 409) navigate("/login");
     } finally {
-      if (isMountedRef.current) {
-        setLoading(false);
-      }
+      if (isMountedRef.current) setLoading(false);
     }
   };
 
@@ -104,692 +62,263 @@ const AuthPage = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await api.post(
-        "/auth/signin",
-        { email: loginemail, password: loginpassword },
-        { withCredentials: true }
-      );
+      const res = await api.post("/auth/signin", { email: loginEmail, password: loginPassword }, { withCredentials: true });
       if (res.status === 200 && res.data.success) {
         dispatch(setUser(res.data.user));
         dispatch(setAuthenticated(true));
-        setLoginEmail("");
-        setLoginPassword("");
-        toast.success(`Welcome ${res.data.user.username}!`);
-        if (isMountedRef.current) {
-          setLoading(false);
-        }
+        toast.success(`Welcome back, ${res.data.user.username}!`);
         navigate("/home", { replace: true });
-        return;
       }
     } catch (err) {
-      console.log(err);
-      const message = err.response?.data?.message || "Network Slow ! Try again";
-      toast.error(message);
+      toast.error(err.response?.data?.message || "Invalid credentials");
     } finally {
-      if (isMountedRef.current) {
-        setLoading(false);
-      }
+      if (isMountedRef.current) setLoading(false);
     }
   };
 
-  const checkAvailablity = async (usrnm) => {
-    if (usrnm.length < 5) {
-      setAvailable(false);
-      return;
-    }
+  const checkAvailability = async (name) => {
+    if (name.length < 5) { setAvailable(false); return; }
     try {
-      const res = await api.post("/auth/checkavailablity", { username: usrnm });
-      if (res.status === 209 && res.data.success) {
-        setAvailable(false);
-      }
-      if (res.status === 200 && res.data.success) {
-        setAvailable(true);
-      }
-    } catch (err) {
-      console.log(err);
+      const res = await api.post("/auth/checkavailablity", { username: name });
+      setAvailable(res.status === 200 && res.data.success);
+    } catch {
       setAvailable(false);
     }
   };
 
-  const handleGoogleSignUp = async (usr) => {
-    let uname = usr;
-    if (typeof usr === 'object' && usr !== null) {
-      uname = username;
-    }
-    if (!uname || uname.length < 5) {
-      toast.error("Please enter a valid username (min 5 characters)");
-      return;
-    }
-
-    try {
-      window.location.href = buildGoogleOAuthUrl({
-        username: uname.toLowerCase(),
-        usertype: "onboarding",
-      });
-    } catch (err) {
-      toast.error(err.message || "Google sign-up is unavailable");
-    }
+  const handleGoogleSignIn = () => {
+    try { window.location.href = buildGoogleOAuthUrl({ usertype: "onboarded" }); }
+    catch (err) { toast.error(err.message || "Google sign-in unavailable"); }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      window.location.href = buildGoogleOAuthUrl({ usertype: "onboarded" });
-    } catch (err) {
-      toast.error(err.message || "Google sign-in is unavailable");
-    }
+  const handleGoogleSignUp = () => {
+    if (!username || username.length < 5) { toast.error("Enter a valid username first"); return; }
+    try { window.location.href = buildGoogleOAuthUrl({ username: username.toLowerCase(), usertype: "onboarding" }); }
+    catch (err) { toast.error(err.message || "Google sign-up unavailable"); }
   };
+
+  const inputClass = "w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors";
 
   return (
-    <div className="min-h-screen w-full overflow-hidden relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 dark:from-gray-950 dark:via-purple-950 dark:to-gray-950">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient Orbs */}
-        <motion.div
-          className="absolute w-96 h-96 bg-purple-500/30 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * 0.5 - 200,
-            y: mousePosition.y * 0.5 - 200,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        />
-        <motion.div
-          className="absolute w-96 h-96 bg-pink-500/30 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * 0.3 - 200,
-            y: mousePosition.y * 0.3 - 200,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        />
-        <motion.div
-          className="absolute w-96 h-96 bg-blue-500/30 rounded-full blur-3xl"
-          animate={{
-            x: mousePosition.x * 0.7 - 200,
-            y: mousePosition.y * 0.7 - 200,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 20 }}
-        />
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex">
+      {/* Left Panel — Branding */}
+      <div className="hidden lg:flex flex-col justify-between w-[420px] bg-violet-600 text-white p-10 flex-shrink-0">
+        <Link to="/" className="flex items-center gap-3">
+          <img src={logo} alt="Logo" className="w-9 h-9 rounded-xl bg-white/20 p-1 object-contain" onError={(e) => { e.target.src = '/favicon-96x96.png'; }} />
+          <span className="text-lg font-bold">All in1 url</span>
+        </Link>
 
-        {/* Animated Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+        <div className="space-y-6">
+          <h1 className="text-3xl font-bold leading-tight">One link for all your social profiles</h1>
+          <p className="text-violet-200 text-sm leading-relaxed">
+            Create personalized, memorable links for LinkedIn, GitHub, Instagram and more. Share one hub URL — they find everything.
+          </p>
+          <div className="space-y-3">
+            {["Personalized short links", "Real-time click analytics", "Custom link hub page", "Free forever"].map((f) => (
+              <div key={f} className="flex items-center gap-3 text-sm">
+                <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                  <FiCheck className="w-3 h-3" />
+                </div>
+                {f}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="text-violet-300 text-xs">© 2024 All in1 url. All rights reserved.</p>
       </div>
 
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        {/* Back Button */}
-        <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          onClick={() => navigate('/')}
-          whileHover={{ scale: 1.05, x: -5 }}
-          whileTap={{ scale: 0.95 }}
-          className="absolute top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8 flex items-center gap-2 text-white dark:text-gray-300 hover:text-purple-400 dark:hover:text-purple-400 transition-colors z-20"
-        >
-          <FaArrowLeft />
-          <span>Back to Home</span>
-        </motion.button>
+      {/* Right Panel — Form */}
+      <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-10">
+        <div className="w-full max-w-sm">
+          {/* Back to home (mobile) */}
+          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors mb-8">
+            <FiArrowLeft className="w-4 h-4" />
+            Back to home
+          </button>
 
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          className="w-full max-w-5xl"
-        >
-          <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-center">
-            {/* Left Side - Welcome Content */}
-            <motion.div
-              className="flex flex-col items-center justify-center text-center space-y-4 md:space-y-6 p-4 md:p-8 mb-6 md:mb-0"
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
-                className="relative"
+          {/* Logo (mobile) */}
+          <div className="flex items-center gap-2.5 mb-8 lg:hidden">
+            <img src={logo} alt="Logo" className="w-8 h-8 rounded-lg object-contain" onError={(e) => { e.target.src = '/favicon-96x96.png'; }} />
+            <span className="text-base font-bold text-slate-900 dark:text-white">All in1 url</span>
+          </div>
+
+          {/* Tab Toggle */}
+          <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-6">
+            {[{ label: "Sign In", mode: false }, { label: "Sign Up", mode: true }].map(({ label, mode }) => (
+              <button
+                key={label}
+                onClick={() => setIsSignUpMode(mode)}
+                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${
+                  isSignUpMode === mode
+                    ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                }`}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-2xl opacity-50 animate-pulse" />
-                <div className="relative bg-gradient-to-br from-purple-600 to-pink-600 p-4 sm:p-6 rounded-2xl shadow-2xl">
-                  <HiSparkles className="text-4xl sm:text-5xl md:text-6xl text-white" />
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <AnimatePresence mode="wait">
+            {!isSignUpMode ? (
+              <motion.div key="signin" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} transition={{ duration: 0.2 }}>
+                <div className="mb-5">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Welcome back</h2>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Sign in to your account</p>
                 </div>
-              </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent"
-              >
-                Welcome to All in1 url
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="text-sm sm:text-base md:text-lg text-gray-300 dark:text-gray-400 max-w-md"
-              >
-                Transform your social media presence with personalized, memorable links that never expire.
-              </motion.p>
-
-              {/* Feature Pills */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="flex flex-wrap gap-2 sm:gap-3 justify-center mt-4 md:mt-6"
-              >
-                {["Personalized Links", "Analytics", "Free Forever"].map((feature, idx) => (
-                  <motion.div
-                    key={feature}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.9 + idx * 0.1, type: "spring" }}
-                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-white/10 backdrop-blur-md rounded-full text-xs sm:text-sm text-white border border-white/20"
-                  >
-                    {feature}
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Right Side - Auth Forms */}
-            <motion.div className="w-full">
-              <div className="relative">
-                {/* Form Container */}
-                <motion.div
-                  className="relative bg-white/10 dark:bg-gray-900/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-gray-700/50 p-6 sm:p-8 md:p-10 overflow-hidden"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.3 }}
+                {/* Google */}
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors disabled:opacity-50 shadow-sm mb-4"
                 >
-                  {/* Animated Border Gradient */}
-                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 opacity-0 hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl" />
+                  <FcGoogle className="w-5 h-5" />
+                  Continue with Google
+                </button>
 
-                  {/* Sign In/Up Toggle */}
-                  <div className="flex gap-2 mb-6 p-1 bg-white/5 dark:bg-gray-800/50 rounded-xl backdrop-blur-sm">
-                    <motion.button
-                      type="button"
-                      onClick={() => setIsSignUpMode(false)}
-                      className={`flex-1 py-3 px-4 rounded-lg font-semibold text-sm transition-all duration-300 relative ${
-                        !isSignUpMode
-                          ? "text-white"
-                          : "text-gray-400 dark:text-gray-500"
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {!isSignUpMode && (
-                        <motion.div
-                          layoutId="activeModeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg"
-                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        />
-                      )}
-                      <span className="relative z-10">Sign In</span>
-                    </motion.button>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-200 dark:border-slate-700" />
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="px-3 bg-slate-50 dark:bg-slate-950 text-xs text-slate-400">or continue with email</span>
+                  </div>
+                </div>
 
-                    <motion.button
-                      type="button"
-                      onClick={() => setIsSignUpMode(true)}
-                      className={`flex-1 py-3 px-4 rounded-lg font-semibold text-sm transition-all duration-300 relative ${
-                        isSignUpMode
-                          ? "text-white"
-                          : "text-gray-400 dark:text-gray-500"
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {isSignUpMode && (
-                        <motion.div
-                          layoutId="activeModeTab"
-                          className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg"
-                          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        />
-                      )}
-                      <span className="relative z-10">Sign Up</span>
-                    </motion.button>
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="relative">
+                    <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input type="email" placeholder="Email address" value={loginEmail} required
+                      onChange={(e) => { if (!e.target.value.includes(" ")) setLoginEmail(e.target.value); }}
+                      className={inputClass} />
                   </div>
 
-                  {/* Authentication Forms */}
-                  <AnimatePresence mode="wait">
-                    {!isSignUpMode ? (
-                      /* Sign In - Show both Password and Google options */
-                      <motion.div
-                        key="signin"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="space-y-6"
-                      >
-                        {/* Header */}
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-center mb-6"
-                        >
-                          <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
-                          <p className="text-gray-300 dark:text-gray-400 text-sm mt-1">
-                            Sign in with your preferred method
-                          </p>
-                        </motion.div>
+                  <div className="relative">
+                    <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input type={showPassword ? "text" : "password"} placeholder="Password" value={loginPassword} required minLength={6}
+                      onChange={(e) => { if (!e.target.value.includes(" ")) setLoginPassword(e.target.value); }}
+                      className={inputClass.replace("pr-4", "pr-10")} />
+                    <button type="button" onClick={() => setShowPassword(s => !s)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                      {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                    </button>
+                  </div>
 
-                        {/* Google Sign In Button */}
-                        <motion.button
-                          type="button"
-                          onClick={handleGoogleSignIn}
-                          disabled={loading}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.1 }}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                          <span className="relative z-10 flex items-center justify-center gap-3">
-                            <FcGoogle className="w-5 h-5" />
-                            <span>Continue with Gmail</span>
-                            <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                            {loading && (
-                              <svg className="animate-spin h-5 w-5 ml-2" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                              </svg>
-                            )}
-                          </span>
-                        </motion.button>
+                  <div className="flex justify-end">
+                    <Link to="/reset_password" className="text-xs text-violet-600 dark:text-violet-400 hover:underline">Forgot password?</Link>
+                  </div>
 
-                        {/* Divider */}
-                        <div className="relative my-6">
-                          <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-600"></div>
-                          </div>
-                          <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-gray-900 text-gray-400">or</span>
-                          </div>
-                        </div>
+                  <button type="submit" disabled={loading}
+                    className="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+                    {loading ? "Signing in..." : "Sign In"}
+                  </button>
+                </form>
+              </motion.div>
+            ) : (
+              <motion.div key="signup" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>
+                <div className="mb-5">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Create an account</h2>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Start with your username</p>
+                </div>
 
-                        {/* Password Sign In Form */}
-                        <motion.form
-                          onSubmit={handleLogin}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="space-y-4"
-                        >
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="relative group"
-                          >
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-400 transition-colors z-10">
-                              <FaEnvelope className="w-5 h-5" />
-                            </div>
-                            <input
-                              type="email"
-                              placeholder="Email"
-                              value={loginemail}
-                              required
-                              onChange={(e) => {
-                                if (e.target.value.includes(" ")) {
-                                  toast.error("Space not allowed");
-                                  return;
-                                }
-                                setLoginEmail(e.target.value);
-                              }}
-                              className="w-full pl-12 pr-4 py-4 bg-white/10 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
-                            />
-                          </motion.div>
-
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="relative group"
-                          >
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-400 transition-colors z-10">
-                              <FaLock className="w-5 h-5" />
-                            </div>
-                            <input
-                              type={isShow ? "text" : "password"}
-                              placeholder="Password"
-                              value={loginpassword}
-                              required
-                              minLength={6}
-                              onChange={(e) => {
-                                if (e.target.value.includes(" ")) {
-                                  toast.error("Space not allowed");
-                                  return;
-                                }
-                                setLoginPassword(e.target.value);
-                              }}
-                              className="w-full pl-12 pr-12 py-4 bg-white/10 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setShow(!isShow)}
-                              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors z-10"
-                            >
-                              {isShow ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
-                            </button>
-                          </motion.div>
-
-                          <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3 }}
-                            className="flex items-center justify-between"
-                          >
-                            <label className="flex items-center gap-2 text-gray-300 dark:text-gray-400 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={isShow}
-                                onChange={() => setShow(!isShow)}
-                                className="w-4 h-4 rounded border-gray-400 text-purple-600 focus:ring-purple-500"
-                              />
-                              <span className="text-sm">Show Password</span>
-                            </label>
-                            <Link
-                              to="/reset_password"
-                              className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
-                            >
-                              Forgot password?
-                            </Link>
-                          </motion.div>
-
-                          <motion.button
-                            type="submit"
-                            disabled={loading}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
-                          >
-                            <span className="relative z-10 flex items-center justify-center gap-2">
-                              {loading ? (
-                                <>
-                                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                  </svg>
-                                  Signing In...
-                                </>
-                              ) : (
-                                "Sign In"
-                              )}
-                            </span>
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                              initial={{ x: "-100%" }}
-                              whileHover={{ x: "100%" }}
-                              transition={{ duration: 0.6 }}
-                            />
-                          </motion.button>
-                        </motion.form>
-                      </motion.div>
-                    ) : (
-                      /* Sign Up - Username required, then Google */
-                      <motion.div
-                        key="signup"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="space-y-6"
-                      >
-                        {/* Header */}
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-center mb-6"
-                        >
-                          <h2 className="text-2xl font-bold text-white">Create Account</h2>
-                          <p className="text-gray-300 dark:text-gray-400 text-sm mt-1">
-                            Username is required for both Google and password registration
-                          </p>
-                        </motion.div>
-
-                        {/* Username Input */}
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.1 }}
-                          className="relative group"
-                        >
-                          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-400 transition-colors z-10">
-                            <FaUser className="w-5 h-5" />
-                          </div>
-                          <input
-                            type="text"
-                            placeholder="Username (min 5 characters)"
-                            value={username}
-                            required
-                            minLength={5}
-                            onChange={(e) => {
-                              if (e.target.value.includes(" ")) {
-                                toast.error("Space not allowed");
-                                return;
-                              }
-                              checkAvailablity(e.target.value.toLowerCase());
-                              setUsername(e.target.value.toLowerCase());
-                            }}
-                            className="w-full pl-12 pr-12 py-4 bg-white/10 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
-                          />
-                          <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
-                            {username.length >= 5 && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ type: "spring" }}
-                              >
-                                {isAvailable ? (
-                                  <FaCheck className="w-5 h-5 text-green-400" />
-                                ) : (
-                                  <GiSkullCrossedBones className="w-5 h-5 text-red-400" />
-                                )}
-                              </motion.div>
-                            )}
-                          </div>
-                        </motion.div>
-
-                        {username.length >= 5 && (
-                          <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className={`text-xs ml-1 transition-all duration-300 ${isAvailable ? "text-green-400" : "text-red-400"
-                              }`}
-                          >
-                            {isAvailable
-                              ? "✓ Username is available"
-                              : "✗ Username is not available"}
-                          </motion.p>
-                        )}
-
-                        {/* Registration Options - Only show when username is valid */}
-                        {username.length >= 5 && isAvailable && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="space-y-6"
-                          >
-                            {/* Google Sign Up Button */}
-                            <motion.button
-                              type="button"
-                              onClick={() => handleGoogleSignUp(username)}
-                              disabled={loading}
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              className="w-full py-4 px-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
-                            >
-                              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                              <span className="relative z-10 flex items-center justify-center gap-3">
-                                <FcGoogle className="w-5 h-5" />
-                                <span>Register with Google</span>
-                                <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                                {loading && (
-                                  <svg className="animate-spin h-5 w-5 ml-2" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                  </svg>
-                                )}
-                              </span>
-                            </motion.button>
-
-                            {/* Divider */}
-                            <div className="relative my-6">
-                              <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-gray-600"></div>
-                              </div>
-                              <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-gray-900 text-gray-400">or use password</span>
-                              </div>
-                            </div>
-
-                            {/* Password Sign Up Form */}
-                            <motion.form
-                              onSubmit={handleSignUp}
-                              className="space-y-4"
-                            >
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1 }}
-                                className="relative group"
-                              >
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-400 transition-colors z-10">
-                                  <FaEnvelope className="w-5 h-5" />
-                                </div>
-                                <input
-                                  type="email"
-                                  placeholder="Email"
-                                  value={signinemail}
-                                  required
-                                  onChange={(e) => {
-                                    if (e.target.value.includes(" ")) {
-                                      toast.error("Space not allowed");
-                                      return;
-                                    }
-                                    setSigninEmail(e.target.value);
-                                  }}
-                                  className="w-full pl-12 pr-4 py-4 bg-white/10 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
-                                />
-                              </motion.div>
-
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="relative group"
-                              >
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-400 transition-colors z-10">
-                                  <FaLock className="w-5 h-5" />
-                                </div>
-                                <input
-                                  type={isShowSignup ? "text" : "password"}
-                                  placeholder="Password (min 6 characters)"
-                                  value={signinpassword}
-                                  required
-                                  minLength={6}
-                                  onChange={(e) => {
-                                    if (e.target.value.includes(" ")) {
-                                      toast.error("Space not allowed");
-                                      return;
-                                    }
-                                    setSigninPassword(e.target.value);
-                                  }}
-                                  className="w-full pl-12 pr-12 py-4 bg-white/10 dark:bg-gray-800/50 border border-white/20 dark:border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 backdrop-blur-sm"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => setShowSignup(!isShowSignup)}
-                                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple-400 transition-colors z-10"
-                                >
-                                  {isShowSignup ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
-                                </button>
-                              </motion.div>
-
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                                className="flex items-center gap-2 text-gray-300 dark:text-gray-400"
-                              >
-                                <input
-                                  type="checkbox"
-                                  id="signupCheck"
-                                  checked={isShowSignup}
-                                  onChange={() => setShowSignup(!isShowSignup)}
-                                  className="w-4 h-4 rounded border-gray-400 text-purple-600 focus:ring-purple-500"
-                                />
-                                <label htmlFor="signupCheck" className="text-sm cursor-pointer">
-                                  Show Password
-                                </label>
-                              </motion.div>
-
-                              <motion.button
-                                type="submit"
-                                disabled={loading}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="w-full py-4 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
-                              >
-                                <span className="relative z-10 flex items-center justify-center gap-2">
-                                  {loading ? (
-                                    <>
-                                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                      </svg>
-                                      Creating Account...
-                                    </>
-                                  ) : (
-                                    "Create Account"
-                                  )}
-                                </span>
-                                <motion.div
-                                  className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                                  initial={{ x: "-100%" }}
-                                  whileHover={{ x: "100%" }}
-                                  transition={{ duration: 0.6 }}
-                                />
-                              </motion.button>
-                            </motion.form>
-                          </motion.div>
-                        )}
-
-                        {/* Show message when username is not valid yet */}
-                        {(!username || username.length < 5) && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-center text-gray-400 text-sm"
-                          >
-                            Enter a valid username first to continue registration
-                          </motion.div>
-                        )}
-
-                        {/* Show message when username exists but is not available */}
-                        {username && username.length >= 5 && !isAvailable && (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-center text-red-400 text-sm"
-                          >
-                            Please choose a different username - this one is already taken
-                          </motion.div>
-                        )}
-                      </motion.div>
+                {/* Username */}
+                <div className="mb-4">
+                  <div className="relative">
+                    <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Username (min. 5 characters)"
+                      value={username}
+                      required
+                      minLength={5}
+                      onChange={(e) => {
+                        if (e.target.value.includes(" ")) { toast.error("No spaces allowed"); return; }
+                        const val = e.target.value.toLowerCase();
+                        setUsername(val);
+                        checkAvailability(val);
+                      }}
+                      className={`${inputClass.replace("pr-4", "pr-10")} lowercase`}
+                    />
+                    {username.length >= 5 && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        {isAvailable
+                          ? <FiCheck className="w-4 h-4 text-emerald-500" />
+                          : <FiX className="w-4 h-4 text-red-500" />}
+                      </div>
                     )}
-                  </AnimatePresence>
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
-        </motion.div>
+                  </div>
+                  {username.length >= 5 && (
+                    <p className={`mt-1.5 text-xs ${isAvailable ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
+                      {isAvailable ? "✓ Username is available" : "✗ Username is taken"}
+                    </p>
+                  )}
+                </div>
+
+                {/* Show registration only when username is valid */}
+                <AnimatePresence>
+                  {username.length >= 5 && isAvailable && (
+                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4">
+                      {/* Google */}
+                      <button
+                        type="button"
+                        onClick={handleGoogleSignUp}
+                        disabled={loading}
+                        className="w-full flex items-center justify-center gap-3 py-2.5 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 transition-colors disabled:opacity-50 shadow-sm"
+                      >
+                        <FcGoogle className="w-5 h-5" />
+                        Register with Google
+                      </button>
+
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-slate-200 dark:border-slate-700" />
+                        </div>
+                        <div className="relative flex justify-center">
+                          <span className="px-3 bg-slate-50 dark:bg-slate-950 text-xs text-slate-400">or use password</span>
+                        </div>
+                      </div>
+
+                      <form onSubmit={handleSignUp} className="space-y-3">
+                        <div className="relative">
+                          <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input type="email" placeholder="Email address" value={signupEmail} required
+                            onChange={(e) => { if (!e.target.value.includes(" ")) setSignupEmail(e.target.value); }}
+                            className={inputClass} />
+                        </div>
+                        <div className="relative">
+                          <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <input type={showSignupPassword ? "text" : "password"} placeholder="Password (min. 6 characters)" value={signupPassword} required minLength={6}
+                            onChange={(e) => { if (!e.target.value.includes(" ")) setSignupPassword(e.target.value); }}
+                            className={inputClass.replace("pr-4", "pr-10")} />
+                          <button type="button" onClick={() => setShowSignupPassword(s => !s)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                            {showSignupPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                        <button type="submit" disabled={loading}
+                          className="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                          {loading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+                          {loading ? "Creating account..." : "Create Account"}
+                        </button>
+                      </form>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {(!username || username.length < 5) && (
+                  <p className="text-xs text-center text-slate-400 mt-2">Enter a username to continue</p>
+                )}
+                {username.length >= 5 && !isAvailable && (
+                  <p className="text-xs text-center text-red-500 dark:text-red-400 mt-2">Please choose a different username</p>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

@@ -85,8 +85,10 @@ const AuthPageV1 = () => {
     };
 
     const handleSignIn = async () => {
+        console.log('handleSignIn');
         try {
-            window.location.href = buildGoogleOAuthUrl({ usertype: "onboarded" });
+            authUrl = buildGoogleOAuthUrl({ usertype: "onboarded" });
+            window.location.href = authUrl;
         } catch (err) {
             toast.error(err.message || "Google sign-in is unavailable");
         }
